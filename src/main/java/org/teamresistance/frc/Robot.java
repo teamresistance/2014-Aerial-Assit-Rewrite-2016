@@ -5,18 +5,17 @@ import org.strongback.Strongback;
 
 /**
  * Main robot class. Override methods from {@link IterativeRobot} to define behavior.
+ *
+ * @author Shreya Ravi
  */
 public class Robot extends IterativeRobot {
 
-    Drive drive;
+  Drive drive = drive = new Drive(IO.robotDrive, IO.leftJoystick.getRoll(), IO.leftJoystick.getPitch(), IO.rightJoystick.getRoll());
 
-    @Override
-    public void robotInit() {
-//      System.out.println(BuildConfig.AGENT);
-
-      Strongback.configure().recordNoEvents().recordNoData().initialize();
-      drive = new Drive(IO.robotDrive);
-    }
+  @Override
+  public void robotInit() {
+    Strongback.configure().recordNoEvents().recordNoData().initialize();
+  }
 
   @Override
   public void autonomousInit() {
@@ -30,12 +29,12 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopInit() {
-
+    Strongback.start();
   }
 
   @Override
   public void teleopPeriodic() {
-    drive.update(IO.translateXSpeed, IO.translateYSpeed, IO.rotateSpeed);
+    drive.update();
   }
 
   @Override

@@ -26,13 +26,7 @@ public class IO {
       gyro
   );
 
-
   public static final FlightStick leftJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(0);
   public static final FlightStick rightJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(1);
   public static final FlightStick coJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(2);
-
-  public static final ContinuousRange translateXSpeed = leftJoystick.getRoll();
-  public static final ContinuousRange translateYSpeed = leftJoystick.getPitch();
-  public static final ContinuousRange rotateSpeed = rightJoystick.getRoll();
-
 }
