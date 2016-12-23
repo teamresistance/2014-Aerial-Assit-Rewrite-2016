@@ -8,7 +8,6 @@ import org.strongback.components.AngleSensor;
  * @author Shreya Ravi
  */
 public class Gyro3D implements AngleSensor {
-
   private final AHRS gyro;
 
   public Gyro3D(SPI.Port port) {

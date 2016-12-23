@@ -9,8 +9,12 @@ import org.strongback.Strongback;
  * @author Shreya Ravi
  */
 public class Robot extends IterativeRobot {
-
-  private final Drive drive = new Drive(IO.robotDrive, IO.leftJoystick.getRoll(), IO.leftJoystick.getPitch(), IO.rightJoystick.getRoll());
+  private final Drive drive = new Drive(
+      IO.robotDrive,
+      IO.leftJoystick.getRoll(),
+      IO.leftJoystick.getPitch(),
+      IO.rightJoystick.getRoll()
+  );
 
   @Override
   public void robotInit() {

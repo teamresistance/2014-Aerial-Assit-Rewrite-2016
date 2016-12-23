@@ -8,7 +8,6 @@ import org.strongback.drive.MecanumDrive;
  * @author Shreya Ravi
  */
 public class Drive implements Stoppable {
-
   private final MecanumDrive robotDrive;
   private final ContinuousRange xSpeed;
   private final ContinuousRange ySpeed;
