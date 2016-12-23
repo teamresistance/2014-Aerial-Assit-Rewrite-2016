@@ -8,7 +8,7 @@ import org.strongback.drive.MecanumDrive;
 import org.strongback.hardware.Hardware;
 
 /**
- * Created by shrey on 12/18/2016.
+ * @author Shreya Ravi
  */
 public class IO {
   public static final Motor frontLeftMotor = Hardware.Motors.victorSP(0);

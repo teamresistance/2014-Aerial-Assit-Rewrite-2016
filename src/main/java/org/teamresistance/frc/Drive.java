@@ -10,29 +10,29 @@ import org.strongback.drive.MecanumDrive;
 public class Drive implements Stoppable {
 
   private final MecanumDrive robotDrive;
-  private final ContinuousRange translateXSpeed;
-  private final ContinuousRange translateYSpeed;
+  private final ContinuousRange xSpeed;
+  private final ContinuousRange ySpeed;
   private final ContinuousRange rotateSpeed;
 
-  public Drive(MecanumDrive robotDrive, ContinuousRange translateXSpeed, ContinuousRange translateYSpeed, ContinuousRange rotateSpeed) {
+  public Drive(MecanumDrive robotDrive, ContinuousRange xSpeed, ContinuousRange ySpeed, ContinuousRange rotateSpeed) {
     this.robotDrive = robotDrive;
-    this.translateXSpeed = translateXSpeed;
-    this.translateYSpeed = translateYSpeed;
+    this.xSpeed = xSpeed;
+    this.ySpeed = ySpeed;
     this.rotateSpeed = rotateSpeed;
     States.driveState = DriveState.OP_CONTROL;
   }
 
-  public void update() throws IllegalStateException {
+  public void update() {
     if (States.driveState == DriveState.OP_CONTROL) {
-      this.robotDrive.cartesian(this.translateXSpeed.read(), this.translateYSpeed.read(), this.rotateSpeed.read());
+      robotDrive.cartesian(xSpeed.read(), ySpeed.read(), rotateSpeed.read());
     } else if (States.driveState == DriveState.STOP) {
-      this.robotDrive.stop();
+      robotDrive.stop();
     } else {
       throw new IllegalStateException();
     }
   }
 
   public void stop() {
-    this.robotDrive.stop();
+    robotDrive.stop();
   }
 }

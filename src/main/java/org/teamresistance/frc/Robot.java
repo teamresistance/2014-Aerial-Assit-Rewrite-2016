@@ -10,7 +10,7 @@ import org.strongback.Strongback;
  */
 public class Robot extends IterativeRobot {
 
-  Drive drive = drive = new Drive(IO.robotDrive, IO.leftJoystick.getRoll(), IO.leftJoystick.getPitch(), IO.rightJoystick.getRoll());
+  private final Drive drive = new Drive(IO.robotDrive, IO.leftJoystick.getRoll(), IO.leftJoystick.getPitch(), IO.rightJoystick.getRoll());
 
   @Override
   public void robotInit() {

@@ -7,36 +7,39 @@ import org.strongback.components.AngleSensor;
 /**
  * @author Shreya Ravi
  */
-public class Gyro3D extends AHRS implements AngleSensor {
+public class Gyro3D implements AngleSensor {
+
+  private final AHRS gyro;
 
   public Gyro3D(SPI.Port port) {
-    super(port);
+    this.gyro = new AHRS(port);
   }
 
-
   @Override
+  /**
+   * Equivalent of getYaw()
+   */
   public double getAngle() {
-    return getYawVal();
+    return normalize((double) gyro.getYaw());
   }
 
   private double normalize(double angle) {
     return ((angle % 360) + 360) % 360;
   }
 
-  public double getYawVal() {
-    return normalize((double) super.getYaw());
+  public double getRoll() {
+    return normalize((double) gyro.getRoll());
   }
 
-  public double getRollVal() {
-    return normalize((double) super.getRoll());
-  }
-
-  public double getPitchVal() {
-    return normalize((double) super.getPitch());
+  public double getPitch() {
+    return normalize((double) gyro.getPitch());
   }
 
   public boolean isAngle(double threshold, double angle) {
-    double currAngle = getYawVal();
-    return ((Math.abs(currAngle - angle) <= threshold) ? true : false);
+    return Math.abs(getAngle() - angle) <= threshold;
+  }
+
+  public AHRS getNavX() {
+    return gyro;
   }
 }
