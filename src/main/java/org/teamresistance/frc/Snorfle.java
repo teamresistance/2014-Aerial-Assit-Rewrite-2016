@@ -7,7 +7,6 @@ import org.strongback.components.Motor;
  * @author Shreya Ravi
  */
 public class Snorfle extends Command {
-
   Motor rollers;
   Motor spinners;
   double rollerSpeed;
