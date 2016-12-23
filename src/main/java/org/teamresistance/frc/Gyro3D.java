@@ -14,10 +14,10 @@ public class Gyro3D implements AngleSensor {
     this.gyro = new AHRS(port);
   }
 
-  @Override
   /**
    * Equivalent of getYaw()
    */
+  @Override
   public double getAngle() {
     return normalize((double) gyro.getYaw());
   }
