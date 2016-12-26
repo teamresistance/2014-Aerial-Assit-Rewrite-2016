@@ -1,7 +1,9 @@
 package org.teamresistance.frc;
 
-import edu.wpi.first.wpilibj.IterativeRobot;
 import org.strongback.Strongback;
+import org.teamresistance.frc.subsystem.drive.Drive;
+
+import edu.wpi.first.wpilibj.IterativeRobot;
 
 /**
  * Main robot class. Override methods from {@link IterativeRobot} to define behavior.
@@ -38,7 +40,8 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
-    drive.update();
+    Pose currentPose = new Pose(IO.gyro.getAngle());
+    drive.onUpdate(currentPose);
   }
 
   @Override

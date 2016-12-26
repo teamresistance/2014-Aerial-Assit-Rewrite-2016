@@ -23,6 +23,6 @@ final class GoalLocator implements Locator<ContourReport, Goal> {
     // Calculate the distance between the goal and camera, in inches.
     double yDistance = (KNOWN_WIDTH * FOCAL_LENGTH_INCHES) / perceivedWidth;
 
-    return new Goal(xDistance, yDistance, perceivedWidth);
+    return new Goal(xDistance, yDistance);
   }
 }
