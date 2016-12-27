@@ -6,14 +6,14 @@ import org.strongback.components.ui.ContinuousRange;
 import org.strongback.drive.MecanumDrive;
 import org.teamresistance.frc.Pose;
 import org.teamresistance.frc.subsystem.Controller;
+import org.teamresistance.frc.subsystem.Looping;
 import org.teamresistance.frc.subsystem.OpenLoopController;
-import org.teamresistance.frc.subsystem.Loopable;
 
 /**
  * @author Shreya Ravi
  * @author Rothanak So
  */
-public class Drive implements Loopable, Stoppable, Requirable {
+public class Drive implements Looping, Stoppable, Requirable {
   private final MecanumDrive robotDrive;
   private final ContinuousRange xSpeed;
   private final ContinuousRange ySpeed;
@@ -29,7 +29,7 @@ public class Drive implements Loopable, Stoppable, Requirable {
   }
 
   public void setOpenLoop() {
-    this.controller = new OpenLoopController<>();
+    setController(new OpenLoopController<>());
   }
 
   public void setController(Controller<Signal> controller) {
@@ -38,22 +38,22 @@ public class Drive implements Loopable, Stoppable, Requirable {
 
   @Override
   public void onUpdate(Pose pose) {
-    Signal raw = new Signal(xSpeed.read(), ySpeed.read(), rotateSpeed.read());
-    Signal computed = controller.computeSignal(raw, pose);
-    robotDrive.cartesian(computed.xSpeed, computed.ySpeed, computed.rotateSpeed);
+    Signal feedForward = new Signal(xSpeed.read(), ySpeed.read(), rotateSpeed.read());
+    Signal computed = controller.computeSignal(feedForward, pose);
+    robotDrive.cartesian(computed.xSpeed, computed.ySpeed, computed. rotateSpeed);
   }
 
   @Override
   public void stop() {
-    robotDrive.stop();
+    setController(new StopController());
   }
 
-  public final static class Signal {
-    public final double xSpeed;
-    public final double ySpeed;
-    public final double rotateSpeed;
+  final static class Signal {
+    final double xSpeed;
+    final double ySpeed;
+    final double rotateSpeed;
 
-    public Signal(double xSpeed, double ySpeed, double rotateSpeed) {
+    Signal(double xSpeed, double ySpeed, double rotateSpeed) {
       this.xSpeed = xSpeed;
       this.ySpeed = ySpeed;
       this.rotateSpeed = rotateSpeed;

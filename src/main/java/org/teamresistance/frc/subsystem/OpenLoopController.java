@@ -5,8 +5,8 @@ import org.teamresistance.frc.Pose;
 public final class OpenLoopController<S> implements Controller<S> {
 
   @Override
-  public S computeSignal(S oldSignal, Pose pose) {
-    return oldSignal;
+  public S computeSignal(S feedForward, Pose feedback) {
+    return feedForward;
   }
 
   @Override

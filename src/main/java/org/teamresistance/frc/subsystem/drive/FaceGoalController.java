@@ -6,8 +6,8 @@ import org.teamresistance.frc.util.SynchronousPID;
 
 import static org.strongback.control.SoftwarePIDController.SourceType.RATE;
 
-public class TurnInPlaceController implements Controller<Drive.Signal> {
-  private static final double TOLERANCE_DEGREES = 2;
+public class FaceGoalController implements Controller<Drive.Signal> {
+  private static final double TOLERANCE = 5;
   private static final double KP = 0;
   private static final double KD = 0;
   private static final double KI = 0;
@@ -15,20 +15,24 @@ public class TurnInPlaceController implements Controller<Drive.Signal> {
 
   private final SynchronousPID pid;
 
-  public TurnInPlaceController(double targetAngle) {
+  public FaceGoalController() {
     this.pid = new SynchronousPID(RATE, KP, KI, KD, FF)
         .withConfigurations(controller -> controller
-            .withInputRange(0, 360)
+            .withInputRange(0, 100) // percent
             .withOutputRange(-1.0, 1.0)
-            .withTolerance(TOLERANCE_DEGREES)
-            .withTarget(targetAngle)
+            .withTolerance(TOLERANCE)
+            .withTarget(50) // center on the goal
             .continuousInputs(true));
   }
 
   @Override
-  public Drive.Signal computeSignal(Drive.Signal oldSignal, Pose pose) {
-    double rotateSpeed = pid.calculate(pose.angle);
-    return new Drive.Signal(oldSignal.xSpeed, oldSignal.ySpeed, rotateSpeed);
+  public Drive.Signal computeSignal(Drive.Signal feedForward, Pose feedback) {
+    // If we see the goal, rotate toward it. Otherwise, pass the feed forward through.
+    double rotateSpeed = feedback.goalOffset.isPresent()
+        ? pid.calculate(feedback.goalOffset.get())
+        : feedForward.rotateSpeed;
+
+    return new Drive.Signal(feedForward.xSpeed, feedForward.ySpeed, rotateSpeed);
   }
 
   @Override

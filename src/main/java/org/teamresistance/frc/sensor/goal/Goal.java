@@ -1,11 +1,11 @@
 package org.teamresistance.frc.sensor.goal;
 
-public final class Goal {
-  public final double xDistance;
-  public final double yDistance;
+final class Goal {
+  final double xOffsetPercent;
+  final double widthPx;
 
-  Goal(double xDistance, double yDistance) {
-    this.xDistance = xDistance;
-    this.yDistance = yDistance;
+  Goal(double xOffsetPercent, double widthPx) {
+    this.xOffsetPercent = xOffsetPercent;
+    this.widthPx = widthPx;
   }
 }

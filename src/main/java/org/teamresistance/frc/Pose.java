@@ -1,9 +1,12 @@
 package org.teamresistance.frc;
 
-public final class Pose {
-  public final double angle;
+import java.util.Optional;
 
-  public Pose(double angle) {
-    this.angle = angle;
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+public final class Pose {
+  public final Optional<Double> goalOffset;
+
+  Pose(Optional<Double> goalOffset) {
+    this.goalOffset = goalOffset;
   }
 }

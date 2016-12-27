@@ -4,7 +4,7 @@ import org.teamresistance.frc.Pose;
 
 public interface Controller<S> {
 
-  S computeSignal(S oldSignal, Pose pose);
+  S computeSignal(S feedForward, Pose feedback);
 
   boolean isOnTarget();
 }
