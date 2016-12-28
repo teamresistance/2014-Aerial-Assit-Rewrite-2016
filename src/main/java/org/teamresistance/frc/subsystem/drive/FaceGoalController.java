@@ -4,6 +4,8 @@ import org.teamresistance.frc.Pose;
 import org.teamresistance.frc.subsystem.Controller;
 import org.teamresistance.frc.util.SynchronousPID;
 
+import java.util.Optional;
+
 import static org.strongback.control.SoftwarePIDController.SourceType.RATE;
 
 public class FaceGoalController implements Controller<Drive.Signal> {
@@ -27,9 +29,11 @@ public class FaceGoalController implements Controller<Drive.Signal> {
 
   @Override
   public Drive.Signal computeSignal(Drive.Signal feedForward, Pose feedback) {
+    Optional<Double> goalOffset = feedback.goalOffset.get();
+
     // If we see the goal, rotate toward it. Otherwise, pass the feed forward through.
-    double rotateSpeed = feedback.goalOffset.isPresent()
-        ? pid.calculate(feedback.goalOffset.get())
+    double rotateSpeed = goalOffset.isPresent()
+        ? pid.calculate(goalOffset.get())
         : feedForward.rotateSpeed;
 
     return new Drive.Signal(feedForward.xSpeed, feedForward.ySpeed, rotateSpeed);

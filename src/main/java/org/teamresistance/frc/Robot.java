@@ -42,7 +42,7 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
-    Pose currentPose = new Pose(goalSensor.getGoalOffset());
+    Pose currentPose = new Pose(goalSensor::getGoalOffset);
     drive.onUpdate(currentPose);
   }
 
