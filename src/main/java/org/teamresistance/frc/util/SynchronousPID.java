@@ -5,7 +5,10 @@ import org.strongback.control.SoftwarePIDController.SourceType;
 
 import java.util.function.Function;
 
-public class SynchronousPID {
+import edu.wpi.first.wpilibj.livewindow.LiveWindowSendable;
+import edu.wpi.first.wpilibj.tables.ITable;
+
+public class SynchronousPID implements LiveWindowSendable {
   private final SoftwarePIDController controller;
   private final Relay<Double> inputRelay = new Relay<>();
   private final Relay<Double> outputRelay = new Relay<>();
@@ -40,5 +43,35 @@ public class SynchronousPID {
     inputRelay.accept(input);
     controller.computeOutput();
     return outputRelay.get();
+  }
+
+  @Override
+  public void updateTable() {
+    controller.updateTable();
+  }
+
+  @Override
+  public void startLiveWindowMode() {
+    controller.startLiveWindowMode();
+  }
+
+  @Override
+  public void stopLiveWindowMode() {
+    controller.stopLiveWindowMode();
+  }
+
+  @Override
+  public void initTable(ITable subtable) {
+    controller.initTable(subtable);
+  }
+
+  @Override
+  public ITable getTable() {
+    return controller.getTable();
+  }
+
+  @Override
+  public String getSmartDashboardType() {
+    return controller.getSmartDashboardType();
   }
 }

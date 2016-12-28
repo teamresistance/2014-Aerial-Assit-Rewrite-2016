@@ -6,6 +6,8 @@ import org.teamresistance.frc.util.SynchronousPID;
 
 import java.util.Optional;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import static org.strongback.control.SoftwarePIDController.SourceType.RATE;
 
 public class FaceGoalController implements Controller<Drive.Signal> {
@@ -25,6 +27,9 @@ public class FaceGoalController implements Controller<Drive.Signal> {
             .withTolerance(TOLERANCE)
             .withTarget(50) // center on the goal
             .continuousInputs(true));
+
+    // Send the PID to the SmartDashboard to allow the gains to be tuned
+    SmartDashboard.putData("Face Goal Controller", pid);
   }
 
   @Override
@@ -32,10 +37,7 @@ public class FaceGoalController implements Controller<Drive.Signal> {
     Optional<Double> goalOffset = feedback.goalOffset.get();
 
     // If we see the goal, rotate toward it. Otherwise, pass the feed forward through.
-    double rotateSpeed = goalOffset.isPresent()
-        ? pid.calculate(goalOffset.get())
-        : feedForward.rotateSpeed;
-
+    double rotateSpeed = goalOffset.map(pid::calculate).orElseGet(() -> feedForward.rotateSpeed);
     return new Drive.Signal(feedForward.xSpeed, feedForward.ySpeed, rotateSpeed);
   }
 
