@@ -1,7 +1,10 @@
 package org.teamresistance.frc;
 
-import edu.wpi.first.wpilibj.IterativeRobot;
 import org.strongback.Strongback;
+import org.teamresistance.frc.sensor.goal.GoalSensor;
+import org.teamresistance.frc.subsystem.drive.Drive;
+
+import edu.wpi.first.wpilibj.IterativeRobot;
 
 /**
  * Main robot class. Override methods from {@link IterativeRobot} to define behavior.
@@ -15,6 +18,7 @@ public class Robot extends IterativeRobot {
       IO.leftJoystick.getPitch(),
       IO.rightJoystick.getRoll()
   );
+  private final GoalSensor goalSensor = new GoalSensor();
 
   @Override
   public void robotInit() {
@@ -38,7 +42,8 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
-    drive.update();
+    Pose currentPose = new Pose(goalSensor::getGoalOffset);
+    drive.onUpdate(currentPose);
   }
 
   @Override
