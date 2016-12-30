@@ -1,54 +1,50 @@
 package org.teamresistance.frc;
 
-import org.strongback.Strongback;
-
 import edu.wpi.first.wpilibj.IterativeRobot;
+import org.strongback.Strongback;
 
 /**
  * Main robot class. Override methods from {@link IterativeRobot} to define behavior.
+ *
+ * @author Shreya Ravi
  */
 public class Robot extends IterativeRobot {
-  private final RobotDelegate teleop = new TeleopDelegate();
-  private final RobotDelegate auto = new AutoDelegate();
+  private final Drive drive = new Drive(
+      IO.robotDrive,
+      IO.leftJoystick.getRoll(),
+      IO.leftJoystick.getPitch(),
+      IO.rightJoystick.getRoll()
+  );
 
   @Override
   public void robotInit() {
-    Strongback.configure()
-        .recordNoCommands()
-        .recordNoData()
-        .recordNoEvents()
-        .initialize();
-
-    auto.robotInit();
-    teleop.robotInit();
+    Strongback.configure().recordNoEvents().recordNoData().initialize();
   }
 
   @Override
   public void autonomousInit() {
     Strongback.start();
-    auto.onInit();
   }
 
   @Override
   public void autonomousPeriodic() {
-    auto.onPeriodic();
+
   }
 
   @Override
   public void teleopInit() {
-    Strongback.restart();
-    teleop.onInit();
+    Strongback.start();
   }
 
   @Override
   public void teleopPeriodic() {
-    teleop.onPeriodic();
+    drive.update();
   }
 
   @Override
   public void disabledInit() {
+    // stop every subsystem
+    drive.stop();
     Strongback.disable();
-    auto.onDisabled();
-    teleop.onDisabled();
   }
 }
