@@ -1,11 +1,10 @@
 package org.teamresistance.frc;
 
-import edu.wpi.first.wpilibj.SPI;
 import org.strongback.components.Motor;
-import org.strongback.components.ui.ContinuousRange;
-import org.strongback.components.ui.FlightStick;
 import org.strongback.drive.MecanumDrive;
 import org.strongback.hardware.Hardware;
+
+import edu.wpi.first.wpilibj.SPI;
 
 /**
  * @author Shreya Ravi
@@ -25,8 +24,4 @@ public class IO {
       rearRightMotor,
       gyro
   );
-
-  public static final FlightStick leftJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(0);
-  public static final FlightStick rightJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(1);
-  public static final FlightStick coJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(2);
 }
