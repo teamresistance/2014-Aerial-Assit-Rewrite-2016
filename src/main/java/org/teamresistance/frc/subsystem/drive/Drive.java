@@ -16,21 +16,21 @@ import org.teamresistance.frc.subsystem.OpenLoopController;
  * runs on a loop for the entire duration of the match and supports both operator and autonomous
  * control.
  * <p>
- * Set the current <b>behavior</b> by supplying a {@link Controller<Drive.Signal>} through {@link
- * #setController(Controller)}. These calls to {@link #setController(Controller)} can be queued and
- * scheduled using {@link Command}s and {@link CommandGroup}s to create higher-level routines for
- * controlling the robot. The {@link Controller#computeSignal} method of the active controller will
- * be invoked during {@link #onUpdate(Pose)}, and the resulting output will be fed into {@link
- * #onSignal(Signal)}.
+ * Set the current <b>behavior</b> by supplying a {@link Controller} for {@link Signal}s through
+ * {@link #setController(Controller)}. These calls to {@link #setController(Controller)} can be
+ * queued and scheduled using {@link Command}s and {@link CommandGroup}s to create higher-level
+ * routines for controlling the robot. The {@link Controller#computeSignal} method of the active
+ * controller will be invoked during {@link #onUpdate(Pose)}, and the resulting output will be fed
+ * into {@link #onSignal(Signal)}.
  * <p>
  * The subsystem starts with the {@link OpenLoopController} in place. It enables the default
  * follow-through behavior of driving the robot field-oriented in response to the raw joystick
  * values from the operator. Re-enable this behavior at any time by calling {@link #setOpenLoop()}.
  * <p>
- * Advanced {@link Controller<Drive.Signal>} implementations can suppress the raw joystick values
- * (the "feedforward") and supply their own speeds, allowing for semi-autonomous behaviors like
- * maintaining the current heading or fully-autonomous behaviors like pathfinding. Both
- * field-oriented and robot-oriented {@link Signal}s are supported.
+ * Advanced {@link Controller} implementations can suppress the raw joystick values (the
+ * "feedforward") and supply their own speeds, allowing for semi-autonomous behaviors like maintaining
+ * the current heading or fully-autonomous behaviors like pathfinding. Both field-oriented and
+ * robot-oriented {@link Signal}s are supported.
  *
  * @author Shreya Ravi
  * @author Rothanak So

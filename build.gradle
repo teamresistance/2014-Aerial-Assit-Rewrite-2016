@@ -25,6 +25,7 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile fileTree(dir: 'libs/test', include: ['*.jar'])
 
     // WPILib!
     compile 'edu.wpi.first.wpilibj:wpilibJavaFinal:2016.5.1'
