@@ -28,9 +28,9 @@ import org.teamresistance.frc.subsystem.OpenLoopController;
  * values from the operator. Re-enable this behavior at any time by calling {@link #setOpenLoop()}.
  * <p>
  * Advanced {@link Controller} implementations can suppress the raw joystick values (the
- * "feedforward") and supply their own speeds, allowing for semi-autonomous behaviors like maintaining
- * the current heading or fully-autonomous behaviors like pathfinding. Both field-oriented and
- * robot-oriented {@link Signal}s are supported.
+ * "feedforward") and supply their own speeds, allowing for semi-autonomous behaviors like
+ * maintaining the current heading or fully-autonomous behaviors like pathfinding. Both
+ * field-oriented and robot-oriented {@link Signal}s are supported.
  *
  * @author Shreya Ravi
  * @author Rothanak So
@@ -61,7 +61,7 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Stoppable, Req
     setController(new DriveHaltingController());
   }
 
-  final static class Signal {
+  public static final class Signal {
     final double xSpeed;
     final double ySpeed;
     final double rotateSpeed;
