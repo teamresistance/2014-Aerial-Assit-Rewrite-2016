@@ -14,8 +14,8 @@ import static org.strongback.control.SoftwarePIDController.SourceType;
  * @author Rothanak So
  */
 public class DriveHoldingAngleController implements Controller<Drive.Signal> {
-  private static final double TOLERANCE = 5;
-  private static final double KP = 0;
+  private static final double TOLERANCE = 2;
+  private static final double KP = 0.008;
   private static final double KD = 0;
   private static final double KI = 0;
   private static final double FF = 0;
@@ -23,7 +23,7 @@ public class DriveHoldingAngleController implements Controller<Drive.Signal> {
   private final SynchronousPID rotationPid;
 
   public DriveHoldingAngleController(double targetDegrees) {
-    this.rotationPid = new SynchronousPID(SourceType.RATE, KP, KI, KD, FF)
+    this.rotationPid = new SynchronousPID(SourceType.DISTANCE, KP, KI, KD, FF)
         .withConfigurations(controller -> controller
             .withInputRange(0, 360) // gyro
             .withOutputRange(-1.0, 1.0) // motor

@@ -1,6 +1,5 @@
 package org.teamresistance.frc;
 
-import org.strongback.Executor;
 import org.strongback.Strongback;
 import org.strongback.SwitchReactor;
 import org.strongback.command.Command;
@@ -32,17 +31,10 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotInit() {
     Strongback.configure().recordNoEvents().recordNoData().initialize();
-    final Executor executor = Strongback.executor();
     final SwitchReactor reactor = Strongback.switchReactor();
 
-    // Register our looping subsystems with Strongback's executor
-    executor.register(timeInMillis -> {
-      Pose pose = new Pose(IO.gyro.getAngle());
-      drive.onUpdate(pose);
-    }, Executor.Priority.HIGH);
-
     // Hold the current angle of the robot while the trigger is held
-    reactor.onTriggeredSubmit(leftJoystick.getTrigger(), () -> new HoldAngleCommand(drive, IO.gyro.getAngle()));
+    reactor.onTriggeredSubmit(leftJoystick.getTrigger(), () -> new HoldAngleCommand(drive, 90));
     reactor.onUntriggeredSubmit(leftJoystick.getTrigger(), () -> Command.cancel(drive));
   }
 
@@ -57,8 +49,13 @@ public class Robot extends IterativeRobot {
   }
 
   @Override
+  public void teleopPeriodic() {
+    Pose pose = new Pose(IO.gyro.getAngle());
+    drive.onUpdate(pose);
+  }
+
+  @Override
   public void disabledInit() {
     Strongback.disable();
-    drive.stop();
   }
 }
