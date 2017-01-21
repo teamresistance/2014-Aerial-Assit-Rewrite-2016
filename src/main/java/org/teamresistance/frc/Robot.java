@@ -46,7 +46,6 @@ public class Robot extends IterativeRobot {
   @Override
   public void teleopInit() {
     Strongback.start();
-    drive.setOpenLoop();
   }
 
   @Override
@@ -58,6 +57,5 @@ public class Robot extends IterativeRobot {
   @Override
   public void disabledInit() {
     Strongback.disable();
-    drive.stop();
   }
 }
