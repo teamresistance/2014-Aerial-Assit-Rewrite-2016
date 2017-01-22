@@ -8,7 +8,10 @@ import org.strongback.components.ui.FlightStick;
 import org.strongback.hardware.Hardware;
 import org.teamresistance.frc.command.BrakeCommand;
 import org.teamresistance.frc.command.DriveTimedCommand;
+import org.teamresistance.frc.command.FaceGoalCommand;
 import org.teamresistance.frc.command.HoldAngleCommand;
+import org.teamresistance.frc.sensor.goal.GoalSensor;
+import org.teamresistance.frc.command.StrafeCommand;
 import org.teamresistance.frc.subsystem.drive.Drive;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -32,6 +35,8 @@ public class Robot extends IterativeRobot {
       rightJoystick.getRoll()
   );
 
+  private final GoalSensor goalSensor = new GoalSensor();
+
   @Override
   public void robotInit() {
     Strongback.configure().recordNoEvents().recordNoData();
@@ -41,28 +46,10 @@ public class Robot extends IterativeRobot {
     reactor.onTriggeredSubmit(leftJoystick.getTrigger(), () -> new HoldAngleCommand(drive, IO.gyro.getAngle()));
     reactor.onUntriggeredSubmit(leftJoystick.getTrigger(), () -> Command.cancel(drive)); // FIXME doesn't cancel
 
-    // Drive straight, strafe 90 degrees, and strafe 45 -- each for 2 seconds
-    reactor.onTriggeredSubmit(leftJoystick.getButton(6), () -> new StrafeCommand(drive, 0, 0, 1.5));
-    reactor.onTriggeredSubmit(leftJoystick.getButton(11), () -> new StrafeCommand(drive, 0, 90, 1.5));
-    reactor.onTriggeredSubmit(leftJoystick.getButton(10), () -> new StrafeCommand(drive, 0, 45, 1.5));
-
-    // Drive straight, pause for 2s, then strafe 90 degrees
-    reactor.onTriggeredSubmit(leftJoystick.getButton(7), () -> CommandGroup.runSequentially(
-        new StrafeCommand(drive, 0, 0, 0.9),
-        new StrafeCommand(drive, 0, 90, 1.5),
-        Command.pause(1.5),
-        new StrafeCommand(drive, 0, 270, 1.0),
-        new StrafeCommand(drive, 0, 180, 0.6),
-        new HoldAngleCommand(drive, 135)
-    ));
-
     reactor.onTriggeredSubmit(leftJoystick.getButton(2), () -> CommandGroup.runSequentially(
         new StrafeCommand(drive, 0, 0, 1.5),
         new BrakeCommand(drive, IO.gyro, 1)
     ));
-
-    reactor.onTriggeredSubmit(rightJoystick.getButton(3), () -> new HoldAngleCommand(drive, 135));
-    reactor.onTriggeredSubmit(rightJoystick.getButton(4), () -> new HoldAngleCommand(drive, 0));
 
     // Cancel ongoing Drive commands. The interrupted commands should hand back operator control
     reactor.onTriggered(leftJoystick.getButton(3), () -> {
@@ -95,6 +82,9 @@ public class Robot extends IterativeRobot {
     reactor.onTriggeredSubmit(rightJoystick.getButton(3), () -> new HoldAngleCommand(drive, 135));
     reactor.onTriggeredSubmit(rightJoystick.getButton(4), () -> new HoldAngleCommand(drive, 0));
 
+    // Face the vision target while button 8 is held
+    reactor.onTriggeredSubmit(leftJoystick.getButton(8), () -> new FaceGoalCommand(drive));
+    reactor.onUntriggeredSubmit(leftJoystick.getButton(8), () -> Command.cancel(drive));
   }
 
   @Override
@@ -113,7 +103,7 @@ public class Robot extends IterativeRobot {
     double orientation = IO.gyro.getAngle();
     SmartDashboard.putNumber("Gyro Angle", orientation);
 
-    Feedback feedback = new Feedback(orientation);
+    Feedback feedback = new Feedback(orientation, goalSensor::getGoalOffset);
     drive.onUpdate(feedback);
   }
 

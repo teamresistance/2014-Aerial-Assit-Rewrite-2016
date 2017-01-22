@@ -5,6 +5,9 @@ import org.strongback.command.Command;
 import org.teamresistance.frc.subsystem.Controller;
 import org.teamresistance.frc.subsystem.Looping;
 
+import java.util.Optional;
+import java.util.function.Supplier;
+
 /**
  * A superstructure that represents the entire physical state of the robot at the given tick, such
  * as its current heading and relative position. It helps ensure all operations within the same tick
@@ -24,8 +27,10 @@ import org.teamresistance.frc.subsystem.Looping;
 @Experimental
 public final class Feedback {
   public final double currentAngle;
+  public final Supplier<Optional<Double>> goalOffset;
 
-  Feedback(double currentAngle) {
+  Feedback(double currentAngle, Supplier<Optional<Double>> goalOffset) {
     this.currentAngle = currentAngle;
+    this.goalOffset = goalOffset;
   }
 }
