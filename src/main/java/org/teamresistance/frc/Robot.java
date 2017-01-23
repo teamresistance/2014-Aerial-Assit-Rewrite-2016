@@ -39,7 +39,7 @@ public class Robot extends IterativeRobot {
     executor.register(timeInMillis -> {
       Pose pose = new Pose(IO.gyro.getAngle());
       drive.onUpdate(pose);
-    });
+    }, Executor.Priority.HIGH);
 
     // Hold the current angle of the robot while the trigger is held
     reactor.onTriggeredSubmit(leftJoystick.getTrigger(), () -> new HoldAngleCommand(drive, IO.gyro.getAngle()));
