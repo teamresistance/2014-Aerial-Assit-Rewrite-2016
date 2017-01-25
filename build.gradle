@@ -1,37 +1,35 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven { url "http://dev.imjac.in/maven" }
-    }
-    dependencies {
-        // Keep an eye on https://github.com/Open-RIO/GradleRIO/issues/11
-        classpath "jaci.openrio.gradle:GradleRIO:4.4.3"
-    }
-}
-
 plugins {
     id 'java'
+    id 'jaci.openrio.gradle.GradleRIO' version '2017.1.1'
 }
-
-apply plugin: 'GradleRIO'
 
 group 'org.teamresistance.frc'
 version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
-    maven { url "http://first.wpi.edu/FRC/roborio/maven/release" }
+}
+
+frc {
+    team = "86"
+    robotClass = "org.teamresistance.frc.Robot"
+    deployTimeout = 3 // Seconds before timing out on an SSH connection
+}
+
+wpi {
+    // Maven source: http://first.wpi.edu/FRC/roborio/maven/release/
+    wpilibVersion = "2017.2.1"  // WPILib
+    ntcoreVersion = "3.1.6"     // NetworkTables
+    opencvVersion = "3.1.0"     // OpenCV
+    cscoreVersion = "1.0.1"     // CameraSerer
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile fileTree(dir: 'libs/test', include: ['*.jar'])
 
-    // WPILib!
-    compile 'edu.wpi.first.wpilibj:wpilibJavaFinal:2016.5.1'
-
-    // NetworkTables!
-    compile 'edu.wpi.first.wpilib.networktables.java:NetworkTables:3.1.1-beta-1'
+    // Compile with WPILib and its dependencies (ntcore, opencv, cscore)
+    compile wpilib()
     
     // Unit testing!
     testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.0-M2'
@@ -40,26 +38,14 @@ dependencies {
     testCompile 'org.mockito:mockito-core:2.2.22'
 }
 
-// GradleRIO configurations, they may be different on a per-project basis
-gradlerio {
-    robotClass = "org.teamresistance.frc.Robot"
-    team = "86"
-    rioIP = "10.00.86.2"
-}
-
 jar {
     from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     manifest {
         attributes 'Main-Class': 'edu.wpi.first.wpilibj.RobotBase'
-        attributes 'Robot-Class': gradlerio.robotClass
+        attributes 'Robot-Class': frc.robotClass
     }
 }
 
-task genJavadoc(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives genJavadoc
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.3'
 }
