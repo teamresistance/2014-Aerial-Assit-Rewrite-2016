@@ -1,8 +1,10 @@
 package org.teamresistance.frc;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.strongback.Strongback;
 import org.strongback.SwitchReactor;
 import org.strongback.command.Command;
+import org.strongback.components.DistanceSensor;
 import org.strongback.components.ui.FlightStick;
 import org.strongback.hardware.Hardware;
 import org.teamresistance.frc.command.HoldAngleCommand;
@@ -15,11 +17,16 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  *
  * @author Shreya Ravi
  * @author Rothanak So
+ * @author Tarik C. Brown
  */
 public class Robot extends IterativeRobot {
   private final FlightStick leftJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(0);
   private final FlightStick rightJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(1);
   private final FlightStick coJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(2);
+  private DistanceSensor rightping = Hardware.DistanceSensors.digitalUltrasonic(0, 1);
+  private DistanceSensor rearping = Hardware.DistanceSensors.digitalUltrasonic(2,3);
+  private double rightpingDistance = rightping.getDistanceInInches();
+  private double rearDistance = rearping.getDistanceInInches();
 
   private final Drive drive = new Drive(
       IO.robotDrive,
@@ -50,7 +57,9 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
-    Pose pose = new Pose(IO.gyro.getAngle());
+    Pose pose = new Pose(IO.gyro.getAngle(),rightping.getDistanceInInches(),rearping.getDistanceInInches());
+    SmartDashboard.putNumber("Ping Y",rightpingDistance);
+    SmartDashboard.putNumber("Ping X",rearDistance);
     drive.onUpdate(pose);
   }
 
