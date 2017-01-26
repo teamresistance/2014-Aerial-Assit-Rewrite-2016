@@ -50,7 +50,7 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
-    Pose pose = new Pose(IO.gyro.getAngle());
+    Pose pose = new Pose(IO.gyro.getAngle(), xspeed);
     drive.onUpdate(pose);
   }
 
