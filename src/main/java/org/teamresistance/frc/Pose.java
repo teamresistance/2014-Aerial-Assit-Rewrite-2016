@@ -24,8 +24,11 @@ import org.teamresistance.frc.subsystem.Looping;
 @Experimental
 public final class Pose {
   public final double currentAngle;
+  public final double xspeed;
 
-  Pose(double currentAngle) {
+  Pose(double currentAngle, double xspeed) {
     this.currentAngle = currentAngle;
+    this.xspeed = xspeed;
+    ;
   }
 }
