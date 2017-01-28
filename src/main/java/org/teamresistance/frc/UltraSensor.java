@@ -11,7 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class UltraSensor extends Command {
   public Ultrasonic ping1;
   public Ultrasonic ping2;
-
+  public double range;
+  public double range2;
   public UltraSensor() {
     // Should be Ultrasonic(Ping Channel, Echo Channel
     // Sets the channels and makes the sensors start running in auto
@@ -23,8 +24,8 @@ public class UltraSensor extends Command {
   @Override
   public boolean execute() {
     //gets the distance from ping sensors
-    double range = ping1.getRangeInches();
-    double range2 = ping2.getRangeInches();
+     range = ping1.getRangeInches();
+     range2 = ping2.getRangeInches();
     // I believe this will display the distance on the smart dashboard
     SmartDashboard.putData("ping distance y",ping1);
     SmartDashboard.putData("ping distance x",ping2);
