@@ -9,19 +9,19 @@ import org.teamresistance.frc.subsystem.drive.Drive;
 public class DriveToYX extends CommandGroup {
 
   private final Drive drive;
-  private final double timeY;
+  private final double timeOutY;
   private final double targetY;
-  private final double timeX;
+  private final double timeOutX;
   private final double targetX;
 
 
-  public DriveToYX(Drive drive, double timeY, double targetY, double timeX, double targetX) {
+  public DriveToYX(Drive drive, double timeOutY, double targetY, double timeOutX, double targetX) {
     this.drive = drive;
-    this.timeY = timeY;
+    this.timeOutY = timeOutY;
     this.targetY = targetY;
-    this.timeX = timeX;
+    this.timeOutX = timeOutX;
     this.targetX = targetX;
-    sequentially(new DriveToY(drive, timeY, targetY), new DriveToX(drive, timeX, targetX));
+    sequentially(new DriveToY(drive, timeOutY, targetY), new DriveToX(drive, timeOutX, targetX));
   }
 
 }

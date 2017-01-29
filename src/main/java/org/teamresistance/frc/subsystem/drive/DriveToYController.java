@@ -51,7 +51,7 @@ public class DriveToYController implements Controller<Drive.Signal> {
 
   @Override
   public Drive.Signal computeSignal(Drive.Signal feedForward, Pose feedback) {
-    double ySpeed = this.yTranslationPID.calculate(feedback.yVal);
+    double ySpeed = this.yTranslationPID.calculate(feedback.yDistPing);
     double rotateSpeed = this.rotationPID.calculate(feedback.currentAngle);
     return new Drive.Signal(0,ySpeed,rotateSpeed);
   }

@@ -102,7 +102,7 @@ public class Robot extends IterativeRobot {
   public void autonomousInit() {
     Strongback.start();
     // make sure these measurements are right
-    Strongback.submit(new DriveToYX(drive,2,78,1,0));
+    Strongback.submit(new DriveToYX(drive,2,66,1,0));
   }
 
   @Override
