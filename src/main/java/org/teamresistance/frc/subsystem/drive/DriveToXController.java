@@ -54,7 +54,7 @@ public class DriveToXController implements Controller<Drive.Signal> {
   @Override
   public Drive.Signal computeSignal(Drive.Signal feedForward, Pose feedback) {
     // multiplied xSpeed by -1 because otherwise, would go in wrong direction
-    double xSpeed = (this.xTranslationPID.calculate(feedback.xDistPing) + this.ADDED_POWER) * -1;
+    double xSpeed = (this.xTranslationPID.calculate(feedback.xDist) + this.ADDED_POWER) * -1;
     double rotateSpeed = this.rotationPID.calculate(feedback.currentAngle);
     return new Drive.Signal(xSpeed,0,rotateSpeed);
   }
