@@ -113,7 +113,9 @@ public class Robot extends IterativeRobot {
     double orientation = IO.gyro.getAngle();
     SmartDashboard.putNumber("Gyro Angle", orientation);
 
-    Feedback feedback = new Feedback(orientation);
+    Feedback feedback = new Feedback(orientation,
+        IO.xDistSensor.getDistance(),
+        IO.yDistSensor.getDistance());
     drive.onUpdate(feedback);
   }
 
