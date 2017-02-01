@@ -40,7 +40,7 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Stoppable, Req
 
   public Drive(MecanumDrive robotDrive, ContinuousRange xSpeed, ContinuousRange ySpeed,
                ContinuousRange rotateSpeed) {
-    super(() -> new Signal(xSpeed.read(), ySpeed.read(), rotateSpeed.read()));
+    super(() -> Signal.createFieldOriented(xSpeed.read(), ySpeed.read(), rotateSpeed.read()));
     this.robotDrive = robotDrive;
   }
 
@@ -49,7 +49,7 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Stoppable, Req
     if (signal.robotOriented) {
       // Convert the speeds from cartesian to polar
       double magnitude = Math.sqrt(signal.xSpeed * signal.xSpeed + signal.ySpeed * signal.ySpeed);
-      double direction = Math.atan2(signal.ySpeed, signal.xSpeed); // (y, x)
+      double direction = Math.toDegrees(Math.atan2(signal.ySpeed, signal.xSpeed));
       robotDrive.polar(magnitude, direction, signal.rotateSpeed);
     } else {
       robotDrive.cartesian(signal.xSpeed, signal.ySpeed, signal.rotateSpeed);
@@ -67,15 +67,21 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Stoppable, Req
     final double rotateSpeed;
     final boolean robotOriented;
 
-    Signal(double xSpeed, double ySpeed, double rotateSpeed) {
-      this(xSpeed, ySpeed, rotateSpeed, false);
-    }
-
-    Signal(double xSpeed, double ySpeed, double rotateSpeed, boolean robotOriented) {
+    private Signal(double xSpeed, double ySpeed, double rotateSpeed, boolean robotOriented) {
       this.xSpeed = xSpeed;
       this.ySpeed = ySpeed;
       this.rotateSpeed = rotateSpeed;
       this.robotOriented = robotOriented;
+    }
+
+    static Signal createFieldOriented(double xSpeed, double ySpeed, double rotateSpeed) {
+      return new Signal(xSpeed, ySpeed, rotateSpeed, false);
+    }
+
+    static Signal createRobotOriented(double speed, double headingDeg, double rotateSpeed) {
+      double xSpeed = speed * Math.cos(Math.toRadians(headingDeg));
+      double ySpeed = speed * Math.sin(Math.toRadians(headingDeg));
+      return new Signal(xSpeed, ySpeed, rotateSpeed, true);
     }
   }
 }
