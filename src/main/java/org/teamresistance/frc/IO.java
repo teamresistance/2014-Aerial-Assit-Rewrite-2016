@@ -26,8 +26,9 @@ public class IO {
       rearRightMotor,
       gyro
   );
-
-  public static final Ping xDistSensor = new Ping(0,1);
-  public static final Ping yDistSensor = new Ping(2,3);
+  //  private static final DistanceSensor xDistPing = Hardware.DistanceSensors.digitalUltrasonic(0,1);
+  //  private static final DistanceSensor yDistPing = Hardware.DistanceSensors.digitalUltrasonic(2,3);
+  public static final Ultrasonic xDistPing = new Ultrasonic(0,1);
+  public static final Ultrasonic yDistPing = new Ultrasonic(7,8);
 
 }
