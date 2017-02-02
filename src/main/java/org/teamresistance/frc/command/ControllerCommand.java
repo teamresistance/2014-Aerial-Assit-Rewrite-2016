@@ -5,6 +5,15 @@ import org.strongback.command.Requirable;
 import org.teamresistance.frc.subsystem.ClosedLooping;
 import org.teamresistance.frc.subsystem.Controller;
 
+/**
+ * This abstract class makes it easy to create a {@link Command} that sets a {@link Controller} on a
+ * subsystem by managing the lifecycle of the controller.
+ *
+ * @author Rothanak So
+ * @see HoldAngleCommand
+ * @see StrafeCommand
+ */
+// Human-readable version: class ControllerCommand<Subsystem, Controller, Signal> extends Command
 abstract class ControllerCommand<T extends ClosedLooping<V> & Requirable, U extends
     Controller<V>, V> extends Command {
   private final T subsystem;

@@ -7,16 +7,16 @@ public class DriveStrafingController implements Controller<Drive.Signal> {
   private static final double SPEED = 0.6;
 
   private final Controller<Drive.Signal> angleController;
-  private final double directionDegrees;
+  private final double headingDeg;
 
-  public DriveStrafingController(double degrees) {
+  public DriveStrafingController(double headingDeg) {
     this.angleController = new DriveHoldingAngleController(0);
-    this.directionDegrees = degrees;
+    this.headingDeg = headingDeg;
   }
 
   @Override
   public Drive.Signal computeSignal(Drive.Signal feedForward, Pose feedback) {
     double rotateSpeed = angleController.computeSignal(feedForward, feedback).rotateSpeed;
-    return Drive.Signal.createRobotOriented(SPEED, directionDegrees, rotateSpeed);
+    return Drive.Signal.createRobotOriented(SPEED, headingDeg, rotateSpeed);
   }
 }

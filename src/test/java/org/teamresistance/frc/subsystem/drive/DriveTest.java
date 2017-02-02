@@ -22,12 +22,12 @@ class DriveTest {
   private final MecanumDrive robotDrive = new MecanumDrive(leftFront, leftRear, rightFront,
       rightRear, Mock.angleSensor());
 
-  // Drive is system-under-test (SUT), which includes the MecanumDrive dependency. We can treat
+  // Drive is the system-under-test (SUT), which includes the MecanumDrive dependency. We can treat
   // it as an isolated black box where its methods are the inputs and the motors are the outputs.
   private Drive drive = new Drive(robotDrive, () -> 0, () -> 0, () -> 0);
 
   @Test
-  void onSignal_WithRobotOrientedSignal_ShouldDrivePolar() {
+  void robotOrientedSignalShouldDrivePolar() {
     final double magnitude = 0.5; // speed
     final double direction = 90; // degrees
     final double rotation = 0.5; // speed
