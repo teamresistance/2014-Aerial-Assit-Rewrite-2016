@@ -24,11 +24,8 @@ import org.teamresistance.frc.subsystem.Looping;
 @Experimental
 public final class Pose {
   public final double currentAngle;
-  public final double distanceInInches;
 
-  Pose(double currentAngle, double distanceInInches, double inInches) {
+  Pose(double currentAngle) {
     this.currentAngle = currentAngle;
-    this.distanceInInches = distanceInInches;
-    ;
   }
 }
