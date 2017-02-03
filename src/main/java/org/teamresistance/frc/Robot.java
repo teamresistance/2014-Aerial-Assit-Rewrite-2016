@@ -1,6 +1,7 @@
 package org.teamresistance.frc;
 
 import edu.wpi.first.wpilibj.Ultrasonic;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.strongback.Strongback;
 import org.strongback.SwitchReactor;
 import org.strongback.command.Command;
@@ -125,6 +126,8 @@ public class Robot extends IterativeRobot {
 //        IO.xDistPing.getDistanceInInches(),
         IO.yDistPing.getRangeInches());
 //        IO.yDistPing.getDistanceInInches());
+    SmartDashboard.putNumber("Y Distance (Ping): ", pose.yDist);
+    SmartDashboard.putNumber("X Distance (Ping): ", pose.xDist);
     drive.onUpdate(feedback);
   }
 
