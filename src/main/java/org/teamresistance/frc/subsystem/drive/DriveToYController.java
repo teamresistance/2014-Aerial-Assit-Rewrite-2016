@@ -15,6 +15,8 @@ public class DriveToYController implements Controller<Drive.Signal> {
 //  private static final double ROTATION_KD = 0;
 //  private static final double ROTATION_KI = 0;
 //  private static final double ROTATION_FF = 0;
+  private double yDistPingSensor;
+  private final double hackTargetY;
 
   private final SynchronousPID yTranslationPID;
   private static final double Y_TRANSLATION_TOLERANCE = 10;
@@ -24,6 +26,7 @@ public class DriveToYController implements Controller<Drive.Signal> {
 //  private static final double Y_TRANSLATION_FF = 0;
 
   public DriveToYController(double targetY) {
+    hackTargetY = targetY;
 
     this.rotationPID = new SynchronousPID(SoftwarePIDController.SourceType.DISTANCE,ROTATION_KP,0,0,0)
         .withConfigurations(controller -> controller
@@ -38,19 +41,20 @@ public class DriveToYController implements Controller<Drive.Signal> {
             .withInputRange(0, 120) // ping sensor -- 10 ft or 120 inches -- can modify later
             .withOutputRange(-0.5, 0.5) // motor
             .withTarget(targetY)
-            .withTolerance(Y_TRANSLATION_TOLERANCE)
-            .continuousInputs(true));
+            .withTolerance(Y_TRANSLATION_TOLERANCE));
   }
 
   @Override
   public Drive.Signal computeSignal(Drive.Signal feedForward, Pose feedback) {
     double ySpeed = this.yTranslationPID.calculate(feedback.yDist);
     double rotateSpeed = this.rotationPID.calculate(feedback.currentAngle);
+    yDistPingSensor = feedback.yDist;
     return new Drive.Signal(0,ySpeed,rotateSpeed);
   }
 
   @Override
   public boolean isOnTarget() {
-    return yTranslationPID.isWithinTolerance();
+    return (yDistPingSensor >= hackTargetY);
+//    return yTranslationPID.isWithinTolerance();
   }
 }

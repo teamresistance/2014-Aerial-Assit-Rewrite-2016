@@ -12,20 +12,19 @@ public class DriveToXController implements Controller<Drive.Signal> {
   private final SynchronousPID rotationPID;
   private static final double ROTATION_TOLERANCE = 1;
   private static final double ROTATION_KP = 0.008;
-//  private static final double ROTATION_KD = 0;
-//  private static final double ROTATION_KI = 0;
-//  private static final double ROTATION_FF = 0;
+
+  private double xDistPingSensor;
+  private final double hackTargetX;
 
   private final SynchronousPID xTranslationPID;
   private static final double X_TRANSLATION_TOLERANCE = 10;
   private static final double X_TRANSLATION_KP = 0.02;
-//  private static final double X_TRANSLATION_KD = 0;
-//  private static final double X_TRANSLATION_KI = 0;
-//  private static final double X_TRANSLATION_FF = 0;
 
   private static final double ADDED_POWER = 0.2;
 
   public DriveToXController(double targetX) {
+    hackTargetX = targetX;
+
     this.rotationPID = new SynchronousPID(SoftwarePIDController.SourceType.DISTANCE,
         ROTATION_KP,0,0,0)
         .withConfigurations(controller -> controller
@@ -40,8 +39,7 @@ public class DriveToXController implements Controller<Drive.Signal> {
             .withInputRange(0, 120) // ping sensor -- 10 ft or 120 inches -- can modify later
             .withOutputRange(-0.5, 0.5) // motor
             .withTarget(targetX)
-            .withTolerance(X_TRANSLATION_TOLERANCE)
-            .continuousInputs(true));
+            .withTolerance(X_TRANSLATION_TOLERANCE));
   }
 
   @Override
@@ -49,11 +47,13 @@ public class DriveToXController implements Controller<Drive.Signal> {
     // multiplied xSpeed by -1 because otherwise, would go in wrong direction
     double xSpeed = this.xTranslationPID.calculate(feedback.xDist) + this.ADDED_POWER;
     double rotateSpeed = this.rotationPID.calculate(feedback.currentAngle);
+    xDistPingSensor = feedback.yDist;
     return new Drive.Signal(xSpeed,0,rotateSpeed);
   }
 
   @Override
   public boolean isOnTarget() {
-    return xTranslationPID.isWithinTolerance();
+   return (xDistPingSensor <= hackTargetX);
+//    return xTranslationPID.isWithinTolerance();
   }
 }

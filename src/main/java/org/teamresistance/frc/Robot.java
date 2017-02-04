@@ -9,6 +9,8 @@ import org.strongback.components.DistanceSensor;
 import org.strongback.command.CommandGroup;
 import org.strongback.components.ui.FlightStick;
 import org.strongback.hardware.Hardware;
+import org.teamresistance.frc.command.DriveToX;
+import org.teamresistance.frc.command.DriveToY;
 import org.teamresistance.frc.command.DriveToYX;
 import org.teamresistance.frc.command.BrakeCommand;
 import org.teamresistance.frc.command.DriveTimedCommand;
@@ -101,7 +103,9 @@ public class Robot extends IterativeRobot {
     reactor.onTriggeredSubmit(rightJoystick.getButton(3), () -> new HoldAngleCommand(drive, 135));
     reactor.onTriggeredSubmit(rightJoystick.getButton(4), () -> new HoldAngleCommand(drive, 0));
 
-    reactor.onTriggeredSubmit(leftJoystick.getButton(6), () -> new DriveToYX(drive,10,66,10,0));
+    reactor.onTriggeredSubmit(leftJoystick.getButton(6), () -> new DriveToYX(drive,60,66,60,0));
+    reactor.onTriggeredSubmit(leftJoystick.getButton(7), () -> new DriveToY(drive, 10, 66));
+    reactor.onTriggeredSubmit(leftJoystick.getButton(8), () -> new DriveToX(drive, 10, 0));
   }
 
   @Override
@@ -126,8 +130,8 @@ public class Robot extends IterativeRobot {
 //        IO.xDistPing.getDistanceInInches(),
         IO.yDistPing.getRangeInches());
 //        IO.yDistPing.getDistanceInInches());
-    SmartDashboard.putNumber("Y Distance (Ping): ", pose.yDist);
-    SmartDashboard.putNumber("X Distance (Ping): ", pose.xDist);
+    SmartDashboard.putNumber("Y Distance (Ping): ", feedback.yDist);
+    SmartDashboard.putNumber("X Distance (Ping): ", feedback.xDist);
     drive.onUpdate(feedback);
   }
 

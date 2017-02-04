@@ -1,4 +1,5 @@
 package org.teamresistance.frc.command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.strongback.command.Command;
 import org.teamresistance.frc.subsystem.drive.Drive;
 import org.teamresistance.frc.subsystem.drive.DriveToXController;
@@ -24,7 +25,9 @@ public class DriveToX extends Command {
 
   @Override
   public boolean execute() {
-    return controller.isOnTarget();
+    boolean onTarget = controller.isOnTarget();
+    SmartDashboard.putBoolean("DriveToX on Target?", onTarget);
+    return onTarget;
   }
 
   @Override
