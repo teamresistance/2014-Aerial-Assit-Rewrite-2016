@@ -13,6 +13,7 @@ import org.teamresistance.frc.command.SnorfleReverseCommand;
 import org.teamresistance.frc.command.SnorfleStopReversingCommand;
 import org.teamresistance.frc.command.SnorfleToggleCommand;
 import org.teamresistance.frc.subsystem.climb.Climber;
+import org.teamresistance.frc.hid.DaveKnob;
 import org.teamresistance.frc.subsystem.drive.Drive;
 import org.teamresistance.frc.subsystem.snorfler.Snorfler;
 
@@ -29,14 +30,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
   private final FlightStick leftJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(0);
   private final FlightStick rightJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(1);
-  private final FlightStick coJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(2);
+  private final FlightStick coDriverBox = Hardware.HumanInterfaceDevices.logitechAttack3D(2);
+  private final DaveKnob knob = new DaveKnob(() -> coDriverBox.getAxis(2).read() * -180 + 180, IO.gyro);
 
   private final Snorfler snorfler = new Snorfler(IO.snorflerMotor);
   private final Drive drive = new Drive(
       IO.robotDrive,
       leftJoystick.getRoll(),
       leftJoystick.getPitch(),
-      rightJoystick.getRoll()
+      knob
   );
   private final Climber climber = new Climber(IO.climberMotor, IO.pdp, IO.CLIMBER_CHANNEL);
 
@@ -129,9 +131,10 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
-    // Post our orientation on the SD for debugging purposes
+    // Post values to the SmartDashboard for debugging
     double orientation = IO.gyro.getAngle();
     SmartDashboard.putNumber("Gyro Angle", orientation);
+    SmartDashboard.putNumber("Knob Angle", knob.read());
 
     Feedback feedback = new Feedback(orientation);
     drive.onUpdate(feedback);
