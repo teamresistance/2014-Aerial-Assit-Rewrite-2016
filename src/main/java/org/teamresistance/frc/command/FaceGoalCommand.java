@@ -16,32 +16,9 @@ import org.teamresistance.frc.subsystem.drive.DriveFacingGoalController;
  * @author Rothanak So
  * @see GoalSensor
  */
-public class FaceGoalCommand extends Command {
-  private final Drive drive;
-  private final DriveFacingGoalController controller;
+public class FaceGoalCommand extends ControllerCommand<Drive, DriveFacingGoalController, Drive.Signal> {
 
   public FaceGoalCommand(Drive drive) {
-    this.drive = drive;
-    this.controller = new DriveFacingGoalController();
-  }
-
-  @Override
-  public void initialize() {
-    drive.setController(controller);
-  }
-
-  @Override
-  public boolean execute() {
-    return controller.isOnTarget();
-  }
-
-  @Override
-  public void interrupted() {
-    this.end();
-  }
-
-  @Override
-  public void end() {
-    drive.setOpenLoop();
+    super(drive, new DriveFacingGoalController(), false);
   }
 }

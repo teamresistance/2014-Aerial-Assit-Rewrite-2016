@@ -32,6 +32,6 @@ public class DriveFacingGoalController implements Controller<Drive.Signal> {
     // If we see the goal, rotate toward it. Otherwise, pass the feed forward through.
     Optional<Double> maybeOffset = feedback.goalOffset.get();
     double rotateSpeed = maybeOffset.map(pid::calculate).orElseGet(() -> feedForward.rotateSpeed);
-    return new Drive.Signal(feedForward.xSpeed, feedForward.ySpeed, rotateSpeed);
+    return Drive.Signal.createFieldOriented(feedForward.xSpeed, feedForward.ySpeed, rotateSpeed);
   }
 }
