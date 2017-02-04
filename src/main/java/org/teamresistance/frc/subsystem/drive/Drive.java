@@ -50,10 +50,11 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Stoppable, Req
   protected void onSignal(Drive.Signal signal) {
     // Spin the motors inwards if we're stopped
     if (hackStoppingLatch) {
-      IO.frontLeftMotor.setSpeed(0.5);
-      IO.frontRightMotor.setSpeed(0.5);
-      IO.rearLeftMotor.setSpeed(-0.5);
-      IO.rearRightMotor.setSpeed(-0.5);
+      final double power = 0.2;
+      IO.frontLeftMotor.setSpeed(power);
+      IO.frontRightMotor.setSpeed(power);
+      IO.rearLeftMotor.setSpeed(-power);
+      IO.rearRightMotor.setSpeed(-power);
       return; // abort so the drive signal doesn't mess things up
     }
 
@@ -67,15 +68,17 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Stoppable, Req
     }
   }
 
-  @Override
-  public void stop() {
-    setController(new DriveHaltingController());
+  public void hackPressBrake() {
     hackStoppingLatch = true; // start stopping
   }
 
-  @Override
-  protected void hackOnNewControllerSet() {
+  public void hackLiftBrake() {
     hackStoppingLatch = false; // lift the latch
+  }
+
+  @Override
+  public void stop() {
+    setController(new DriveHaltingController());
   }
 
   public static final class Signal {
