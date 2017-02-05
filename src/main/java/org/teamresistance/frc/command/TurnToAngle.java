@@ -12,7 +12,7 @@ public class TurnToAngle extends Command {
   private final Drive drive;
   private final DriveHoldingAngleController controller;
 
-  public TurnToAngle(Drive drive, double targetAngle){
+  public TurnToAngle(Drive drive, double targetAngle) {
     this.drive = drive;
     this.controller = new DriveHoldingAngleController(targetAngle);
   }
@@ -31,5 +31,4 @@ public class TurnToAngle extends Command {
   public void end() {
     drive.stop();
   }
-
 }
