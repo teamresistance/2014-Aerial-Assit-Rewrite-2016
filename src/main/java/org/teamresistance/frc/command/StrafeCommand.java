@@ -5,7 +5,7 @@ import org.teamresistance.frc.subsystem.drive.DriveStrafingController;
 
 public class StrafeCommand extends ControllerCommand<Drive, DriveStrafingController, Drive.Signal> {
 
-  public StrafeCommand(Drive drive, double headingDeg, double timeoutSeconds) {
-    super(drive, new DriveStrafingController(headingDeg), timeoutSeconds);
+  public StrafeCommand(Drive drive, double orientation, double headingDeg, double timeoutSeconds) {
+    super(drive, new DriveStrafingController(orientation, headingDeg), timeoutSeconds);
   }
 }

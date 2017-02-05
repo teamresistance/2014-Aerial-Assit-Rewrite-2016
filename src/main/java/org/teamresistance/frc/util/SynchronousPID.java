@@ -36,6 +36,7 @@ public class SynchronousPID implements LiveWindowSendable {
   }
 
   public boolean isWithinTolerance() {
+    // FIXME: Bad calculation. Patched in https://github.com/strongback/strongback-java/pull/106
     return controller.isWithinTolerance();
   }
 

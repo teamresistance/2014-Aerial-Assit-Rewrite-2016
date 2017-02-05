@@ -9,8 +9,8 @@ public class DriveStrafingController implements Controller<Drive.Signal> {
   private final Controller<Drive.Signal> angleController;
   private final double headingDeg;
 
-  public DriveStrafingController(double headingDeg) {
-    this.angleController = new DriveHoldingAngleController(0);
+  public DriveStrafingController(double orientation, double headingDeg) {
+    this.angleController = new DriveHoldingAngleController(orientation);
     this.headingDeg = headingDeg;
   }
 

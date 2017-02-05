@@ -23,6 +23,11 @@ public abstract class ClosedLooping<T> implements Looping {
 
   public final void setController(Controller<T> controller) {
     this.controller = controller;
+    onController(controller);
+  }
+
+  protected void onController(Controller<T> controller) {
+
   }
 
   @Override

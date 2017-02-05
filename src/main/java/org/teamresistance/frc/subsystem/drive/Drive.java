@@ -49,6 +49,11 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Stoppable, Req
   }
 
   @Override
+  protected void onController(Controller<Signal> controller) {
+    SmartDashboard.putString("Drive Controller", controller.getClass().getSimpleName());
+  }
+
+  @Override
   protected void onSignal(Drive.Signal signal) {
     // Spin the motors inwards if we're stopped
     if (hackBrakingLatch) {
