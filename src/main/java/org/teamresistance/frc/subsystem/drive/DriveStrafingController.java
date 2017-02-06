@@ -1,6 +1,6 @@
 package org.teamresistance.frc.subsystem.drive;
 
-import org.teamresistance.frc.Pose;
+import org.teamresistance.frc.Feedback;
 import org.teamresistance.frc.subsystem.Controller;
 
 public class DriveStrafingController implements Controller<Drive.Signal> {
@@ -15,7 +15,7 @@ public class DriveStrafingController implements Controller<Drive.Signal> {
   }
 
   @Override
-  public Drive.Signal computeSignal(Drive.Signal feedForward, Pose feedback) {
+  public Drive.Signal computeSignal(Drive.Signal feedForward, Feedback feedback) {
     double rotateSpeed = angleController.computeSignal(feedForward, feedback).rotateSpeed;
     return Drive.Signal.createRobotOriented(SPEED, headingDeg, rotateSpeed);
   }

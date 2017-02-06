@@ -6,7 +6,7 @@ import org.strongback.command.Requirable;
 import org.strongback.components.ui.ContinuousRange;
 import org.strongback.drive.MecanumDrive;
 import org.teamresistance.frc.IO;
-import org.teamresistance.frc.Pose;
+import org.teamresistance.frc.Feedback;
 import org.teamresistance.frc.subsystem.ClosedLooping;
 import org.teamresistance.frc.subsystem.Controller;
 import org.teamresistance.frc.subsystem.OpenLoopController;
@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * {@link #setController(Controller)}. These calls to {@link #setController(Controller)} can be
  * queued and scheduled using {@link Command}s and {@link CommandGroup}s to create higher-level
  * routines for controlling the robot. The {@link Controller#computeSignal} method of the active
- * controller will be invoked during {@link #onUpdate(Pose)}, and the resulting output will be fed
+ * controller will be invoked during {@link #onUpdate(Feedback)}, and the resulting output will be fed
  * into {@link #onSignal(Signal)}.
  * <p>
  * The subsystem starts with the {@link OpenLoopController} in place. It enables the default

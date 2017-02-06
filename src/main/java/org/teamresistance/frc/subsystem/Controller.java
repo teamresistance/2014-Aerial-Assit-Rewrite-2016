@@ -1,6 +1,6 @@
 package org.teamresistance.frc.subsystem;
 
-import org.teamresistance.frc.Pose;
+import org.teamresistance.frc.Feedback;
 
 /**
  * TODO: Documentation (high priority)
@@ -10,7 +10,7 @@ import org.teamresistance.frc.Pose;
 @FunctionalInterface
 public interface Controller<T> {
 
-  T computeSignal(T feedForward, Pose feedback);
+  T computeSignal(T feedForward, Feedback feedback);
 
   default boolean isOnTarget() {
     return false;

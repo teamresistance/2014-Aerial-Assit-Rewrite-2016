@@ -90,8 +90,8 @@ public class Robot extends IterativeRobot {
     double orientation = IO.gyro.getAngle();
     SmartDashboard.putNumber("Gyro Angle", orientation);
 
-    Pose pose = new Pose(orientation);
-    drive.onUpdate(pose);
+    Feedback feedback = new Feedback(orientation);
+    drive.onUpdate(feedback);
   }
 
   @Override

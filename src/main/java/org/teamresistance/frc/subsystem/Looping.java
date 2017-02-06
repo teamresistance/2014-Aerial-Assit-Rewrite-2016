@@ -1,6 +1,6 @@
 package org.teamresistance.frc.subsystem;
 
-import org.teamresistance.frc.Pose;
+import org.teamresistance.frc.Feedback;
 
 /**
  * TODO: Documentation (high priority)
@@ -9,5 +9,5 @@ import org.teamresistance.frc.Pose;
 @FunctionalInterface
 public interface Looping {
 
-  void onUpdate(Pose pose);
+  void onUpdate(Feedback feedback);
 }

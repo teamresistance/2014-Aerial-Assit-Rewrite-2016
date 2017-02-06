@@ -1,7 +1,7 @@
 package org.teamresistance.frc.subsystem.drive;
 
 import org.strongback.control.SoftwarePIDController.SourceType;
-import org.teamresistance.frc.Pose;
+import org.teamresistance.frc.Feedback;
 import org.teamresistance.frc.subsystem.Controller;
 import org.teamresistance.frc.util.SynchronousPID;
 
@@ -38,7 +38,7 @@ public class DriveHoldingAngleController implements Controller<Drive.Signal> {
   }
 
   @Override
-  public Drive.Signal computeSignal(Drive.Signal feedForward, Pose feedback) {
+  public Drive.Signal computeSignal(Drive.Signal feedForward, Feedback feedback) {
     double rotationSpeed = rotationPid.calculate(feedback.currentAngle);
     return Drive.Signal.createFieldOriented(feedForward.xSpeed, feedForward.ySpeed, rotationSpeed);
   }

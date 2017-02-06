@@ -1,6 +1,6 @@
 package org.teamresistance.frc.subsystem;
 
-import org.teamresistance.frc.Pose;
+import org.teamresistance.frc.Feedback;
 
 import java.util.function.Supplier;
 
@@ -32,8 +32,8 @@ public abstract class ClosedLooping<T> implements Looping {
   }
 
   @Override
-  public final void onUpdate(Pose pose) {
-    onSignal(controller.computeSignal(feedForward.get(), pose));
+  public final void onUpdate(Feedback feedback) {
+    onSignal(controller.computeSignal(feedForward.get(), feedback));
   }
 
   protected abstract void onSignal(T signal);
