@@ -11,7 +11,7 @@ import org.teamresistance.frc.subsystem.Controller;
  *
  * @author Rothanak So
  * @see HoldAngleCommand
- * @see StrafeCommand
+ * @see DriveTimedCommand
  */
 // Human-readable version: class ControllerCommand<Subsystem, Controller, Signal> extends Command
 abstract class ControllerCommand<T extends ClosedLooping<V> & Requirable, U extends

@@ -13,7 +13,7 @@ import org.teamresistance.frc.subsystem.drive.DriveHoldingAngleController;
  *
  * @author Rothanak So
  */
-public class HoldAngleCommand extends ControllerCommand<Drive, DriveHoldingAngleController, Drive.Signal> {
+public class HoldAngleCommand extends DriveCommand {
 
   public HoldAngleCommand(Drive drive, double targetAngle) {
     // Unlike a TurnToAngle command, we want HoldAngle to run indefinitely.

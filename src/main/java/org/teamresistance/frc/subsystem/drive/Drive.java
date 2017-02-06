@@ -3,7 +3,6 @@ package org.teamresistance.frc.subsystem.drive;
 import org.strongback.command.Command;
 import org.strongback.command.CommandGroup;
 import org.strongback.command.Requirable;
-import org.strongback.components.Stoppable;
 import org.strongback.components.ui.ContinuousRange;
 import org.strongback.drive.MecanumDrive;
 import org.teamresistance.frc.IO;
@@ -38,7 +37,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * @author Shreya Ravi
  * @author Rothanak So
  */
-public class Drive extends ClosedLooping<Drive.Signal> implements Stoppable, Requirable {
+public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
   private final MecanumDrive robotDrive;
   private boolean hackBrakingLatch;
 
@@ -46,11 +45,6 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Stoppable, Req
                ContinuousRange rotateSpeed) {
     super(() -> Signal.createFieldOriented(xSpeed.read(), ySpeed.read(), rotateSpeed.read()));
     this.robotDrive = robotDrive;
-  }
-
-  @Override
-  protected void onController(Controller<Signal> controller) {
-    SmartDashboard.putString("Drive Controller", controller.getClass().getSimpleName());
   }
 
   @Override
@@ -84,11 +78,6 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Stoppable, Req
 
   public void hackLiftBrake() {
     hackBrakingLatch = false; // lift the latch
-  }
-
-  @Override
-  public void stop() {
-    setController(new DriveHaltingController());
   }
 
   public static final class Signal {
