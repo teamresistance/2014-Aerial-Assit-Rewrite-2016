@@ -6,11 +6,10 @@ import org.strongback.command.Command;
 import org.strongback.command.CommandGroup;
 import org.strongback.components.ui.FlightStick;
 import org.strongback.hardware.Hardware;
+import org.teamresistance.frc.command.BrakeCommand;
 import org.teamresistance.frc.command.HoldAngleCommand;
 import org.teamresistance.frc.command.StrafeCommand;
 import org.teamresistance.frc.subsystem.drive.Drive;
-
-import java.util.concurrent.TimeUnit;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -49,13 +48,15 @@ public class Robot extends IterativeRobot {
 
     // Drive straight, pause for 2s, then strafe 90 degrees
     reactor.onTriggeredSubmit(leftJoystick.getButton(7), () -> CommandGroup.runSequentially(
-        new StrafeCommand(drive, 0, 1.5),
-        Command.pause(2, TimeUnit.SECONDS), // TODO replace with full stop
-        new StrafeCommand(drive, 90, 1.5)
+        new StrafeCommand(drive, 0, 0.9),
+        new HoldAngleCommand(drive, 135)
     ));
 
     // Cancel ongoing Drive commands. The interrupted commands should hand back operator control
     reactor.onTriggered(leftJoystick.getButton(3), () -> Strongback.submit(Command.cancel(drive)));
+
+    // Lock the drive motors and hopefully stop the robot
+    reactor.onTriggeredSubmit(leftJoystick.getButton(5), () -> new BrakeCommand(drive, IO.gyro, 1));
   }
 
   @Override

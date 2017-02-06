@@ -6,10 +6,13 @@ import org.strongback.command.Requirable;
 import org.strongback.components.Stoppable;
 import org.strongback.components.ui.ContinuousRange;
 import org.strongback.drive.MecanumDrive;
+import org.teamresistance.frc.IO;
 import org.teamresistance.frc.Pose;
 import org.teamresistance.frc.subsystem.ClosedLooping;
 import org.teamresistance.frc.subsystem.Controller;
 import org.teamresistance.frc.subsystem.OpenLoopController;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The drive subsystem. The <b>only</b> way to manipulate the drivetrain is through this class. It
@@ -37,6 +40,7 @@ import org.teamresistance.frc.subsystem.OpenLoopController;
  */
 public class Drive extends ClosedLooping<Drive.Signal> implements Stoppable, Requirable {
   private final MecanumDrive robotDrive;
+  private boolean hackBrakingLatch;
 
   public Drive(MecanumDrive robotDrive, ContinuousRange xSpeed, ContinuousRange ySpeed,
                ContinuousRange rotateSpeed) {
@@ -46,6 +50,19 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Stoppable, Req
 
   @Override
   protected void onSignal(Drive.Signal signal) {
+    // Spin the motors inwards if we're stopped
+    if (hackBrakingLatch) {
+      SmartDashboard.putBoolean("Is Braking?", true);
+      final double power = 0.2;
+      IO.frontLeftMotor.setSpeed(-power);
+      IO.frontRightMotor.setSpeed(-power);
+      IO.rearLeftMotor.setSpeed(power);
+      IO.rearRightMotor.setSpeed(power);
+      return; // abort so the drive signal doesn't mess things up
+    }
+
+    SmartDashboard.putBoolean("Is Braking?", false);
+
     if (signal.robotOriented) {
       // Convert the speeds from cartesian to polar
       double magnitude = Math.sqrt(signal.xSpeed * signal.xSpeed + signal.ySpeed * signal.ySpeed);
@@ -54,6 +71,14 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Stoppable, Req
     } else {
       robotDrive.cartesian(signal.xSpeed, signal.ySpeed, signal.rotateSpeed);
     }
+  }
+
+  public void hackPressBrake() {
+    hackBrakingLatch = true; // start stopping
+  }
+
+  public void hackLiftBrake() {
+    hackBrakingLatch = false; // lift the latch
   }
 
   @Override
