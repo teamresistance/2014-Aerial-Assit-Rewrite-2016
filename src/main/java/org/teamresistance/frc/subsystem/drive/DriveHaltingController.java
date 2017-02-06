@@ -19,6 +19,7 @@ public final class DriveHaltingController implements Controller<Drive.Signal> {
 
   @Override
   public Drive.Signal computeSignal(Drive.Signal feedForward, Pose feedback) {
-    return new Drive.Signal(0, 0, 0);
+    // TODO: Spin the wheels inward instead to halt. May need some API tweaks.
+    return Drive.Signal.createFieldOriented(0, 0, 0);
   }
 }
