@@ -48,16 +48,15 @@ public class Robot extends IterativeRobot {
 
     // Drive straight, pause for 2s, then strafe 90 degrees
     reactor.onTriggeredSubmit(leftJoystick.getButton(7), () -> CommandGroup.runSequentially(
-        new StrafeCommand(drive, 0, 1.5),
-        new BrakeCommand(drive, IO.gyro, 1.5),
-        new StrafeCommand(drive, 90, 1.5)
+        new StrafeCommand(drive, 0, 0.9),
+        new HoldAngleCommand(drive, 135)
     ));
 
     // Cancel ongoing Drive commands. The interrupted commands should hand back operator control
     reactor.onTriggered(leftJoystick.getButton(3), () -> Strongback.submit(Command.cancel(drive)));
 
     // Lock the drive motors and hopefully stop the robot
-    reactor.onTriggeredSubmit(leftJoystick.getButton(5), () -> new BrakeCommand(drive, IO.gyro, 0.5));
+    reactor.onTriggeredSubmit(leftJoystick.getButton(5), () -> new BrakeCommand(drive, IO.gyro, 1));
   }
 
   @Override

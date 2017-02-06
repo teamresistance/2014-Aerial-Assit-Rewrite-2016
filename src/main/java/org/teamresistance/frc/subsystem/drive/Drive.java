@@ -12,6 +12,8 @@ import org.teamresistance.frc.subsystem.ClosedLooping;
 import org.teamresistance.frc.subsystem.Controller;
 import org.teamresistance.frc.subsystem.OpenLoopController;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * The drive subsystem. The <b>only</b> way to manipulate the drivetrain is through this class. It
  * runs on a loop for the entire duration of the match and supports both operator and autonomous
@@ -38,7 +40,7 @@ import org.teamresistance.frc.subsystem.OpenLoopController;
  */
 public class Drive extends ClosedLooping<Drive.Signal> implements Stoppable, Requirable {
   private final MecanumDrive robotDrive;
-  private boolean hackStoppingLatch;
+  private boolean hackBrakingLatch;
 
   public Drive(MecanumDrive robotDrive, ContinuousRange xSpeed, ContinuousRange ySpeed,
                ContinuousRange rotateSpeed) {
@@ -49,14 +51,17 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Stoppable, Req
   @Override
   protected void onSignal(Drive.Signal signal) {
     // Spin the motors inwards if we're stopped
-    if (hackStoppingLatch) {
+    if (hackBrakingLatch) {
+      SmartDashboard.putBoolean("Is Braking?", true);
       final double power = 0.2;
-      IO.frontLeftMotor.setSpeed(power);
-      IO.frontRightMotor.setSpeed(power);
-      IO.rearLeftMotor.setSpeed(-power);
-      IO.rearRightMotor.setSpeed(-power);
+      IO.frontLeftMotor.setSpeed(-power);
+      IO.frontRightMotor.setSpeed(-power);
+      IO.rearLeftMotor.setSpeed(power);
+      IO.rearRightMotor.setSpeed(power);
       return; // abort so the drive signal doesn't mess things up
     }
+
+    SmartDashboard.putBoolean("Is Braking?", false);
 
     if (signal.robotOriented) {
       // Convert the speeds from cartesian to polar
@@ -69,11 +74,11 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Stoppable, Req
   }
 
   public void hackPressBrake() {
-    hackStoppingLatch = true; // start stopping
+    hackBrakingLatch = true; // start stopping
   }
 
   public void hackLiftBrake() {
-    hackStoppingLatch = false; // lift the latch
+    hackBrakingLatch = false; // lift the latch
   }
 
   @Override
