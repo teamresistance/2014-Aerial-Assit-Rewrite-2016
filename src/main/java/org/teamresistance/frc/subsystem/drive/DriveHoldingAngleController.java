@@ -20,12 +20,13 @@ public class DriveHoldingAngleController implements Controller<Drive.Signal> {
   // (>= 1.0 or <= -1.0) for the majority of travel. For example, a kP of 0.008 only outputs full
   // speed when the error exceeds 1 / 0.008, or 125 degrees.
   private static final double TOLERANCE = 2;
-  private static final double KP = 0.03; // TODO: underdamped, spun so fast it killed the robot
+  private static final double KP = 0.02; // TODO: underdamped, spun so fast it killed the robot
+  private static final double KD = 0.01;
 
   private final SynchronousPID rotationPid;
 
   public DriveHoldingAngleController(double targetDegrees) {
-    this.rotationPid = new SynchronousPID(SourceType.DISTANCE, KP, 0, 0)
+    this.rotationPid = new SynchronousPID(SourceType.DISTANCE, KP, 0, KD)
         .withConfigurations(controller -> controller
             .withInputRange(0, 360) // gyro
             .withOutputRange(-1.0, 1.0) // motor
