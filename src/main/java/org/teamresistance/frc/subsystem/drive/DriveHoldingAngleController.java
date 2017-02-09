@@ -33,7 +33,6 @@ public class DriveHoldingAngleController implements Controller<Drive.Signal> {
             .withTolerance(TOLERANCE)
             .continuousInputs(true));
 
-    // FIXME: Gains don't display. Patched in https://github.com/strongback/strongback-java/pull/106
     SmartDashboard.putData("Angle Hold PID", rotationPid);
   }
 
