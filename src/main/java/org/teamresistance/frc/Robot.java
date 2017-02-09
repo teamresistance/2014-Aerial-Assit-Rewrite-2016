@@ -25,6 +25,8 @@ public class Robot extends IterativeRobot {
   private final FlightStick rightJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(1);
   private final FlightStick coJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(2);
 
+  private OpticalFlow opFlow = new OpticalFlow();
+
   private final Drive drive = new Drive(
       IO.robotDrive,
       leftJoystick.getRoll(),
@@ -34,6 +36,8 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void robotInit() {
+    opFlow.init();
+
     Strongback.configure().recordNoEvents().recordNoData();
     final SwitchReactor reactor = Strongback.switchReactor();
 
@@ -112,6 +116,8 @@ public class Robot extends IterativeRobot {
     // Post our orientation on the SD for debugging purposes
     double orientation = IO.gyro.getAngle();
     SmartDashboard.putNumber("Gyro Angle", orientation);
+
+    opFlow.update();
 
     Feedback feedback = new Feedback(orientation);
     drive.onUpdate(feedback);
