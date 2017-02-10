@@ -61,10 +61,10 @@ Tarik has a [pull request](https://github.com/teamresistance/fist-of-life/pull/1
 
 ## Testing Plan
 
-1. Pressing Toggle will spin the motor forward if they are idle
-2. Pressing Toggle will stop the motor if they are spinning forward
-3. Pressing Toggle will spin the motor forward if they are spinning backward
-4. Pressing and holding Reverse will spin the motor backward if they are idle
-5. Pressing and holding Reverse is ignored if the motor are spinning forward
-6. Releasing Reverse will stop the motor if they are spinning backward
+1. Pressing Toggle will spin the motor forward if it is idle
+2. Pressing Toggle will stop the motor if it is spinning forward
+3. Pressing Toggle will spin the motor forward if it is spinning backward
+4. Pressing and holding Reverse will spin the motor backward if it is idle
+5. Pressing and holding Reverse is ignored if the motor is spinning forward
+6. Releasing Reverse will stop the motor if it is spinning backward
 7. **Edge case:** Pressing Toggle while holding Reverse will spin the motor forward. Releasing Reverse will have no effect.
