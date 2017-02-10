@@ -3,12 +3,15 @@ package org.teamresistance.frc;
 import org.strongback.Strongback;
 import org.strongback.SwitchReactor;
 import org.strongback.command.Command;
+import org.strongback.components.Motor;
 import org.strongback.command.CommandGroup;
 import org.strongback.components.ui.FlightStick;
 import org.strongback.hardware.Hardware;
 import org.teamresistance.frc.command.BrakeCommand;
 import org.teamresistance.frc.command.DriveTimedCommand;
 import org.teamresistance.frc.command.HoldAngleCommand;
+import org.teamresistance.frc.command.SnorfleInCommand;
+import org.teamresistance.frc.command.SnorfleOutCommand;
 import org.teamresistance.frc.subsystem.drive.Drive;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -25,6 +28,9 @@ public class Robot extends IterativeRobot {
   private final FlightStick rightJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(1);
   private final FlightStick coJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(2);
 
+  public final double snorfSpeed = 1.0;
+  public Motor snorfleMotor;
+  public final double stopSnorf = 0.0;
   private final Drive drive = new Drive(
       IO.robotDrive,
       leftJoystick.getRoll(),
@@ -94,6 +100,12 @@ public class Robot extends IterativeRobot {
     // Hold angle at 135 or 0 degrees until cancelled or interrupted
     reactor.onTriggeredSubmit(rightJoystick.getButton(3), () -> new HoldAngleCommand(drive, 135));
     reactor.onTriggeredSubmit(rightJoystick.getButton(4), () -> new HoldAngleCommand(drive, 0));
+
+    // Snorfling
+    reactor.whileTriggered(rightJoystick.getTrigger(), () -> new SnorfleOutCommand( snorfSpeed,snorfleMotor,stopSnorf));
+    reactor.whileUntriggered(rightJoystick.getTrigger(), () -> Command.cancel(snorfleMotor));
+    reactor.onTriggeredSubmit(rightJoystick.getButton(6), () -> new SnorfleInCommand(snorfSpeed,snorfleMotor,stopSnorf));
+    reactor.onTriggeredSubmit(rightJoystick.getButton(7), () -> Command.cancel(snorfleMotor));
 
   }
 

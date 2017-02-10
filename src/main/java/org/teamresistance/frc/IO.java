@@ -16,6 +16,8 @@ public class IO {
   public static final Motor rearLeftMotor = new MotorSpy(Hardware.Motors.victor(2), "RL");
   public static final Motor rearRightMotor = new MotorSpy(Hardware.Motors.victor(3).invert(), "RR");
 
+  public static final Motor snorfleMotor = Hardware.Motors.victor(0);
+
   public static final Gyro3D gyro = new Gyro3D(SPI.Port.kMXP);
 
   public static final MecanumDrive robotDrive = new MecanumDrive(

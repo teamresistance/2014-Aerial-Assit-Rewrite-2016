@@ -6,14 +6,14 @@ import org.strongback.components.Motor;
 /**
  * @author Tarik C. Brown
  */
-public class SnorfleCommand extends Command {
+public class SnorfleOutCommand extends Command {
   public final double snorfspeed;
-  public Motor snorfleMotor;
-
-  public SnorfleCommand(Motor snorfleMotor, double snorfspeed) {
-    super(snorfleMotor);
+  public final Motor snorfleMotor;
+  public final double stopSnorf;
+  public SnorfleOutCommand(double snorfspeed, Motor snorfleMotor, double stopSnorf) {
     this.snorfspeed = snorfspeed;
     this.snorfleMotor = snorfleMotor;
+    this.stopSnorf = stopSnorf;
   }
 
   @Override
@@ -23,6 +23,6 @@ public class SnorfleCommand extends Command {
   }
   @Override
   public void interrupted() {
-    snorfleMotor.setSpeed(0.0);
+    snorfleMotor.setSpeed(stopSnorf);
   }
 }
