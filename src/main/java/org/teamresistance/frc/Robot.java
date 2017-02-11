@@ -8,6 +8,9 @@ import org.strongback.components.ui.FlightStick;
 import org.strongback.hardware.Hardware;
 import org.teamresistance.frc.command.BrakeCommand;
 import org.teamresistance.frc.command.DriveTimedCommand;
+import org.teamresistance.frc.command.DriveToX;
+import org.teamresistance.frc.command.DriveToY;
+import org.teamresistance.frc.command.DriveToYX;
 import org.teamresistance.frc.command.HoldAngleCommand;
 import org.teamresistance.frc.subsystem.drive.Drive;
 
@@ -35,34 +38,13 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotInit() {
     Strongback.configure().recordNoEvents().recordNoData();
+    IO.xDistPing.setAutomaticMode(true);
+    IO.yDistPing.setAutomaticMode(true);
     final SwitchReactor reactor = Strongback.switchReactor();
 
     // Hold the current angle of the robot while the trigger is held
     reactor.onTriggeredSubmit(leftJoystick.getTrigger(), () -> new HoldAngleCommand(drive, IO.gyro.getAngle()));
     reactor.onUntriggeredSubmit(leftJoystick.getTrigger(), () -> Command.cancel(drive)); // FIXME doesn't cancel
-
-    // Drive straight, strafe 90 degrees, and strafe 45 -- each for 2 seconds
-    reactor.onTriggeredSubmit(leftJoystick.getButton(6), () -> new StrafeCommand(drive, 0, 0, 1.5));
-    reactor.onTriggeredSubmit(leftJoystick.getButton(11), () -> new StrafeCommand(drive, 0, 90, 1.5));
-    reactor.onTriggeredSubmit(leftJoystick.getButton(10), () -> new StrafeCommand(drive, 0, 45, 1.5));
-
-    // Drive straight, pause for 2s, then strafe 90 degrees
-    reactor.onTriggeredSubmit(leftJoystick.getButton(7), () -> CommandGroup.runSequentially(
-        new StrafeCommand(drive, 0, 0, 0.9),
-        new StrafeCommand(drive, 0, 90, 1.5),
-        Command.pause(1.5),
-        new StrafeCommand(drive, 0, 270, 1.0),
-        new StrafeCommand(drive, 0, 180, 0.6),
-        new HoldAngleCommand(drive, 135)
-    ));
-
-    reactor.onTriggeredSubmit(leftJoystick.getButton(2), () -> CommandGroup.runSequentially(
-        new StrafeCommand(drive, 0, 0, 1.5),
-        new BrakeCommand(drive, IO.gyro, 1)
-    ));
-
-    reactor.onTriggeredSubmit(rightJoystick.getButton(3), () -> new HoldAngleCommand(drive, 135));
-    reactor.onTriggeredSubmit(rightJoystick.getButton(4), () -> new HoldAngleCommand(drive, 0));
 
     // Cancel ongoing Drive commands. The interrupted commands should hand back operator control
     reactor.onTriggered(leftJoystick.getButton(3), () -> {
@@ -91,15 +73,25 @@ public class Robot extends IterativeRobot {
     // Reset the gyro
     reactor.onTriggered(rightJoystick.getButton(2), () -> IO.gyro.getNavX().reset());
 
+    // Braking
+    reactor.onTriggeredSubmit(leftJoystick.getButton(2), () -> CommandGroup.runSequentially(
+        new DriveTimedCommand(drive, 0, 0, 1.5),
+        new BrakeCommand(drive, IO.gyro, 1)
+    ));
+
     // Hold angle at 135 or 0 degrees until cancelled or interrupted
     reactor.onTriggeredSubmit(rightJoystick.getButton(3), () -> new HoldAngleCommand(drive, 135));
     reactor.onTriggeredSubmit(rightJoystick.getButton(4), () -> new HoldAngleCommand(drive, 0));
 
+    reactor.onTriggeredSubmit(leftJoystick.getButton(6), () -> new DriveToYX(drive,60,66,60,0));
+    reactor.onTriggeredSubmit(leftJoystick.getButton(7), () -> new DriveToY(drive, 10, 66));
+    reactor.onTriggeredSubmit(leftJoystick.getButton(8), () -> new DriveToX(drive, 10, 0));
   }
 
   @Override
   public void autonomousInit() {
     Strongback.start();
+    // make sure these measurements are right
   }
 
   @Override
@@ -113,7 +105,13 @@ public class Robot extends IterativeRobot {
     double orientation = IO.gyro.getAngle();
     SmartDashboard.putNumber("Gyro Angle", orientation);
 
-    Feedback feedback = new Feedback(orientation);
+    Feedback feedback = new Feedback(orientation,
+        IO.xDistPing.getRangeInches(),
+//        IO.xDistPing.getDistanceInInches(),
+        IO.yDistPing.getRangeInches());
+//        IO.yDistPing.getDistanceInInches());
+    SmartDashboard.putNumber("Y Distance (Ping): ", feedback.yDist);
+    SmartDashboard.putNumber("X Distance (Ping): ", feedback.xDist);
     drive.onUpdate(feedback);
   }
 

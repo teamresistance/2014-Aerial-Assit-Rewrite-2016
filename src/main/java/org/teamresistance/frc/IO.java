@@ -1,5 +1,6 @@
 package org.teamresistance.frc;
 
+import edu.wpi.first.wpilibj.Ultrasonic;
 import org.strongback.components.Motor;
 import org.strongback.drive.MecanumDrive;
 import org.strongback.hardware.Hardware;
@@ -25,4 +26,9 @@ public class IO {
       rearRightMotor,
       gyro
   );
+  //  private static final DistanceSensor xDistPing = Hardware.DistanceSensors.digitalUltrasonic(0,1);
+  //  private static final DistanceSensor yDistPing = Hardware.DistanceSensors.digitalUltrasonic(2,3);
+  public static final Ultrasonic xDistPing = new Ultrasonic(0,1);
+  public static final Ultrasonic yDistPing = new Ultrasonic(2,3);
+
 }

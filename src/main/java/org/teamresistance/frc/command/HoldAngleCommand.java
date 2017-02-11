@@ -1,5 +1,6 @@
 package org.teamresistance.frc.command;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.strongback.command.Command;
 import org.strongback.command.Requirable;
 import org.teamresistance.frc.subsystem.drive.Drive;
