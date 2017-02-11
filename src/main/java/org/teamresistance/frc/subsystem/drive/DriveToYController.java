@@ -1,7 +1,7 @@
 package org.teamresistance.frc.subsystem.drive;
 
 import org.strongback.control.SoftwarePIDController;
-import org.teamresistance.frc.Pose;
+import org.teamresistance.frc.Feedback;
 import org.teamresistance.frc.subsystem.Controller;
 import org.teamresistance.frc.util.SynchronousPID;
 
@@ -45,11 +45,11 @@ public class DriveToYController implements Controller<Drive.Signal> {
   }
 
   @Override
-  public Drive.Signal computeSignal(Drive.Signal feedForward, Pose feedback) {
+  public Drive.Signal computeSignal(Drive.Signal feedForward, Feedback feedback) {
     double ySpeed = this.yTranslationPID.calculate(feedback.yDist);
     double rotateSpeed = this.rotationPID.calculate(feedback.currentAngle);
     yDistPingSensor = feedback.yDist;
-    return new Drive.Signal(0,ySpeed,rotateSpeed);
+    return Drive.Signal.createFieldOriented(0,ySpeed,rotateSpeed);
   }
 
   @Override

@@ -1,8 +1,9 @@
 package org.teamresistance.frc.command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.strongback.command.Command;
 import org.teamresistance.frc.subsystem.drive.Drive;
 import org.teamresistance.frc.subsystem.drive.DriveToXController;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Created by shrey on 1/28/2017.
@@ -37,6 +38,6 @@ public class DriveToX extends Command {
 
   @Override
   public void end() {
-    drive.stop();
+    drive.setOpenLoop();
   }
 }
