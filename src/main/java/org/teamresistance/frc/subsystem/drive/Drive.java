@@ -52,7 +52,7 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
     // Spin the motors inwards if we're stopped
     if (hackBrakingLatch) {
       SmartDashboard.putBoolean("Is Braking?", true);
-      final double power = 0.2;
+      final double power = 0.3;
       IO.frontLeftMotor.setSpeed(-power);
       IO.frontRightMotor.setSpeed(-power);
       IO.rearLeftMotor.setSpeed(power);
