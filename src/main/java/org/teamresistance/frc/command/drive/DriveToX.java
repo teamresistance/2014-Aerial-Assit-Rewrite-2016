@@ -1,22 +1,22 @@
-package org.teamresistance.frc.command;
+package org.teamresistance.frc.command.drive;
 import org.strongback.command.Command;
 import org.teamresistance.frc.subsystem.drive.Drive;
-import org.teamresistance.frc.subsystem.drive.DriveToYController;
+import org.teamresistance.frc.subsystem.drive.DriveToXController;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * Created by shrey on 1/25/2017.
+ * Created by shrey on 1/28/2017.
  */
-public class DriveToY extends Command {
+public class DriveToX extends Command {
 
-  private final DriveToYController controller;
+  private final DriveToXController controller;
   private final Drive drive;
 
-  public DriveToY(Drive drive, double time, double targetY) {
+  public DriveToX(Drive drive, double time, double targetX) {
     super(time, drive);
     this.drive = drive;
-    this.controller = new DriveToYController(targetY);
+    this.controller = new DriveToXController(targetX);
   }
 
   @Override
@@ -27,8 +27,7 @@ public class DriveToY extends Command {
   @Override
   public boolean execute() {
     boolean onTarget = controller.isOnTarget();
-    SmartDashboard.putBoolean("DriveToY on Target?", onTarget);
-    System.out.println(onTarget);
+    SmartDashboard.putBoolean("DriveToX on Target?", onTarget);
     return onTarget;
   }
 

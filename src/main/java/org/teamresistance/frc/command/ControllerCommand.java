@@ -2,6 +2,8 @@ package org.teamresistance.frc.command;
 
 import org.strongback.command.Command;
 import org.strongback.command.Requirable;
+import org.teamresistance.frc.command.drive.DriveTimedCommand;
+import org.teamresistance.frc.command.drive.HoldAngleCommand;
 import org.teamresistance.frc.subsystem.ClosedLooping;
 import org.teamresistance.frc.subsystem.Controller;
 
@@ -14,20 +16,20 @@ import org.teamresistance.frc.subsystem.Controller;
  * @see DriveTimedCommand
  */
 // Human-readable version: class ControllerCommand<Subsystem, Controller, Signal> extends Command
-abstract class ControllerCommand<T extends ClosedLooping<V> & Requirable, U extends
+public abstract class ControllerCommand<T extends ClosedLooping<V> & Requirable, U extends
     Controller<V>, V> extends Command {
   private final T subsystem;
   private final U controller;
   private final boolean dontFinish;
 
-  ControllerCommand(T subsystem, U controller, boolean dontFinish) {
+  protected ControllerCommand(T subsystem, U controller, boolean dontFinish) {
     super(subsystem);
     this.subsystem = subsystem;
     this.controller = controller;
     this.dontFinish = dontFinish;
   }
 
-  ControllerCommand(T subsystem, U controller, double timeoutSeconds) {
+  protected ControllerCommand(T subsystem, U controller, double timeoutSeconds) {
     super(timeoutSeconds, subsystem);
     this.subsystem = subsystem;
     this.controller = controller;
