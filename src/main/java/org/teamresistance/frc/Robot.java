@@ -73,6 +73,12 @@ public class Robot extends IterativeRobot {
     // Reset the gyro
     reactor.onTriggered(rightJoystick.getButton(2), () -> IO.gyro.getNavX().reset());
 
+    // Braking
+    reactor.onTriggeredSubmit(leftJoystick.getButton(2), () -> CommandGroup.runSequentially(
+        new DriveTimedCommand(drive, 0, 0, 1.5),
+        new BrakeCommand(drive, IO.gyro, 1)
+    ));
+
     // Hold angle at 135 or 0 degrees until cancelled or interrupted
     reactor.onTriggeredSubmit(rightJoystick.getButton(3), () -> new HoldAngleCommand(drive, 135));
     reactor.onTriggeredSubmit(rightJoystick.getButton(4), () -> new HoldAngleCommand(drive, 0));
