@@ -1,4 +1,4 @@
-package org.teamresistance.frc.command;
+package org.teamresistance.frc.command.drive;
 
 import org.strongback.command.Command;
 import org.strongback.command.Requirable;

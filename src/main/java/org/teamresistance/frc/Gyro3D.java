@@ -17,6 +17,7 @@ public class Gyro3D implements AngleSensor, Accelerometer {
     this.gyro = new AHRS(port);
   }
 
+
   /**
    * Equivalent of getYaw()
    */

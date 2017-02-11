@@ -5,7 +5,6 @@ import org.strongback.command.CommandGroup;
 import org.strongback.command.Requirable;
 import org.strongback.components.ui.ContinuousRange;
 import org.strongback.drive.MecanumDrive;
-import org.teamresistance.frc.IO;
 import org.teamresistance.frc.Feedback;
 import org.teamresistance.frc.subsystem.ClosedLooping;
 import org.teamresistance.frc.subsystem.Controller;
@@ -53,10 +52,10 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
     if (hackBrakingLatch) {
       SmartDashboard.putBoolean("Is Braking?", true);
       final double power = 0.3;
-      IO.frontLeftMotor.setSpeed(-power);
-      IO.frontRightMotor.setSpeed(-power);
-      IO.rearLeftMotor.setSpeed(power);
-      IO.rearRightMotor.setSpeed(power);
+      //IO.frontLeftMotor.setSpeed(-power);
+      //IO.frontRightMotor.setSpeed(-power);
+      //IO.rearLeftMotor.setSpeed(power);
+      //IO.rearRightMotor.setSpeed(power);
       return; // abort so the drive signal doesn't mess things up
     }
 
