@@ -11,7 +11,6 @@ import org.teamresistance.frc.command.DriveTimedCommand;
 import org.teamresistance.frc.command.FaceGoalCommand;
 import org.teamresistance.frc.command.HoldAngleCommand;
 import org.teamresistance.frc.sensor.goal.GoalSensor;
-import org.teamresistance.frc.command.StrafeCommand;
 import org.teamresistance.frc.subsystem.drive.Drive;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -47,7 +46,7 @@ public class Robot extends IterativeRobot {
     reactor.onUntriggeredSubmit(leftJoystick.getTrigger(), () -> Command.cancel(drive)); // FIXME doesn't cancel
 
     reactor.onTriggeredSubmit(leftJoystick.getButton(2), () -> CommandGroup.runSequentially(
-        new StrafeCommand(drive, 0, 0, 1.5),
+        new DriveTimedCommand(drive, 0, 0, 1.5),
         new BrakeCommand(drive, IO.gyro, 1)
     ));
 

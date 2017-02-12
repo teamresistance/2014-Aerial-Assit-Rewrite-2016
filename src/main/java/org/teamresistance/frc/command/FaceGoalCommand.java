@@ -16,7 +16,7 @@ import org.teamresistance.frc.subsystem.drive.DriveFacingGoalController;
  * @author Rothanak So
  * @see GoalSensor
  */
-public class FaceGoalCommand extends ControllerCommand<Drive, DriveFacingGoalController, Drive.Signal> {
+public class FaceGoalCommand extends DriveCommand {
 
   public FaceGoalCommand(Drive drive) {
     super(drive, new DriveFacingGoalController(), false);

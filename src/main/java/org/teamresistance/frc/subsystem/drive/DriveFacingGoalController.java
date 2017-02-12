@@ -1,6 +1,6 @@
 package org.teamresistance.frc.subsystem.drive;
 
-import org.teamresistance.frc.Pose;
+import org.teamresistance.frc.Feedback;
 import org.teamresistance.frc.subsystem.Controller;
 import org.teamresistance.frc.util.SynchronousPID;
 
@@ -28,7 +28,7 @@ public class DriveFacingGoalController implements Controller<Drive.Signal> {
   }
 
   @Override
-  public Drive.Signal computeSignal(Drive.Signal feedForward, Pose feedback) {
+  public Drive.Signal computeSignal(Drive.Signal feedForward, Feedback feedback) {
     // If we see the goal, rotate toward it. Otherwise, pass the feed forward through.
     Optional<Double> maybeOffset = feedback.goalOffset.get();
     double rotateSpeed = maybeOffset.map(pid::calculate).orElseGet(() -> feedForward.rotateSpeed);
