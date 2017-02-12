@@ -14,8 +14,8 @@ public class ClimbRope extends Command {
   private double currTime;
   private double elapsedTime;
   private boolean onEnter;
-  private double currentThreshhold;
-  private double timeThreshhold;
+  private final double currentThreshhold;
+  private final double timeThreshhold;
 
   public ClimbRope(Motor climberMotor, PowerDistributionPanel pdp, double currentThreshhold, double timeThreshhold){
     super(climberMotor);
