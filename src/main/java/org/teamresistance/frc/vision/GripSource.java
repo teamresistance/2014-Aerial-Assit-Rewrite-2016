@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
+@Deprecated
 public final class GripSource implements Source<ContourReport> {
   private static final String TABLE_NAME = "GRIP/myContoursReport";
   private final NetworkTable table = NetworkTable.getTable(TABLE_NAME);

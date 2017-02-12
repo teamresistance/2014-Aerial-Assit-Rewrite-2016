@@ -10,11 +10,15 @@ import org.teamresistance.frc.command.BrakeCommand;
 import org.teamresistance.frc.command.DriveTimedCommand;
 import org.teamresistance.frc.command.FaceGoalCommand;
 import org.teamresistance.frc.command.HoldAngleCommand;
-import org.teamresistance.frc.sensor.goal.GoalSensor;
+import org.teamresistance.frc.sensor.boiler.BoilerListener;
+import org.teamresistance.frc.sensor.boiler.BoilerPipeline;
 import org.teamresistance.frc.subsystem.drive.Drive;
 
+import edu.wpi.cscore.VideoSource;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.vision.VisionThread;
 
 /**
  * Main robot class. Override methods from {@link IterativeRobot} to define behavior.
@@ -34,7 +38,13 @@ public class Robot extends IterativeRobot {
       rightJoystick.getRoll()
   );
 
-  private final GoalSensor goalSensor = new GoalSensor();
+  // Vision
+  private static final String AXIS_CAMERA_IP = "";
+  private final VideoSource source = CameraServer.getInstance().addAxisCamera(AXIS_CAMERA_IP);
+  private final BoilerPipeline boilerPipeline = new BoilerPipeline();
+  private final BoilerListener boilerListener = new BoilerListener();
+  private final VisionThread visionThread = new VisionThread(source, boilerPipeline,
+      boilerListener);
 
   @Override
   public void robotInit() {
@@ -94,15 +104,15 @@ public class Robot extends IterativeRobot {
   @Override
   public void teleopInit() {
     Strongback.start();
+    visionThread.start(); // Vision
   }
 
   @Override
   public void teleopPeriodic() {
-    // Post our orientation on the SD for debugging purposes
-    double orientation = IO.gyro.getAngle();
-    SmartDashboard.putNumber("Gyro Angle", orientation);
+    Feedback feedback = new Feedback(IO.gyro.getAngle(), boilerListener.getRelativeOffset());
+    SmartDashboard.putNumber("Gyro Angle", feedback.currentAngle);
+    SmartDashboard.putNumber("Goal Offset", feedback.goalOffset.orElse(-1));
 
-    Feedback feedback = new Feedback(orientation, goalSensor::getGoalOffset);
     drive.onUpdate(feedback);
   }
 
