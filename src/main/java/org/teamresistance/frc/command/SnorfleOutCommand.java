@@ -1,28 +1,25 @@
 package org.teamresistance.frc.command;
 
 import org.strongback.command.Command;
-import org.strongback.components.Motor;
+import org.teamresistance.frc.subsystem.snorfler.Snorfler;
 
 /**
  * @author Tarik C. Brown
  */
 public class SnorfleOutCommand extends Command {
-  public final double snorfspeed;
-  public final Motor snorfleMotor;
-  public final double stopSnorf;
-  public SnorfleOutCommand(double snorfspeed, Motor snorfleMotor, double stopSnorf) {
-    this.snorfspeed = snorfspeed;
-    this.snorfleMotor = snorfleMotor;
-    this.stopSnorf = stopSnorf;
+  public final Snorfler snorfler;
+
+  public SnorfleOutCommand(Snorfler snorfler) {
+    this.snorfler = snorfler;
   }
 
   @Override
   public boolean execute() {
-    snorfleMotor.setSpeed(snorfspeed);
+    snorfler.reverseSnorfling();
     return false;
   }
   @Override
-  public void interrupted() {
-    snorfleMotor.setSpeed(stopSnorf);
+  public void interrupted(){
+
   }
 }

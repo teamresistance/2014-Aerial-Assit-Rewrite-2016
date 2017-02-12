@@ -14,6 +14,7 @@ frc {
     team = "86"
     robotClass = "org.teamresistance.frc.Robot"
     deployTimeout = 3 // Seconds before timing out on an SSH connection
+    useDebugCommand = false;
 }
 
 wpi {

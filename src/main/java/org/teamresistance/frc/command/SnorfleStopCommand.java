@@ -4,21 +4,19 @@ import org.strongback.command.Command;
 import org.teamresistance.frc.subsystem.snorfler.Snorfler;
 
 /**
- * @author Tarik C. Brown
+ * Created by owner on 2/12/2017.
  */
-public class SnorfleInCommand extends Command {
+public class SnorfleStopCommand extends Command {
   public final Snorfler snorfler;
 
-  public SnorfleInCommand(Snorfler snorfler) {
+  public SnorfleStopCommand(Snorfler snorfler) {
     this.snorfler = snorfler;
   }
 
   @Override
   public boolean execute() {
-    snorfler.startSnorfling();
+    snorfler.stopSnorfling();
     return false;
   }
-  @Override
-  public void interrupted() {
-  }
+
 }

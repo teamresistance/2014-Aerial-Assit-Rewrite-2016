@@ -12,9 +12,11 @@ import org.teamresistance.frc.command.DriveTimedCommand;
 import org.teamresistance.frc.command.HoldAngleCommand;
 import org.teamresistance.frc.command.SnorfleInCommand;
 import org.teamresistance.frc.command.SnorfleOutCommand;
+import org.teamresistance.frc.command.SnorfleStopCommand;
 import org.teamresistance.frc.subsystem.drive.Drive;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import org.teamresistance.frc.subsystem.snorfler.Snorfler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -30,8 +32,7 @@ public class Robot extends IterativeRobot {
   private final FlightStick coJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(2);
 
   public final double snorfSpeed = 1.0;
-  public Motor snorfleMotor;
-  public final double stopSnorf = 0.0;
+  public Motor snorflerMotor;
   private final Drive drive = new Drive(
       IO.robotDrive,
       leftJoystick.getRoll(),
@@ -46,7 +47,7 @@ public class Robot extends IterativeRobot {
 
     // Hold the current angle of the robot while the trigger is held
     reactor.onTriggeredSubmit(leftJoystick.getTrigger(), () -> new HoldAngleCommand(drive, IO.gyro.getAngle()));
-    reactor.onUntriggeredSubmit(leftJoystick.getTrigger(), () -> Command.cancel(drive)); // FIXME doesn't cancel
+    reactor.onUntriggeredSubmit(leftJoystick.getTrigger(), () -> Command.cancel(drive));// FIXME doesn't cancel
 
     // Drive straight, strafe 90 degrees, and strafe 45 -- each for 2 seconds
     reactor.onTriggeredSubmit(leftJoystick.getButton(6), () -> new DriveTimedCommand(drive, 0, 0, 1.5));
@@ -103,10 +104,10 @@ public class Robot extends IterativeRobot {
     reactor.onTriggeredSubmit(rightJoystick.getButton(4), () -> new HoldAngleCommand(drive, 0));
 
     // Snorfling
-    reactor.whileTriggered(rightJoystick.getTrigger(), () -> new SnorfleOutCommand( snorfSpeed,snorfleMotor,stopSnorf));
-    reactor.whileUntriggered(rightJoystick.getTrigger(), () -> Command.cancel(snorfleMotor));
-    reactor.onTriggeredSubmit(rightJoystick.getButton(6), () -> new SnorfleInCommand(snorfSpeed,snorfleMotor,stopSnorf));
-    reactor.onTriggeredSubmit(rightJoystick.getButton(7), () -> Command.cancel(snorfleMotor));
+    Snorfler snorfler = new Snorfler();
+    reactor.onTriggeredSubmit(leftJoystick.getButton(6), () -> new SnorfleInCommand(snorfler));
+    reactor.onTriggeredSubmit(leftJoystick.getButton(7), () -> new SnorfleStopCommand(snorfler));
+    reactor.onTriggeredSubmit(leftJoystick.getButton(10), () -> new SnorfleOutCommand(snorfler));
 
   }
 
