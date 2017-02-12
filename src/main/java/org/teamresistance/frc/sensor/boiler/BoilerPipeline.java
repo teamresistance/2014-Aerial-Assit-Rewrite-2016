@@ -25,7 +25,11 @@ public class BoilerPipeline implements VisionPipeline {
     pipeline.process();
   }
 
-  OptionalDouble getRelativeOffset() {
+  ArrayList<MatOfPoint> unsafeGetConvexHulls() {
+    return pipeline.convexHullsOutput();
+  }
+
+  OptionalDouble unsafeGetRelativeOffset() {
     // Grab the last output
     ArrayList<MatOfPoint> hulls = pipeline.convexHullsOutput();
 
