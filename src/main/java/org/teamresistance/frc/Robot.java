@@ -42,22 +42,22 @@ public class Robot extends IterativeRobot {
     reactor.onUntriggeredSubmit(leftJoystick.getTrigger(), () -> Command.cancel(drive)); // FIXME doesn't cancel
 
     // Drive straight, strafe 90 degrees, and strafe 45 -- each for 2 seconds
-    reactor.onTriggeredSubmit(leftJoystick.getButton(6), () -> new StrafeCommand(drive, 0, 0, 1.5));
-    reactor.onTriggeredSubmit(leftJoystick.getButton(11), () -> new StrafeCommand(drive, 0, 90, 1.5));
-    reactor.onTriggeredSubmit(leftJoystick.getButton(10), () -> new StrafeCommand(drive, 0, 45, 1.5));
+    reactor.onTriggeredSubmit(leftJoystick.getButton(6), () -> new DriveTimedCommand(drive, 0, 0, 1.5));
+    reactor.onTriggeredSubmit(leftJoystick.getButton(11), () -> new DriveTimedCommand(drive, 0, 90, 1.5));
+    reactor.onTriggeredSubmit(leftJoystick.getButton(10), () -> new DriveTimedCommand(drive, 0, 45, 1.5));
 
     // Drive straight, pause for 2s, then strafe 90 degrees
     reactor.onTriggeredSubmit(leftJoystick.getButton(7), () -> CommandGroup.runSequentially(
-        new StrafeCommand(drive, 0, 0, 0.9),
-        new StrafeCommand(drive, 0, 90, 1.5),
+        new DriveTimedCommand(drive, 0, 0, 0.9),
+        new DriveTimedCommand(drive, 0, 90, 1.5),
         Command.pause(1.5),
-        new StrafeCommand(drive, 0, 270, 1.0),
-        new StrafeCommand(drive, 0, 180, 0.6),
+        new DriveTimedCommand(drive, 0, 270, 1.0),
+        new DriveTimedCommand(drive, 0, 180, 0.6),
         new HoldAngleCommand(drive, 135)
     ));
 
     reactor.onTriggeredSubmit(leftJoystick.getButton(2), () -> CommandGroup.runSequentially(
-        new StrafeCommand(drive, 0, 0, 1.5),
+        new DriveTimedCommand(drive, 0, 0, 1.5),
         new BrakeCommand(drive, IO.gyro, 1)
     ));
 
