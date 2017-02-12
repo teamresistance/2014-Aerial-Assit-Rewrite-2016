@@ -1,5 +1,6 @@
 package org.teamresistance.frc;
 
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import org.strongback.components.Motor;
 import org.strongback.drive.MecanumDrive;
 import org.strongback.hardware.Hardware;
@@ -17,6 +18,10 @@ public class IO {
 
   public static final Gyro3D gyro = new Gyro3D(SPI.Port.kMXP);
 
+  public static final Motor climberMotor = Hardware.Motors.victor(4);
+
+  public static final PowerDistributionPanel pdp = new PowerDistributionPanel();
+
   public static final MecanumDrive robotDrive = new MecanumDrive(
       frontLeftMotor,
       rearLeftMotor,
@@ -24,4 +29,5 @@ public class IO {
       rearRightMotor,
       gyro
   );
+
 }

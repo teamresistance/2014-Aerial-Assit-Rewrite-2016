@@ -6,6 +6,8 @@ import org.strongback.command.Command;
 import org.strongback.components.ui.FlightStick;
 import org.strongback.hardware.Hardware;
 import org.teamresistance.frc.command.HoldAngleCommand;
+import org.teamresistance.frc.command.climb.ClimbRope;
+import org.teamresistance.frc.subsystem.climb.Climber;
 import org.teamresistance.frc.subsystem.drive.Drive;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -27,6 +29,7 @@ public class Robot extends IterativeRobot {
       leftJoystick.getPitch(),
       rightJoystick.getRoll()
   );
+  private final Climber climber = new Climber(IO.climberMotor, IO.pdp);
 
   @Override
   public void robotInit() {
@@ -36,6 +39,9 @@ public class Robot extends IterativeRobot {
     // Hold the current angle of the robot while the trigger is held
     reactor.onTriggeredSubmit(leftJoystick.getTrigger(), () -> new HoldAngleCommand(drive, 90));
     reactor.onUntriggeredSubmit(leftJoystick.getTrigger(), () -> Command.cancel(drive));
+
+    reactor.onTriggeredSubmit(rightJoystick.getButton(3), () -> climber.climbRope());
+    reactor.onUntriggeredSubmit(rightJoystick.getButton(3), () -> Command.cancel(IO.climberMotor));
   }
 
   @Override
