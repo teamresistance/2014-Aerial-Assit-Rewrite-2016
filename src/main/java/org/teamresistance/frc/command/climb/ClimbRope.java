@@ -16,8 +16,9 @@ public class ClimbRope extends Command {
   private boolean onEnter;
   private final double currentThreshhold;
   private final double timeThreshhold;
+  private final int channel;
 
-  public ClimbRope(Motor climberMotor, PowerDistributionPanel pdp, double currentThreshhold, double timeThreshhold){
+  public ClimbRope(Motor climberMotor, PowerDistributionPanel pdp, double currentThreshhold, double timeThreshhold, int channel){
     super(climberMotor);
     this.climberMotor = climberMotor;
     this.pdp = pdp;
@@ -25,11 +26,12 @@ public class ClimbRope extends Command {
     elapsedTime = 0.0;
     this.currentThreshhold = currentThreshhold;
     this.timeThreshhold = timeThreshhold;
+    this.channel = channel;
   }
 
   @Override
   public boolean execute() {
-    if (pdp.getCurrent(5) >= currentThreshhold){
+    if (pdp.getCurrent(channel) >= currentThreshhold){
       if (onEnter) {
         prevTime = System.currentTimeMillis();
         onEnter = false;

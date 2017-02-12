@@ -29,7 +29,7 @@ public class Robot extends IterativeRobot {
       leftJoystick.getPitch(),
       rightJoystick.getRoll()
   );
-  private final Climber climber = new Climber(IO.climberMotor, IO.pdp);
+  private final Climber climber = new Climber(IO.climberMotor, IO.pdp, 5);
 
   @Override
   public void robotInit() {
@@ -40,7 +40,7 @@ public class Robot extends IterativeRobot {
     reactor.onTriggeredSubmit(leftJoystick.getTrigger(), () -> new HoldAngleCommand(drive, 90));
     reactor.onUntriggeredSubmit(leftJoystick.getTrigger(), () -> Command.cancel(drive));
 
-    reactor.onTriggeredSubmit(rightJoystick.getButton(3), () -> climber.climbRope());
+    reactor.onTriggeredSubmit(rightJoystick.getButton(3), () -> climber.climbRope(40,0.5));
     reactor.onUntriggeredSubmit(rightJoystick.getButton(3), () -> Command.cancel(IO.climberMotor));
   }
 

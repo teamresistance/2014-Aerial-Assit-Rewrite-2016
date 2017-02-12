@@ -12,13 +12,15 @@ public class Climber {
 
   private final Motor climberMotor;
   private final PowerDistributionPanel pdp;
+  private final int channel;
 
-  public Climber(Motor climberMotor, PowerDistributionPanel pdp) {
+  public Climber(Motor climberMotor, PowerDistributionPanel pdp, int channel) {
     this.climberMotor = climberMotor;
     this.pdp = pdp;
+    this.channel = channel;
   }
 
-  public Command climbRope() {
-    return new ClimbRope(climberMotor, pdp, 40, .5);
+  public Command climbRope(double currentThreshold, double timeThreshold) {
+    return new ClimbRope(climberMotor, pdp, currentThreshold, timeThreshold, channel);
   }
 }
