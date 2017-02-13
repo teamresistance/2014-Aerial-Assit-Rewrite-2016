@@ -13,10 +13,10 @@ import edu.wpi.first.wpilibj.vision.VisionPipeline;
 
 public class BoilerPipeline implements VisionPipeline {
   private static final int CANVAS_WIDTH_PX = 320;
-  private final BoilerGrip pipeline;
+  private final GearGrip pipeline;
 
   public BoilerPipeline() {
-    pipeline = new BoilerGrip();
+    pipeline = new GearGrip();
   }
 
   @Override
@@ -36,7 +36,7 @@ public class BoilerPipeline implements VisionPipeline {
     // Abort if there aren't only two tapes
     int numberOfContours = hulls.size();
     SmartDashboard.putNumber("Vision: Number of contours", numberOfContours);
-    if (numberOfContours != 2) return OptionalDouble.empty();
+    if (numberOfContours != 1) return OptionalDouble.empty();
 
     // Calculate the offset, relative to the center with a domain of -1 to +1
     return hulls.stream().mapToDouble(hull -> {
