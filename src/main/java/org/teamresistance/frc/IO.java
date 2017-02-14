@@ -26,5 +26,5 @@ public class IO {
       rearRightMotor,
       gyro
   );
-  public static CDROutputStream_1_0 opticalFlow;
+  //public static CDROutputStream_1_0 opticalFlow;
 }

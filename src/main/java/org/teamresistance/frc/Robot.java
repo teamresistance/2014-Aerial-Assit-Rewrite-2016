@@ -1,5 +1,8 @@
 package org.teamresistance.frc;
 
+import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.strongback.Strongback;
 import org.strongback.SwitchReactor;
 import org.strongback.command.Command;
@@ -10,9 +13,9 @@ import org.teamresistance.frc.command.BrakeCommand;
 import org.teamresistance.frc.command.DriveTimedCommand;
 import org.teamresistance.frc.command.HoldAngleCommand;
 import org.teamresistance.frc.subsystem.drive.Drive;
+import org.teamresistance.frc.util.XboxController;
 
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import static org.teamresistance.frc.OpticalFlow.*;
 
 /**
  * Main robot class. Override methods from {@link IterativeRobot} to define behavior.
@@ -25,7 +28,10 @@ public class Robot extends IterativeRobot {
   private final FlightStick rightJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(1);
   private final FlightStick coJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(2);
 
+
   private OpticalFlow opFlow = new OpticalFlow();
+
+  private XboxController XboxControl = new XboxController();
 
   private final Drive drive = new Drive(
       IO.robotDrive,
@@ -99,7 +105,10 @@ public class Robot extends IterativeRobot {
     reactor.onTriggeredSubmit(rightJoystick.getButton(3), () -> new HoldAngleCommand(drive, 135));
     reactor.onTriggeredSubmit(rightJoystick.getButton(4), () -> new HoldAngleCommand(drive, 0));
 
+    //reactor.onTriggeredSubmit(rightJoystick.getButton(11), OpticalFlow::init);
+
   }
+
 
   @Override
   public void autonomousInit() {
@@ -116,6 +125,8 @@ public class Robot extends IterativeRobot {
     // Post our orientation on the SD for debugging purposes
     double orientation = IO.gyro.getAngle();
     SmartDashboard.putNumber("Gyro Angle", orientation);
+
+    XboxControl.update();
 
     opFlow.update();
 
