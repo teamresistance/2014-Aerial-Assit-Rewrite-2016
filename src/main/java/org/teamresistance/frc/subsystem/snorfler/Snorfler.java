@@ -27,13 +27,11 @@ public class Snorfler {
       snorflerMotor.setSpeed(snorfSpeed);
       state = SnorfleState.SNORFLING;
     }
-  }
-  public void stopSnorfling(){
-    if (state == SnorfleState.SNORFLING) {
-      snorflerMotor.setSpeed(stopSnorf);
-      state = SnorfleState.STOPPED;
+      else if (state == SnorfleState.SNORFLING) {
+        snorflerMotor.setSpeed(stopSnorf);
+        state = SnorfleState.STOPPED;
+      }
     }
-  }
 
   public void reverseSnorfling() {
     if (state == SnorfleState.STOPPED) {

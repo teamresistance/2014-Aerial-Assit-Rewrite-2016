@@ -33,6 +33,7 @@ public class Robot extends IterativeRobot {
 
   public final double snorfSpeed = 1.0;
   public Motor snorflerMotor;
+  Snorfler snorfler = new Snorfler();
   private final Drive drive = new Drive(
       IO.robotDrive,
       leftJoystick.getRoll(),
@@ -104,10 +105,10 @@ public class Robot extends IterativeRobot {
     reactor.onTriggeredSubmit(rightJoystick.getButton(4), () -> new HoldAngleCommand(drive, 0));
 
     // Snorfling
-    Snorfler snorfler = new Snorfler();
+     // Snorfle In command is a toggle for Snorfle In and Snorfle Stop
+     // Snofle out is hold
     reactor.onTriggeredSubmit(leftJoystick.getButton(6), () -> new SnorfleInCommand(snorfler));
-    reactor.onTriggeredSubmit(leftJoystick.getButton(7), () -> new SnorfleStopCommand(snorfler));
-    reactor.onTriggeredSubmit(leftJoystick.getButton(10), () -> new SnorfleOutCommand(snorfler));
+    reactor.whileTriggered(leftJoystick.getButton(7), () -> new SnorfleOutCommand(snorfler));
 
   }
 

@@ -4,7 +4,7 @@ import org.strongback.command.Command;
 import org.teamresistance.frc.subsystem.snorfler.Snorfler;
 
 /**
- * Created by owner on 2/12/2017.
+ * @author Tarik Brown .
  */
 public class SnorfleStopCommand extends Command {
   public final Snorfler snorfler;
@@ -15,7 +15,7 @@ public class SnorfleStopCommand extends Command {
 
   @Override
   public boolean execute() {
-    snorfler.stopSnorfling();
+    snorfler.startSnorfling();
     return false;
   }
 
