@@ -25,14 +25,17 @@ public final class DaveKnob implements ContinuousRange {
       final double gyroAngle = gyro.getAngle();
 
       // Don't rotate if the shortest distance between the two angles is too large
-      if (Math.abs(knobAngle - gyroAngle + 180) % 360 - 180 > DEADBAND_DEGREES)
-        return 0;
+      //double v = Math.abs(knobAngle - gyroAngle + 180) % 360 - 180;
+      //SmartDashboard.putNumber("Knob-Gyro Difference", v);
+      //if (v > DEADBAND_DEGREES) {
+      //  return 0;
+      //}
 
       currentRotationPid = new SynchronousPID(SoftwarePIDController
-          .SourceType.RATE, 0.015, 0, 0)
+          .SourceType.RATE, 0.010, 0, 0)
           .withConfigurations(controller -> controller
               .withInputRange(0, 360) // gyro
-              .withOutputRange(-1.0, 1.0) // motor
+              .withOutputRange(-0.5, 0.5) // motor
               .withTarget(knobAngle) // degrees
               .withTolerance(2) // degrees
               .continuousInputs(true));

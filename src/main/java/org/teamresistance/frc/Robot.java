@@ -4,6 +4,7 @@ import org.strongback.Strongback;
 import org.strongback.SwitchReactor;
 import org.strongback.command.Command;
 import org.strongback.command.CommandGroup;
+import org.strongback.components.AngleSensor;
 import org.strongback.components.ui.FlightStick;
 import org.strongback.hardware.Hardware;
 import org.teamresistance.frc.command.BrakeCommand;
@@ -31,7 +32,8 @@ public class Robot extends IterativeRobot {
   private final FlightStick leftJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(0);
   private final FlightStick rightJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(1);
   private final FlightStick coDriverBox = Hardware.HumanInterfaceDevices.logitechAttack3D(2);
-  private final DaveKnob knob = new DaveKnob(() -> coDriverBox.getAxis(2).read() * -180 + 180, IO.gyro);
+  private final AngleSensor rawKnob = () -> coDriverBox.getAxis(2).read() * -180 + 180;
+  private final DaveKnob knob = new DaveKnob(rawKnob, IO.gyro);
 
   private final Snorfler snorfler = new Snorfler(IO.snorflerMotor);
   private final Drive drive = new Drive(
@@ -133,8 +135,10 @@ public class Robot extends IterativeRobot {
   public void teleopPeriodic() {
     // Post values to the SmartDashboard for debugging
     double orientation = IO.gyro.getAngle();
+
     SmartDashboard.putNumber("Gyro Angle", orientation);
-    SmartDashboard.putNumber("Knob Angle", knob.read());
+    SmartDashboard.putNumber("Knob Angle", rawKnob.getAngle());
+    SmartDashboard.putNumber("Computed Rotation Speed", knob.read());
 
     Feedback feedback = new Feedback(orientation);
     drive.onUpdate(feedback);
