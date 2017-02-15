@@ -7,7 +7,7 @@ import org.strongback.components.Stoppable;
  * @author Tarik C. Brown
  */
 public final class Snorfler implements Stoppable {
-  private static final double SNORFLE_SPEED = 0.5;
+  private static final double SNORFLE_SPEED = 1.0;
   private static final double STOP_SPEED = 0.0;
 
   private final Motor snorflerMotor;
