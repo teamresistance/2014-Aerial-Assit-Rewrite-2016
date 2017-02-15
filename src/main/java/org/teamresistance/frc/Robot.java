@@ -9,8 +9,9 @@ import org.strongback.hardware.Hardware;
 import org.teamresistance.frc.command.BrakeCommand;
 import org.teamresistance.frc.command.DriveTimedCommand;
 import org.teamresistance.frc.command.HoldAngleCommand;
-import org.teamresistance.frc.command.SnorfleInCommand;
-import org.teamresistance.frc.command.SnorfleOutCommand;
+import org.teamresistance.frc.command.SnorfleReverseCommand;
+import org.teamresistance.frc.command.SnorfleStopReversingCommand;
+import org.teamresistance.frc.command.SnorfleToggleCommand;
 import org.teamresistance.frc.subsystem.drive.Drive;
 import org.teamresistance.frc.subsystem.snorfler.Snorfler;
 
@@ -100,9 +101,12 @@ public class Robot extends IterativeRobot {
     reactor.onTriggeredSubmit(rightJoystick.getButton(3), () -> new HoldAngleCommand(drive, 135));
     reactor.onTriggeredSubmit(rightJoystick.getButton(4), () -> new HoldAngleCommand(drive, 0));
 
-    // SnorfleIn is a toggle for Snorfle In and Snorfle Stop, SnorfleOut is hold
-    reactor.onTriggeredSubmit(leftJoystick.getButton(6), () -> new SnorfleInCommand(snorfler));
-    reactor.whileTriggered(leftJoystick.getButton(7), () -> new SnorfleOutCommand(snorfler));
+    // Press to toggle the snorfler forward/off
+    reactor.onTriggeredSubmit(leftJoystick.getButton(6), () -> new SnorfleToggleCommand(snorfler));
+
+    // Press and hold to reverse the snorfler
+    reactor.onTriggeredSubmit(leftJoystick.getButton(7), () -> new SnorfleReverseCommand(snorfler));
+    reactor.onUntriggeredSubmit(leftJoystick.getButton(7), () -> new SnorfleStopReversingCommand(snorfler));
   }
 
   @Override

@@ -6,21 +6,26 @@ import org.teamresistance.frc.subsystem.snorfler.Snorfler;
 /**
  * @author Tarik Brown .
  */
-public class SnorfleStopCommand extends Command {
+public class SnorfleStopReversingCommand extends Command {
   private final Snorfler snorfler;
 
-  public SnorfleStopCommand(Snorfler snorfler) {
+  public SnorfleStopReversingCommand(Snorfler snorfler) {
     this.snorfler = snorfler;
   }
 
   @Override
   public boolean execute() {
-    snorfler.startSnorfling();
+    snorfler.stopReversing();
     return false;
   }
 
   @Override
   public void interrupted() {
-    // TODO
+    end();
+  }
+
+  @Override
+  public void end() {
+    snorfler.stop();
   }
 }

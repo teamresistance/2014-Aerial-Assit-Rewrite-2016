@@ -6,21 +6,26 @@ import org.teamresistance.frc.subsystem.snorfler.Snorfler;
 /**
  * @author Tarik C. Brown
  */
-public class SnorfleInCommand extends Command {
+public class SnorfleToggleCommand extends Command {
   private final Snorfler snorfler;
 
-  public SnorfleInCommand(Snorfler snorfler) {
+  public SnorfleToggleCommand(Snorfler snorfler) {
     this.snorfler = snorfler;
   }
 
   @Override
   public boolean execute() {
-    snorfler.startSnorfling();
+    snorfler.toggleSnorfling();
     return false;
   }
 
   @Override
   public void interrupted() {
-    // TODO
+    end();
+  }
+
+  @Override
+  public void end() {
+    snorfler.stop();
   }
 }

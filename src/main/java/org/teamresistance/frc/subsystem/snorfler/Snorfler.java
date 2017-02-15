@@ -1,39 +1,55 @@
 package org.teamresistance.frc.subsystem.snorfler;
 
 import org.strongback.components.Motor;
+import org.strongback.components.Stoppable;
 
 /**
  * @author Tarik C. Brown
  */
-public final class Snorfler {
+public final class Snorfler implements Stoppable {
   private static final double SNORFLE_SPEED = 0.5;
   private static final double STOP_SPEED = 0.0;
 
   private final Motor snorflerMotor;
-  private SnorfleState state = SnorfleState.STOPPED;
+  private State state = State.STOPPED;
 
-  private enum SnorfleState {
-    STOPPED, SNORFLING
+  private enum State {
+    STOPPED, SNORFLING, REVERSING
   }
 
   public Snorfler(Motor snorflerMotor) {
     this.snorflerMotor = snorflerMotor;
   }
 
-  public void startSnorfling() {
-    if (state == SnorfleState.STOPPED) {
+  public void toggleSnorfling() {
+    if (state == State.REVERSING) {
       snorflerMotor.setSpeed(SNORFLE_SPEED);
-      state = SnorfleState.SNORFLING;
-    } else if (state == SnorfleState.SNORFLING) {
+      state = State.SNORFLING;
+    } else if (state == State.STOPPED) {
+      snorflerMotor.setSpeed(SNORFLE_SPEED);
+      state = State.REVERSING;
+    } else {
       snorflerMotor.setSpeed(STOP_SPEED);
-      state = SnorfleState.STOPPED;
+      state = State.STOPPED;
     }
   }
 
-  public void reverseSnorfling() {
-    if (state == SnorfleState.STOPPED) {
+  public void startReversing() {
+    if (state == State.STOPPED) {
       snorflerMotor.setSpeed(-SNORFLE_SPEED);
-      state = SnorfleState.SNORFLING;
+      state = State.REVERSING;
     }
+  }
+
+  public void stopReversing() {
+    if (state == State.REVERSING) {
+      snorflerMotor.setSpeed(STOP_SPEED);
+      state = State.STOPPED;
+    }
+  }
+
+  @Override
+  public void stop() {
+    snorflerMotor.stop();
   }
 }
