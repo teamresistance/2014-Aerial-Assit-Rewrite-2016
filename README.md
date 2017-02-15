@@ -1,9 +1,7 @@
-Fist of Life
+Maytag Wringer
 ---
 
-> Prototype for the 2017 season.
-
-This project contains the code being tested on the Fist of Death in preparation for the 2017 robot. Inside is tested autonomous driving code and untested subsystems.
+> Washing machine for the 2017 season.
  
 ### Getting Started
 

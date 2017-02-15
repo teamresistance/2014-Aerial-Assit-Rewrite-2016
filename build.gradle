@@ -22,6 +22,9 @@ wpi {
     ntcoreVersion = "3.1.6"     // NetworkTables
     opencvVersion = "3.1.0"     // OpenCV
     cscoreVersion = "1.0.1"     // CameraSerer
+
+    // Maven source: http://dev.imjac.in/maven/thirdparty/frc/ctre/
+    talonSrxVersion = "4.4.1.9" // Talon SRX
 }
 
 dependencies {
@@ -30,6 +33,9 @@ dependencies {
 
     // Compile with WPILib and its dependencies (ntcore, opencv, cscore)
     compile wpilib()
+
+    // Compile CTRLib for the Talon SRX
+    compile talonSrx()
     
     // Unit testing!
     testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.0-M3'
