@@ -7,7 +7,7 @@ import org.teamresistance.frc.subsystem.snorfler.Snorfler;
  * @author Tarik C. Brown
  */
 public class SnorfleOutCommand extends Command {
-  public final Snorfler snorfler;
+  private final Snorfler snorfler;
 
   public SnorfleOutCommand(Snorfler snorfler) {
     this.snorfler = snorfler;
@@ -18,8 +18,9 @@ public class SnorfleOutCommand extends Command {
     snorfler.reverseSnorfling();
     return false;
   }
-  @Override
-  public void interrupted(){
 
+  @Override
+  public void interrupted() {
+    // TODO
   }
 }

@@ -7,7 +7,7 @@ import org.teamresistance.frc.subsystem.snorfler.Snorfler;
  * @author Tarik Brown .
  */
 public class SnorfleStopCommand extends Command {
-  public final Snorfler snorfler;
+  private final Snorfler snorfler;
 
   public SnorfleStopCommand(Snorfler snorfler) {
     this.snorfler = snorfler;
@@ -19,4 +19,8 @@ public class SnorfleStopCommand extends Command {
     return false;
   }
 
+  @Override
+  public void interrupted() {
+    // TODO
+  }
 }
