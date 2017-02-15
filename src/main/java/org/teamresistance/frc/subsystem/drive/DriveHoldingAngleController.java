@@ -28,7 +28,7 @@ public class DriveHoldingAngleController implements Controller<Drive.Signal> {
   public DriveHoldingAngleController(double targetDegrees) {
     this.rotationPid = new SynchronousPID(SourceType.DISTANCE, KP, 0, KD)
         .withConfigurations(controller -> controller
-            .withInputRange(0, 360) // gyro
+            .withInputRange(0, 360) // navX
             .withOutputRange(-1.0, 1.0) // motor
             .withTarget(targetDegrees)
             .withTolerance(TOLERANCE)

@@ -16,6 +16,6 @@ The WPILib is pulled directly from the [official FIRST repository](http://first.
 
 * WPILib (2017.2.1)
 * NetworkTables (3.1.6)
-* [Strongback](https://github.com/strongback/strongback-java) (2017.1.0)
+* [Strongback](https://github.com/strongback/strongback-java) (2017.2.0)
 * [NavX-MXP](http://www.pdocs.kauailabs.com/navx-mxp/) (3.0.320)
 

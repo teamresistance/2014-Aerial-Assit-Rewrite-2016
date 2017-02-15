@@ -53,10 +53,10 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
     if (hackBrakingLatch) {
       SmartDashboard.putBoolean("Is Braking?", true);
       final double power = 0.3;
-      IO.frontLeftMotor.setSpeed(-power);
-      IO.frontRightMotor.setSpeed(-power);
-      IO.rearLeftMotor.setSpeed(power);
-      IO.rearRightMotor.setSpeed(power);
+      IO.lfMotor.setSpeed(-power);
+      IO.rfMotor.setSpeed(-power);
+      IO.rLMotor.setSpeed(power);
+      IO.rrMotor.setSpeed(power);
       return; // abort so the drive signal doesn't mess things up
     }
 
