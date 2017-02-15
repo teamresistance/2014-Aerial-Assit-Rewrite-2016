@@ -12,6 +12,7 @@ import org.teamresistance.frc.command.HoldAngleCommand;
 import org.teamresistance.frc.command.SnorfleReverseCommand;
 import org.teamresistance.frc.command.SnorfleStopReversingCommand;
 import org.teamresistance.frc.command.SnorfleToggleCommand;
+import org.teamresistance.frc.subsystem.climb.Climber;
 import org.teamresistance.frc.subsystem.drive.Drive;
 import org.teamresistance.frc.subsystem.snorfler.Snorfler;
 
@@ -37,6 +38,7 @@ public class Robot extends IterativeRobot {
       leftJoystick.getPitch(),
       rightJoystick.getRoll()
   );
+  private final Climber climber = new Climber(IO.climberMotor, IO.pdp, IO.CLIMBER_CHANNEL);
 
   @Override
   public void robotInit() {
@@ -107,6 +109,12 @@ public class Robot extends IterativeRobot {
     // Press and hold to reverse the snorfler
     reactor.onTriggeredSubmit(leftJoystick.getButton(7), () -> new SnorfleReverseCommand(snorfler));
     reactor.onUntriggeredSubmit(leftJoystick.getButton(7), () -> new SnorfleStopReversingCommand(snorfler));
+    reactor.onTriggeredSubmit(leftJoystick.getTrigger(), () -> new HoldAngleCommand(drive, 90));
+    reactor.onUntriggeredSubmit(leftJoystick.getTrigger(), () -> Command.cancel(drive));
+
+    // Press and hold to climb
+    reactor.onTriggeredSubmit(rightJoystick.getButton(3), () -> climber.climbRope(40,0.5));
+    reactor.onUntriggeredSubmit(rightJoystick.getButton(3), () -> Command.cancel(climber));
   }
 
   @Override
