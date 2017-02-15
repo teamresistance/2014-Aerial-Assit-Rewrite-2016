@@ -19,20 +19,20 @@ public class IO {
   private static final class PWM {
 
     // Drive assignments
-    private static final int LF_WHEEL = 3;
-    private static final int LR_WHEEL = 5;
-    private static final int RF_WHEEL = 10;
-    private static final int RR_WHEEL = 9;
+    private static final int LF_WHEEL = 0;
+    private static final int LR_WHEEL = 1;
+    private static final int RF_WHEEL = 2;
+    private static final int RR_WHEEL = 3;
 
     // Shooter assignments
-    private static final int SHOOTER_WHEEL = 6; // TODO: not Talon?
-    private static final int SHOOTER_CONVEYOR = 4;
-    private static final int SHOOTER_AGITATOR = 8;
+    private static final int SHOOTER_WHEEL = 4; // TODO: not Talon?
+    private static final int SHOOTER_CONVEYOR = 5;
+    private static final int SHOOTER_AGITATOR = 6;
 
     // Snorfler, grabulator, and climber assignments
-    private static final int BALL_SNORFLER = 1;
-    private static final int GRABULATOR_ROTATOR = 7;
-    private static final int CLIMBER = 11;
+    private static final int BALL_SNORFLER = 7;
+    private static final int GRABULATOR_ROTATOR = 8;
+    private static final int CLIMBER = 9;
 
     // Compressor assignment
     private static final int AIR_COMPRESSOR = 2;
