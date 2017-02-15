@@ -4,6 +4,7 @@ import org.strongback.command.Command;
 import org.teamresistance.frc.subsystem.climb.Climber;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * @author Sabrina
@@ -29,16 +30,22 @@ public class ClimbRope extends Command {
 
   @Override
   public boolean execute() {
-    // Stop climbing only when the current has exceeded the threshold for a minimum period
-    if (climber.getCurrent() >= currentThreshold) {
-      if (timer.get() >= timeThresholdSeconds) {
+    double current = climber.getCurrent();
+    double spikeDuration = timer.get();
+
+    SmartDashboard.putNumber("Climber: current", climber.getCurrent());
+    SmartDashboard.putNumber("Climber: spike duration", spikeDuration);
+
+    // Stop climbing when the current has exceeded the threshold for a minimum period
+    if (current >= currentThreshold) {
+      if (spikeDuration >= timeThresholdSeconds) {
         return true;
       }
     } else {
       timer.reset();
     }
 
-    // Keep chugging
+    // Still not yet at the top, keep chugging
     climber.startClimbing();
     return false;
   }
