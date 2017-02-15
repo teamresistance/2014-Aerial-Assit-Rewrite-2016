@@ -2,8 +2,9 @@ package org.teamresistance.frc.hid;
 
 import org.strongback.components.AngleSensor;
 import org.strongback.components.ui.ContinuousRange;
-import org.strongback.control.SoftwarePIDController;
 import org.teamresistance.frc.util.SynchronousPID;
+
+import static org.strongback.control.SoftwarePIDController.*;
 
 public final class DaveKnob implements ContinuousRange {
   private static final double DEADBAND_DEGREES = 30.0;
@@ -19,28 +20,30 @@ public final class DaveKnob implements ContinuousRange {
 
   @Override
   public double read() {
+    final double knobAngle = knob.getAngle();
+    final double gyroAngle = gyro.getAngle();
+
+    // Calculate the shortest distance between the two angles, for checking the deadband
+    double difference = Math.abs(knobAngle - gyroAngle + 180) % 360 - 180;
+
     // Only update the setpoint when the robot isn't already in the middle of rotating
-    if (currentRotationPid == null || currentRotationPid.isWithinTolerance()) {
-      final double knobAngle = knob.getAngle();
-      final double gyroAngle = gyro.getAngle();
-
-      // Don't rotate if the shortest distance between the two angles is too large
-      //double v = Math.abs(knobAngle - gyroAngle + 180) % 360 - 180;
-      //SmartDashboard.putNumber("Knob-Gyro Difference", v);
-      //if (v > DEADBAND_DEGREES) {
-      //  return 0;
-      //}
-
-      currentRotationPid = new SynchronousPID(SoftwarePIDController
-          .SourceType.RATE, 0.010, 0, 0)
-          .withConfigurations(controller -> controller
-              .withInputRange(0, 360) // gyro
-              .withOutputRange(-0.5, 0.5) // motor
-              .withTarget(knobAngle) // degrees
-              .withTolerance(2) // degrees
-              .continuousInputs(true));
+    if (currentRotationPid == null) {
+      if (difference > DEADBAND_DEGREES) return 0;
+      currentRotationPid = createPid(knobAngle);
+    } else if (currentRotationPid.isWithinTolerance() && difference < DEADBAND_DEGREES) {
+      currentRotationPid = createPid(knobAngle);
     }
 
     return currentRotationPid.calculate(gyro.getAngle());
+  }
+
+  private SynchronousPID createPid(double setpoint) {
+    return new SynchronousPID(SourceType.RATE, 0.010, 0, 0)
+        .withConfigurations(controller -> controller
+            .withInputRange(0, 360) // gyro
+            .withOutputRange(-0.8, 0.8) // motor
+            .withTarget(setpoint) // degrees
+            .withTolerance(2) // degrees
+            .continuousInputs(true));
   }
 }
