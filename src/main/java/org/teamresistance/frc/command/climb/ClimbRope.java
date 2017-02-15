@@ -1,46 +1,41 @@
 package org.teamresistance.frc.command.climb;
 
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import org.strongback.command.Command;
-import org.strongback.components.Motor;
+import org.teamresistance.frc.subsystem.climb.Climber;
 
 /**
  * @author Sabrina
  */
 public class ClimbRope extends Command {
-  private final Motor climberMotor;
-  private final PowerDistributionPanel pdp;
+  private final Climber climber;
   private double prevTime;
   private double currTime;
   private double elapsedTime;
   private boolean onEnter;
-  private final double currentThreshhold;
-  private final double timeThreshhold;
-  private final int channel;
+  private final double currentThreshold;
+  private final double timeThreshold;
 
-  public ClimbRope(Motor climberMotor, PowerDistributionPanel pdp, double currentThreshhold, double timeThreshhold, int channel){
-    super(climberMotor);
-    this.climberMotor = climberMotor;
-    this.pdp = pdp;
-    onEnter = true;
-    elapsedTime = 0.0;
-    this.currentThreshhold = currentThreshhold;
-    this.timeThreshhold = timeThreshhold;
-    this.channel = channel;
+  public ClimbRope(Climber climber, double currentThreshold, double timeThreshold) {
+    super(climber);
+    this.climber = climber;
+    this.currentThreshold = currentThreshold;
+    this.timeThreshold = timeThreshold;
+    this.onEnter = true;
+    this.elapsedTime = 0.0;
   }
 
   @Override
   public boolean execute() {
-    if (pdp.getCurrent(channel) >= currentThreshhold){
+    if (climber.getCurrent() >= currentThreshold) {
       if (onEnter) {
         prevTime = System.currentTimeMillis();
         onEnter = false;
       } else {
         currTime = System.currentTimeMillis();
-        elapsedTime = (currTime - prevTime)/(1000.0);
+        elapsedTime = (currTime - prevTime) / (1000.0);
       }
 
-      if (elapsedTime >= timeThreshhold) {
+      if (elapsedTime >= timeThreshold) {
         return true;
       }
 
@@ -49,7 +44,7 @@ public class ClimbRope extends Command {
       elapsedTime = 0.0;
     }
 
-    climberMotor.setSpeed(1);
+    climber.startClimbing();
     return false;
   }
 
@@ -60,7 +55,6 @@ public class ClimbRope extends Command {
 
   @Override
   public void end() {
-    climberMotor.setSpeed(0.0);
+    climber.stop();
   }
-
 }

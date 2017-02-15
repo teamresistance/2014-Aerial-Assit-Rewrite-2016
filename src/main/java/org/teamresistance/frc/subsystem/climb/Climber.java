@@ -1,26 +1,43 @@
 package org.teamresistance.frc.subsystem.climb;
 
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import org.strongback.command.Command;
+import org.strongback.command.Requirable;
 import org.strongback.components.Motor;
+import org.strongback.components.Stoppable;
 import org.teamresistance.frc.command.climb.ClimbRope;
+
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 
 /**
  * @author Sabrina
  */
-public class Climber {
+public class Climber implements Requirable, Stoppable {
+  private static final double CLIMB_SPEED = 1.0;
 
-  private final Motor climberMotor;
+  private final Motor motor;
   private final PowerDistributionPanel pdp;
   private final int channel;
 
-  public Climber(Motor climberMotor, PowerDistributionPanel pdp, int channel) {
-    this.climberMotor = climberMotor;
+  public Climber(Motor motor, PowerDistributionPanel pdp, int channel) {
+    this.motor = motor;
     this.pdp = pdp;
     this.channel = channel;
   }
 
   public Command climbRope(double currentThreshold, double timeThreshold) {
-    return new ClimbRope(climberMotor, pdp, currentThreshold, timeThreshold, channel);
+    return new ClimbRope(this, currentThreshold, timeThreshold);
+  }
+
+  public double getCurrent() {
+    return pdp.getCurrent(channel);
+  }
+
+  public void startClimbing() {
+    motor.setSpeed(CLIMB_SPEED);
+  }
+
+  @Override
+  public void stop() {
+    motor.setSpeed(0);
   }
 }
