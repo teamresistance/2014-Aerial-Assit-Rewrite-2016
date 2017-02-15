@@ -9,7 +9,11 @@ import org.strongback.hardware.Hardware;
 import org.teamresistance.frc.command.BrakeCommand;
 import org.teamresistance.frc.command.DriveTimedCommand;
 import org.teamresistance.frc.command.HoldAngleCommand;
+import org.teamresistance.frc.command.SnorfleReverseCommand;
+import org.teamresistance.frc.command.SnorfleStopReversingCommand;
+import org.teamresistance.frc.command.SnorfleToggleCommand;
 import org.teamresistance.frc.subsystem.drive.Drive;
+import org.teamresistance.frc.subsystem.snorfler.Snorfler;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,12 +23,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  * @author Shreya Ravi
  * @author Rothanak So
+ * @author Tarik C. Brown
  */
 public class Robot extends IterativeRobot {
   private final FlightStick leftJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(0);
   private final FlightStick rightJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(1);
   private final FlightStick coJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(2);
 
+  private final Snorfler snorfler = new Snorfler(IO.snorflerMotor);
   private final Drive drive = new Drive(
       IO.robotDrive,
       leftJoystick.getRoll(),
@@ -95,6 +101,12 @@ public class Robot extends IterativeRobot {
     reactor.onTriggeredSubmit(rightJoystick.getButton(3), () -> new HoldAngleCommand(drive, 135));
     reactor.onTriggeredSubmit(rightJoystick.getButton(4), () -> new HoldAngleCommand(drive, 0));
 
+    // Press to toggle the snorfler forward/off
+    reactor.onTriggeredSubmit(leftJoystick.getButton(6), () -> new SnorfleToggleCommand(snorfler));
+
+    // Press and hold to reverse the snorfler
+    reactor.onTriggeredSubmit(leftJoystick.getButton(7), () -> new SnorfleReverseCommand(snorfler));
+    reactor.onUntriggeredSubmit(leftJoystick.getButton(7), () -> new SnorfleStopReversingCommand(snorfler));
   }
 
   @Override
