@@ -1,13 +1,16 @@
 package org.teamresistance.frc;
 
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.SPI;
+
 import org.strongback.components.AngleSensor;
+
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 
 /**
  * @author Shreya Ravi
  */
-public class Gyro3D implements AngleSensor {
+public class Gyro3D implements AngleSensor, Accelerometer {
   private final AHRS gyro;
 
   public Gyro3D(SPI.Port port) {
@@ -40,5 +43,25 @@ public class Gyro3D implements AngleSensor {
 
   public AHRS getNavX() {
     return gyro;
+  }
+
+  @Override
+  public void setRange(Range range) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public double getX() {
+    return gyro.getWorldLinearAccelX();
+  }
+
+  @Override
+  public double getY() {
+    return gyro.getWorldLinearAccelY();
+  }
+
+  @Override
+  public double getZ() {
+    return gyro.getWorldLinearAccelZ();
   }
 }

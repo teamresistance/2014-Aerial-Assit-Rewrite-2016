@@ -13,33 +13,10 @@ import org.teamresistance.frc.subsystem.drive.DriveHoldingAngleController;
  *
  * @author Rothanak So
  */
-public class HoldAngleCommand extends Command {
-  private final Drive drive;
-  private final DriveHoldingAngleController controller;
+public class HoldAngleCommand extends DriveCommand {
 
   public HoldAngleCommand(Drive drive, double targetAngle) {
-    super(drive);
-    this.drive = drive;
-    this.controller = new DriveHoldingAngleController(targetAngle);
-  }
-
-  @Override
-  public void initialize() {
-    drive.setController(controller);
-  }
-
-  @Override
-  public boolean execute() {
-    return false; // Unlike a TurnToAngle command, we want HoldAngle to run indefinitely.
-  }
-
-  @Override
-  public void interrupted() {
-    end();
-  }
-
-  @Override
-  public void end() {
-    drive.setOpenLoop();
+    // Unlike a TurnToAngle command, we want HoldAngle to run indefinitely.
+    super(drive, new DriveHoldingAngleController(targetAngle), true);
   }
 }
