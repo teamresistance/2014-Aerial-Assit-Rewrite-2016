@@ -22,12 +22,9 @@ public final class Snorfler implements Stoppable {
   }
 
   public void toggleSnorfling() {
-    if (state == State.REVERSING) {
+    if (state == State.REVERSING || state == State.STOPPED) {
       snorflerMotor.setSpeed(SNORFLE_SPEED);
       state = State.SNORFLING;
-    } else if (state == State.STOPPED) {
-      snorflerMotor.setSpeed(SNORFLE_SPEED);
-      state = State.REVERSING;
     } else {
       snorflerMotor.setSpeed(STOP_SPEED);
       state = State.STOPPED;
