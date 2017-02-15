@@ -1,10 +1,8 @@
 package org.teamresistance.frc.subsystem;
 
-import org.teamresistance.frc.Feedback;
+import org.teamresistance.frc.Pose;
 
 import java.util.function.Supplier;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * TODO: Documentation (high priority)
@@ -25,15 +23,11 @@ public abstract class ClosedLooping<T> implements Looping {
 
   public final void setController(Controller<T> controller) {
     this.controller = controller;
-
-    final String subsystemName = getClass().getSimpleName(); // will get parent class
-    final String controllerName = controller.getClass().getSimpleName();
-    SmartDashboard.putString(subsystemName + " Controller", controllerName);
   }
 
   @Override
-  public final void onUpdate(Feedback feedback) {
-    onSignal(controller.computeSignal(feedForward.get(), feedback));
+  public final void onUpdate(Pose pose) {
+    onSignal(controller.computeSignal(feedForward.get(), pose));
   }
 
   protected abstract void onSignal(T signal);

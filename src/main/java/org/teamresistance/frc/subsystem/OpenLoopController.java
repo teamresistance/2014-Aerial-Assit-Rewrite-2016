@@ -1,6 +1,6 @@
 package org.teamresistance.frc.subsystem;
 
-import org.teamresistance.frc.Feedback;
+import org.teamresistance.frc.Pose;
 
 /**
  * TODO: Documentation (high priority)
@@ -9,7 +9,7 @@ import org.teamresistance.frc.Feedback;
 public final class OpenLoopController<T> implements Controller<T> {
 
   @Override
-  public T computeSignal(T feedForward, Feedback feedback) {
+  public T computeSignal(T feedForward, Pose feedback) {
     return feedForward;
   }
 

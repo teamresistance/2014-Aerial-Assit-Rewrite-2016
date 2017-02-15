@@ -2,6 +2,7 @@ package org.teamresistance.frc.command.grabber;
 
 import org.strongback.command.Command;
 import org.teamresistance.frc.InvertibleDigitalInput;
+import org.teamresistance.frc.subsystem.grabber.Grabber;
 
 /**
  * Created by shrey on 2/7/2017.
@@ -18,6 +19,11 @@ public class FindGear extends Command {
   @Override
   public boolean execute() {
     return gearPresentBannerSensor.get();
+  }
+
+  @Override
+  public void end() {
+
   }
 
 }
