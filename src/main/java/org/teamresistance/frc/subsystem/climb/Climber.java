@@ -24,8 +24,8 @@ public class Climber implements Requirable, Stoppable {
     this.channel = channel;
   }
 
-  public Command climbRope(double currentThreshold, double timeThreshold) {
-    return new ClimbRope(this, currentThreshold, timeThreshold);
+  public Command climbRope(double currentThreshold, double timeThresholdSeconds) {
+    return new ClimbRope(this, currentThreshold, timeThresholdSeconds);
   }
 
   public double getCurrent() {

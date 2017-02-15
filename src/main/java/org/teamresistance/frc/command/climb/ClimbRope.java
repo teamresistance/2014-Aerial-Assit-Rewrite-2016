@@ -3,47 +3,42 @@ package org.teamresistance.frc.command.climb;
 import org.strongback.command.Command;
 import org.teamresistance.frc.subsystem.climb.Climber;
 
+import edu.wpi.first.wpilibj.Timer;
+
 /**
  * @author Sabrina
  */
 public class ClimbRope extends Command {
   private final Climber climber;
-  private double prevTime;
-  private double currTime;
-  private double elapsedTime;
-  private boolean onEnter;
+  private final Timer timer;
   private final double currentThreshold;
-  private final double timeThreshold;
+  private final double timeThresholdSeconds;
 
-  public ClimbRope(Climber climber, double currentThreshold, double timeThreshold) {
+  public ClimbRope(Climber climber, double currentThreshold, double timeThresholdSeconds) {
     super(climber);
     this.climber = climber;
     this.currentThreshold = currentThreshold;
-    this.timeThreshold = timeThreshold;
-    this.onEnter = true;
-    this.elapsedTime = 0.0;
+    this.timeThresholdSeconds = timeThresholdSeconds;
+    this.timer = new Timer();
+  }
+
+  @Override
+  public void initialize() {
+    timer.start();
   }
 
   @Override
   public boolean execute() {
+    // Stop climbing only when the current has exceeded the threshold for a minimum period
     if (climber.getCurrent() >= currentThreshold) {
-      if (onEnter) {
-        prevTime = System.currentTimeMillis();
-        onEnter = false;
-      } else {
-        currTime = System.currentTimeMillis();
-        elapsedTime = (currTime - prevTime) / (1000.0);
-      }
-
-      if (elapsedTime >= timeThreshold) {
+      if (timer.get() >= timeThresholdSeconds) {
         return true;
       }
-
     } else {
-      onEnter = true;
-      elapsedTime = 0.0;
+      timer.reset();
     }
 
+    // Keep chugging
     climber.startClimbing();
     return false;
   }
