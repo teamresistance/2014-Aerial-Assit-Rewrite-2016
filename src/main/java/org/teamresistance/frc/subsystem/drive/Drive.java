@@ -3,7 +3,6 @@ package org.teamresistance.frc.subsystem.drive;
 import org.strongback.command.Command;
 import org.strongback.command.CommandGroup;
 import org.strongback.command.Requirable;
-import org.strongback.components.ui.ContinuousRange;
 import org.strongback.drive.MecanumDrive;
 import org.teamresistance.frc.IO;
 import org.teamresistance.frc.Feedback;
@@ -41,8 +40,8 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
   private final MecanumDrive robotDrive;
   private boolean hackBrakingLatch;
 
-  public Drive(MecanumDrive robotDrive, ContinuousRange xSpeed, ContinuousRange ySpeed,
-               ContinuousRange rotateSpeed) {
+  public Drive(MecanumDrive robotDrive, double xSpeed, double ySpeed,
+               double rotateSpeed) {
     super(() -> Signal.createFieldOriented(xSpeed.read(), ySpeed.read(), rotateSpeed.read()));
     this.robotDrive = robotDrive;
   }

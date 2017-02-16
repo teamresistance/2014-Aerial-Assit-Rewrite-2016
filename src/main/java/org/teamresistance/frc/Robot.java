@@ -1,16 +1,17 @@
 package org.teamresistance.frc;
 
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Sendable;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.strongback.Strongback;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.wpilibj.IterativeRobot;
 import org.strongback.SwitchReactor;
 import org.strongback.command.Command;
+import org.strongback.hardware.Hardware;
 import org.strongback.command.CommandGroup;
 import org.strongback.components.ui.FlightStick;
-import org.strongback.hardware.Hardware;
 import org.teamresistance.frc.command.BrakeCommand;
 import org.teamresistance.frc.command.DriveTimedCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.teamresistance.frc.command.HoldAngleCommand;
 import org.teamresistance.frc.subsystem.drive.Drive;
 import org.teamresistance.frc.util.XboxController;
@@ -24,20 +25,21 @@ import static org.teamresistance.frc.OpticalFlow.*;
  * @author Rothanak So
  */
 public class Robot extends IterativeRobot {
+  Joystick XboxController = new Joystick(1);
   private final FlightStick leftJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(0);
   private final FlightStick rightJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(1);
   private final FlightStick coJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(2);
 
+  private XboxController XboxControl = new XboxController();
 
   private OpticalFlow opFlow = new OpticalFlow();
 
-  private XboxController XboxControl = new XboxController();
 
   private final Drive drive = new Drive(
       IO.robotDrive,
-      leftJoystick.getRoll(),
-      leftJoystick.getPitch(),
-      rightJoystick.getRoll()
+      XboxController.getRawAxis(0),
+      XboxController.getRawAxis(1),
+      XboxController.getRawAxis(4)
   );
 
   @Override

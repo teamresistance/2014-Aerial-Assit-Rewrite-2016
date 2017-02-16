@@ -11,6 +11,7 @@ public class XboxController {
   Joystick XboxController = new Joystick(1); // Where "1" is the index of the joystick (you can set this in the Driver Station software).
 
   public void update() {
+
     double xAxisLeft = XboxController.getRawAxis(0);      // Where "0" is the index of the X axis on the left stick
     double yAxisLeft = XboxController.getRawAxis(1);      // Where "1" is the index of the Y axis on the left stick
     double LeftTrigger = XboxController.getRawAxis(2);    // Where "2" is the index of the left trigger
@@ -19,15 +20,15 @@ public class XboxController {
     double yAxisRight = XboxController.getRawAxis(5);     // Where "5" is the index of the Y axis on the right stick
 
     boolean aPressed = XboxController.getRawButton(0);            // Where "0" is the index of the button A
-    boolean bPressed = XboxController.getRawButton(1);            // Where "1" is the index of the button A
-    boolean xPressed = XboxController.getRawButton(2);            // Where "2" is the index of the button A
-    boolean yPressed = XboxController.getRawButton(3);            // Where "3" is the index of the button A
-    boolean leftBumperPressed = XboxController.getRawButton(4);   // Where "4" is the index of the button A
-    boolean rightBumperPressed = XboxController.getRawButton(5);  // Where "5" is the index of the button A
-    boolean backPressed = XboxController.getRawButton(6);         // Where "6" is the index of the button A
-    boolean startPressed = XboxController.getRawButton(7);        // Where "7" is the index of the button A
-    boolean leftStickPressed = XboxController.getRawButton(8);    // Where "8" is the index of the button A
-    boolean rightStickPressed = XboxController.getRawButton(9);   // Where "9" is the index of the button A
+    boolean bPressed = XboxController.getRawButton(1);            // Where "1" is the index of the button B
+    boolean xPressed = XboxController.getRawButton(2);            // Where "2" is the index of the button X
+    boolean yPressed = XboxController.getRawButton(3);            // Where "3" is the index of the button Y
+    boolean leftBumperPressed = XboxController.getRawButton(4);   // Where "4" is the index of the button Left Bumper
+    boolean rightBumperPressed = XboxController.getRawButton(5);  // Where "5" is the index of the button Right Bumper
+    boolean backPressed = XboxController.getRawButton(6);         // Where "6" is the index of the button Back
+    boolean startPressed = XboxController.getRawButton(7);        // Where "7" is the index of the button Start
+    boolean leftStickPressed = XboxController.getRawButton(8);    // Where "8" is the index of the button Left Stick Button
+    boolean rightStickPressed = XboxController.getRawButton(9);   // Where "9" is the index of the button Right Stick Button
 
     SmartDashboard.putNumber("X Axis Left Controller", xAxisLeft);
     SmartDashboard.putNumber("Y Axis Left Controller", yAxisLeft);
