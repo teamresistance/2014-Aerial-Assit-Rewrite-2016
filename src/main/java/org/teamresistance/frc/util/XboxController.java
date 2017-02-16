@@ -10,6 +10,10 @@ public class XboxController {
 
   Joystick XboxController = new Joystick(1); // Where "1" is the index of the joystick (you can set this in the Driver Station software).
 
+  public void  init() {
+
+  }
+
   public void update() {
 
     double xAxisLeft = XboxController.getRawAxis(0);      // Where "0" is the index of the X axis on the left stick
