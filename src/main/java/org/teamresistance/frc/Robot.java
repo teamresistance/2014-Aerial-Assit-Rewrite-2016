@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * @author Shreya Ravi
  * @author Rothanak So
  * @author Joseph Delcastillo III
+ *
  */
 public class Robot extends IterativeRobot {
   private final FlightStick leftJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(0);
