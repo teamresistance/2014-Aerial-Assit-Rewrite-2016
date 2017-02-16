@@ -12,6 +12,7 @@ repositories {
 
 frc {
     team = "86"
+    rioIP = "10.0.86.76"
     robotClass = "org.teamresistance.frc.Robot"
     deployTimeout = 3 // Seconds before timing out on an SSH connection
 }

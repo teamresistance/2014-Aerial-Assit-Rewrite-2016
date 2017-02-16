@@ -5,12 +5,9 @@ import org.strongback.SwitchReactor;
 import org.strongback.components.ui.FlightStick;
 import org.strongback.drive.MecanumDrive;
 import org.strongback.hardware.Hardware;
-import org.teamresistance.frc.subsystem.climb.Climber;
 import org.teamresistance.frc.subsystem.drive.Drive;
-import org.teamresistance.frc.subsystem.snorfler.Snorfler;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Main robot class. Override methods from {@link IterativeRobot} to define behavior.
@@ -24,20 +21,16 @@ public class Robot extends IterativeRobot {
   private final FlightStick rightJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(1);
   private final FlightStick coJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(2);
 
-  private final Snorfler snorfler = new Snorfler(IO.snorflerMotor);
-
-
   private final MecanumDrive robotDrive =
-      new MecanumDrive(IO.lfMotor, IO.rLMotor, IO.rfMotor, IO.rrMotor, IO.navX);
+      new MecanumDrive(IO.lfMotor, IO.lRMotor, IO.rfMotor, IO.rrMotor, IO.navX);
   private final Drive drive =
       new Drive(robotDrive, leftJoystick.getRoll(), leftJoystick.getPitch(), rightJoystick.getRoll());
-  private final Climber climber = new Climber(IO.climberMotor, IO.powerPanel, IO.PDP.CLIMBER);
 
   @Override
   public void robotInit() {
     Strongback.configure().recordNoEvents().recordNoData();
     final SwitchReactor reactor = Strongback.switchReactor();
-    //
+
     //// Hold the current angle of the robot while the trigger is held
     //reactor.onTriggeredSubmit(leftJoystick.getTrigger(), () -> new HoldAngleCommand(drive, IO.navX.getAngle()));
     //reactor.onUntriggeredSubmit(leftJoystick.getTrigger(), () -> Command.cancel(drive)); // FIXME doesn't cancel
@@ -108,20 +101,6 @@ public class Robot extends IterativeRobot {
     //// Press and hold to climb
     //reactor.onTriggeredSubmit(rightJoystick.getButton(3), () -> climber.climbRope(40,0.5));
     //reactor.onUntriggeredSubmit(rightJoystick.getButton(3), () -> Command.cancel(climber));
-
-    reactor.onTriggered(leftJoystick.getButton(8), () -> {
-      int port = (int) SmartDashboard.getNumber("PWM Victor", -1);
-      if (port != -1) {
-        Hardware.Motors.victorSP(port).setSpeed(0.5);
-      }
-    });
-
-    reactor.onTriggered(leftJoystick.getButton(9), () -> {
-      int port = (int) SmartDashboard.getNumber("PWM Victor", -1);
-      if (port != -1) {
-        Hardware.Motors.victorSP(port).stop();
-      }
-    });
   }
 
   @Override
@@ -137,11 +116,11 @@ public class Robot extends IterativeRobot {
   @Override
   public void teleopPeriodic() {
     // Post our orientation on the SD for debugging purposes
-    double orientation = IO.navX.getAngle();
-    SmartDashboard.putNumber("Gyro Angle", orientation);
+    //double orientation = IO.navX.getAngle();
+    //SmartDashboard.putNumber("Gyro Angle", orientation);
 
-    Feedback feedback = new Feedback(orientation);
-    drive.onUpdate(feedback);
+    //Feedback feedback = new Feedback(orientation);
+    //drive.onUpdate(feedback);
   }
 
   @Override
