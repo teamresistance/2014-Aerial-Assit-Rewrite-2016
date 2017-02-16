@@ -1,8 +1,10 @@
 package org.teamresistance.frc;
 
 import com.sun.org.apache.xpath.internal.functions.FuncFalse;
+import edu.wpi.first.wpilibj.Sendable;
 import org.strongback.Strongback;
 import org.strongback.SwitchReactor;
+import org.strongback.components.ui.ContinuousRange;
 import org.strongback.components.ui.DirectionalAxis;
 import org.strongback.hardware.Hardware;
 import org.strongback.components.ui.Gamepad;
@@ -27,8 +29,11 @@ public class Robot extends IterativeRobot {
   );
 
 
-  //double LeftX = xboxController.getLeftX();
-  //double LeftY = xboxController.getLeftY();
+  ContinuousRange leftX = xboxController.getLeftX();
+  ContinuousRange leftY = xboxController.getLeftY();
+
+  ContinuousRange rightX = xboxController.getRightX();
+  ContinuousRange rightY = xboxController.getRightY();
 
   boolean leftBumper = false;
   boolean leftStick  = false;
@@ -93,10 +98,10 @@ public class Robot extends IterativeRobot {
     double orientation = IO.gyro.getAngle();
     SmartDashboard.putNumber("Gyro Angle", orientation);
 
-//    SmartDashboard.putNumber("Left X", );
-//    SmartDashboard.putNumber("Left Y", );
-//    SmartDashboard.putNumber("Right X", );
-//    SmartDashboard.putNumber("Right Y", );
+    SmartDashboard.putData("Left X", (Sendable) leftX );
+    SmartDashboard.putData("Left Y", (Sendable) leftY );
+    SmartDashboard.putData("Right X", (Sendable) rightX );
+    SmartDashboard.putData("Right Y", (Sendable) rightY );
     SmartDashboard.putBoolean("Left Stick", leftStick );
     SmartDashboard.putBoolean("Right Stick", rightStick);
     SmartDashboard.putBoolean("Left Bumper", leftBumper );
