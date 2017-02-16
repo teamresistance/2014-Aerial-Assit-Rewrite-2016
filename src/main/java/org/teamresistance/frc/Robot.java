@@ -2,12 +2,10 @@ package org.teamresistance.frc;
 
 import org.strongback.Strongback;
 import org.strongback.SwitchReactor;
-import edu.wpi.first.wpilibj.Sendable;
 import org.strongback.hardware.Hardware;
 import org.strongback.components.ui.Gamepad;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import org.teamresistance.frc.subsystem.drive.Drive;
-import org.strongback.components.ui.ContinuousRange;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -40,7 +38,7 @@ public class Robot extends IterativeRobot {
     final SwitchReactor reactor = Strongback.switchReactor();
 
     // Reset the gyro
-    reactor.onTriggered(xboxDriver.getA(), () -> IO.gyro.getNavX().reset());
+    reactor.onTriggered(xboxCoDriver.getA(), () -> IO.gyro.getNavX().reset());
 
   }
 
