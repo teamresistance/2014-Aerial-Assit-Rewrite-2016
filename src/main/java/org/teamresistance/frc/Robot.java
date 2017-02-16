@@ -2,6 +2,7 @@ package org.teamresistance.frc;
 
 import org.strongback.Strongback;
 import org.strongback.SwitchReactor;
+import org.strongback.components.ui.DirectionalAxis;
 import org.strongback.hardware.Hardware;
 import org.strongback.components.ui.Gamepad;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -17,9 +18,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot {
   private final Gamepad xboxController = Hardware.HumanInterfaceDevices.xbox360(0);
 
-  private OpticalFlow opFlow = new OpticalFlow();
-
-
   private final Drive drive = new Drive(
       IO.robotDrive,
       xboxController.getLeftY(),
@@ -27,15 +25,21 @@ public class Robot extends IterativeRobot {
       xboxController.getRightX()
   );
 
+
+  double LeftX = xboxController.getLeftX();
+  double LeftY = xboxController.getLeftY();
+
+  DirectionalAxis dPad_1 = xboxController.getDPad(1);
+
+
   @Override
   public void robotInit() {
-    opFlow.init();
 
     Strongback.configure().recordNoEvents().recordNoData();
     final SwitchReactor reactor = Strongback.switchReactor();
-//
+
     // Reset the gyro
-    reactor.onTriggered(xboxController.getButton(7), () -> IO.gyro.getNavX().reset());
+    reactor.onTriggered(xboxController.getA(), () -> IO.gyro.getNavX().reset());
   }
 
 
@@ -55,9 +59,21 @@ public class Robot extends IterativeRobot {
     double orientation = IO.gyro.getAngle();
     SmartDashboard.putNumber("Gyro Angle", orientation);
 
-    //XboxControl.update();
-
-    opFlow.update();
+    SmartDashboard.putNumber("Left X", LeftX);
+    SmartDashboard.putNumber("Left Y", LeftY);
+    SmartDashboard.putNumber("Right X", );
+    SmartDashboard.putNumber("Right Y", );
+    SmartDashboard.putNumber("Left Bumper", );
+    SmartDashboard.putNumber("Left Trigger", );
+    SmartDashboard.putNumber("Right Bumper", );
+    SmartDashboard.putNumber("Right Trigger", );
+    SmartDashboard.putNumber("A", );
+    SmartDashboard.putNumber("B", );
+    SmartDashboard.putNumber("X", );
+    SmartDashboard.putNumber("Y", );
+    SmartDashboard.putNumber("Start", );
+    SmartDashboard.putNumber("Start", xboxController.getStart() );
+    SmartDashboard.putNumber("DPad 1", );
 
     Feedback feedback = new Feedback(orientation);
     drive.onUpdate(feedback);
