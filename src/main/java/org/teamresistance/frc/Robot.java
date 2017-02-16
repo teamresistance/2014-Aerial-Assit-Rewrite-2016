@@ -5,7 +5,6 @@ import org.strongback.SwitchReactor;
 import org.strongback.components.ui.Gamepad;
 import org.strongback.hardware.Hardware;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import org.strongback.components.ui.FlightStick;
 import org.teamresistance.frc.subsystem.drive.Drive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -19,16 +18,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 public class Robot extends IterativeRobot {
-  private final Gamepad xboxController = Hardware.HumanInterfaceDevices.xbox360(0); //The 0 indicates that the Controller is in the 1st port
+  private final Gamepad xboxDriver = Hardware.HumanInterfaceDevices.xbox360(0);
+  //private final Gamepad xboxCoDriver= Hardware.HumanInterfaceDevices.xbox360(1);
 
   private OpticalFlow opFlow = new OpticalFlow();
 
 
   private final Drive drive = new Drive(
       IO.robotDrive,
-      xboxController.getLeftY(),
-      xboxController.getLeftX(),
-      xboxController.getRightX()
+      xboxDriver.getLeftY(),
+      xboxDriver.getLeftX(),
+      xboxDriver.getRightX()
   );
 
   @Override
@@ -39,9 +39,10 @@ public class Robot extends IterativeRobot {
     final SwitchReactor reactor = Strongback.switchReactor();
 
     // Reset the gyro
-    reactor.onTriggered(xboxController.getStart(), () -> IO.gyro.getNavX().reset());
+    reactor.onTriggered(xboxDriver.getA(), () -> IO.gyro.getNavX().reset());
 
-    //reactor.onTriggeredSubmit(rightJoystick.getButton(11), OpticalFlow::init);
+    //Reset the OF sensor
+    reactor.onTriggered(xboxDriver.getB(), () -> opFlow.init() );
 
   }
 
