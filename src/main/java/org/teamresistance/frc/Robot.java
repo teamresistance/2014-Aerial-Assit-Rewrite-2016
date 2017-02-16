@@ -1,15 +1,13 @@
 package org.teamresistance.frc;
 
-import com.sun.org.apache.xpath.internal.functions.FuncFalse;
-import edu.wpi.first.wpilibj.Sendable;
 import org.strongback.Strongback;
 import org.strongback.SwitchReactor;
-import org.strongback.components.ui.ContinuousRange;
-import org.strongback.components.ui.DirectionalAxis;
+import edu.wpi.first.wpilibj.Sendable;
 import org.strongback.hardware.Hardware;
 import org.strongback.components.ui.Gamepad;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import org.teamresistance.frc.subsystem.drive.Drive;
+import org.strongback.components.ui.ContinuousRange;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -19,21 +17,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * @author Rothanak So
  */
 public class Robot extends IterativeRobot {
-  private final Gamepad xboxController = Hardware.HumanInterfaceDevices.xbox360(0); //The 0 indicates that the Controller is in the 1st port
+  private final Gamepad xboxDriver = Hardware.HumanInterfaceDevices.xbox360(0); //The 1st Controller goes in port 0
+  private final Gamepad xboxCoDriver= Hardware.HumanInterfaceDevices.xbox360(1);    //The 1st Controller goes in port 1
 
   private final Drive drive = new Drive(
       IO.robotDrive,
-      xboxController.getLeftY(),
-      xboxController.getLeftX(),
-      xboxController.getRightX()
+      xboxDriver.getLeftY(),
+      xboxDriver.getLeftX(),
+      xboxDriver.getRightX()
   );
 
+  //Driver
+  ContinuousRange leftX = xboxDriver.getLeftX();
+  ContinuousRange leftY = xboxDriver.getLeftY();
 
-  ContinuousRange leftX = xboxController.getLeftX();
-  ContinuousRange leftY = xboxController.getLeftY();
-
-  ContinuousRange rightX = xboxController.getRightX();
-  ContinuousRange rightY = xboxController.getRightY();
+  ContinuousRange rightX = xboxDriver.getRightX();
+  ContinuousRange rightY = xboxDriver.getRightY();
 
   boolean leftBumper = false;
   boolean leftStick  = false;
@@ -46,10 +45,32 @@ public class Robot extends IterativeRobot {
   boolean xPressed  = false;
   boolean yPressed  = false;
 
+  //------------------------------------------------//
+  //Co Driver
+  ContinuousRange leftXCo = xboxCoDriver.getLeftX();
+  ContinuousRange leftYCo = xboxCoDriver.getLeftY();
+
+  ContinuousRange rightXCo = xboxCoDriver.getRightX();
+  ContinuousRange rightYCo = xboxCoDriver.getRightY();
+
+  boolean startPressedCo  = false;
+  boolean selectPressedCo = false;
+
+  boolean leftBumperCo = false;
+  boolean leftStickCo  = false;
+
+  boolean rightBumperCo = false;
+  boolean rightStickCo  = false;
+
+  boolean aPressedCo  = false;
+  boolean bPressedCo  = false;
+  boolean xPressedCo  = false;
+  boolean yPressedCo  = false;
+
   boolean startPressed  = false;
   boolean selectPressed = false;
 
-//  DirectionalAxis dPad_1 = xboxController.getDPad(1);
+//  DirectionalAxis dPad_1 = xboxDriver.getDPad(1);
 
   public Robot() {
 
@@ -63,21 +84,37 @@ public class Robot extends IterativeRobot {
     final SwitchReactor reactor = Strongback.switchReactor();
 
     // Reset the gyro
-    reactor.onTriggered(xboxController.getA(), () -> IO.gyro.getNavX().reset());
+    reactor.onTriggered(xboxCoDriver.getA(), () -> IO.gyro.getNavX().reset());
 
-    reactor.onTriggered( xboxController.getLeftBumper() , () -> leftBumper = true );
-    reactor.onTriggered( xboxController.getLeftStick() , () -> leftStick = true );
+    //Test Xbox Buttons
+    reactor.onTriggered( xboxDriver.getLeftBumper() , () -> leftBumper = true );
+    reactor.onTriggered( xboxDriver.getLeftStick() , () -> leftStick = true );
 
-    reactor.onTriggered( xboxController.getRightBumper() , () -> rightBumper = true );
-    reactor.onTriggered( xboxController.getRightStick() , () -> rightStick = true );
+    reactor.onTriggered( xboxDriver.getRightBumper() , () -> rightBumper = true );
+    reactor.onTriggered( xboxDriver.getRightStick() , () -> rightStick = true );
 
-    reactor.onTriggered( xboxController.getA() , () -> aPressed = true );
-    reactor.onTriggered( xboxController.getB() , () -> bPressed = true );
-    reactor.onTriggered( xboxController.getX() , () -> xPressed = true );
-    reactor.onTriggered( xboxController.getY() , () -> yPressed = true );
+    reactor.onTriggered( xboxDriver.getA() , () -> aPressed = true );
+    reactor.onTriggered( xboxDriver.getB() , () -> bPressed = true );
+    reactor.onTriggered( xboxDriver.getX() , () -> xPressed = true );
+    reactor.onTriggered( xboxDriver.getY() , () -> yPressed = true );
 
-    reactor.onTriggered( xboxController.getStart() , () -> startPressed = true );
-    reactor.onTriggered( xboxController.getSelect() , () -> selectPressed = true );
+    reactor.onTriggered( xboxDriver.getStart() , () -> startPressed = true );
+    reactor.onTriggered( xboxDriver.getSelect() , () -> selectPressed = true );
+
+    //Test Xbox Buttons for Covdriver
+    reactor.onTriggered( xboxCoDriver.getLeftBumper() , () -> leftBumper = true );
+    reactor.onTriggered( xboxCoDriver.getLeftStick() , () -> leftStick = true );
+
+    reactor.onTriggered( xboxCoDriver.getRightBumper() , () -> rightBumper = true );
+    reactor.onTriggered( xboxCoDriver.getRightStick() , () -> rightStick = true );
+
+    reactor.onTriggered( xboxCoDriver.getA() , () -> aPressed = true );
+    reactor.onTriggered( xboxCoDriver.getB() , () -> bPressed = true );
+    reactor.onTriggered( xboxCoDriver.getX() , () -> xPressed = true );
+    reactor.onTriggered( xboxCoDriver.getY() , () -> yPressed = true );
+
+    reactor.onTriggered( xboxCoDriver.getStart() , () -> startPressed = true );
+    reactor.onTriggered( xboxCoDriver.getSelect() , () -> selectPressed = true );
 
   }
 
@@ -115,6 +152,24 @@ public class Robot extends IterativeRobot {
     SmartDashboard.putBoolean("Start", startPressed );
     SmartDashboard.putBoolean("Start", selectPressed );
 //    SmartDashboard.putNumber("DPad 1", );
+
+    SmartDashboard.putData("Left X (Co)", (Sendable) leftXCo );
+    SmartDashboard.putData("Left Y (Co)", (Sendable) leftYCo );
+    SmartDashboard.putData("Right X (Co) ", (Sendable) rightXCo );
+    SmartDashboard.putData("Right Y (Co) ", (Sendable) rightYCo );
+    SmartDashboard.putBoolean("Left Stick (Co) ", leftStickCo );
+    SmartDashboard.putBoolean("Right Stick (Co) ", rightStickCo );
+    SmartDashboard.putBoolean("Left Bumper (Co) ", leftBumperCo );
+    SmartDashboard.putBoolean("Right Bumper (Co) ", rightBumperCo );
+//    SmartDashboard.putNumber("Left Trigger (Co) ", );
+//    SmartDashboard.putNumber("Right Trigger (Co) ", );
+    SmartDashboard.putBoolean("A (Co) ", aPressedCo );
+    SmartDashboard.putBoolean("B (Co) ", bPressedCo );
+    SmartDashboard.putBoolean("X (Co) ", xPressedCo );
+    SmartDashboard.putBoolean("Y (Co) ", yPressedCo );
+    SmartDashboard.putBoolean("Start (Co) ", startPressedCo );
+    SmartDashboard.putBoolean("Start (Co) ", selectPressedCo );
+//    SmartDashboard.putNumber("DPad 1 (Co) ", );
 
     Feedback feedback = new Feedback(orientation);
     drive.onUpdate(feedback);
