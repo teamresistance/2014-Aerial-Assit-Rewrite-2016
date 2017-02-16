@@ -37,9 +37,9 @@ public class Robot extends IterativeRobot {
 
   private final Drive drive = new Drive(
       IO.robotDrive,
-      XboxController.getRawAxis(0),
-      XboxController.getRawAxis(1),
-      XboxController.getRawAxis(4)
+      leftJoystick.getRoll(),
+      leftJoystick.getPitch(),
+      rightJoystick.getRoll()
   );
 
   @Override
