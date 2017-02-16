@@ -41,7 +41,7 @@ public class NavX implements AngleSensor, Accelerometer {
     return Math.abs(getAngle() - angle) <= threshold;
   }
 
-  public AHRS getNavX() {
+  public AHRS getRawNavX() {
     return gyro;
   }
 
