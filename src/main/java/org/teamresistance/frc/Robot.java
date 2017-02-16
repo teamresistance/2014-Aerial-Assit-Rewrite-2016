@@ -2,12 +2,11 @@ package org.teamresistance.frc;
 
 import org.strongback.Strongback;
 import org.strongback.SwitchReactor;
+import org.strongback.components.ui.Gamepad;
 import org.strongback.hardware.Hardware;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import org.strongback.components.ui.FlightStick;
-import org.teamresistance.frc.util.XboxController;
 import org.teamresistance.frc.subsystem.drive.Drive;
-import org.teamresistance.frc.command.HoldAngleCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
@@ -20,20 +19,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 public class Robot extends IterativeRobot {
-  private final FlightStick leftJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(0);
-  private final FlightStick rightJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(1);
-  private final FlightStick coJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(2);
-
-  private XboxController XboxControl = new XboxController();
+  private final Gamepad xboxController = Hardware.HumanInterfaceDevices.xbox360(0); //The 0 indicates that the Controller is in the 1st port
 
   private OpticalFlow opFlow = new OpticalFlow();
 
 
   private final Drive drive = new Drive(
       IO.robotDrive,
-      leftJoystick.getRoll(),
-      leftJoystick.getPitch(),
-      rightJoystick.getRoll()
+      xboxController.getLeftY(),
+      xboxController.getLeftX(),
+      xboxController.getRightX()
   );
 
   @Override
@@ -44,11 +39,7 @@ public class Robot extends IterativeRobot {
     final SwitchReactor reactor = Strongback.switchReactor();
 
     // Reset the gyro
-    reactor.onTriggered(rightJoystick.getButton(2), () -> IO.gyro.getNavX().reset());
-
-    // Hold angle at 135 or 0 degrees until cancelled or interrupted
-    reactor.onTriggeredSubmit(rightJoystick.getButton(3), () -> new HoldAngleCommand(drive, 135));
-    reactor.onTriggeredSubmit(rightJoystick.getButton(4), () -> new HoldAngleCommand(drive, 0));
+    reactor.onTriggered(xboxController.getStart(), () -> IO.gyro.getNavX().reset());
 
     //reactor.onTriggeredSubmit(rightJoystick.getButton(11), OpticalFlow::init);
 
@@ -70,8 +61,6 @@ public class Robot extends IterativeRobot {
     // Post our orientation on the SD for debugging purposes
     double orientation = IO.gyro.getAngle();
     SmartDashboard.putNumber("Gyro Angle", orientation);
-
-    XboxControl.update();
 
     opFlow.update();
 
