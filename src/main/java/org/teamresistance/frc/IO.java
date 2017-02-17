@@ -1,5 +1,6 @@
 package org.teamresistance.frc;
 
+import com.sun.corba.se.impl.encoding.CDROutputStream_1_0;
 import org.strongback.components.Motor;
 import org.strongback.drive.MecanumDrive;
 import org.strongback.hardware.Hardware;
@@ -25,4 +26,5 @@ public class IO {
       rearRightMotor,
       gyro
   );
+  //public static CDROutputStream_1_0 opticalFlow;
 }
