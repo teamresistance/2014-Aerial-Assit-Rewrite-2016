@@ -14,8 +14,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  * @author Shreya Ravi
  * @author Rothanak So
+ * @author Tarik C. Brown
  * @author Joseph Delcastillo III
- *
  */
 public class Robot extends IterativeRobot {
   private final Gamepad xboxDriver = Hardware.HumanInterfaceDevices.xbox360(0);
@@ -47,7 +47,6 @@ public class Robot extends IterativeRobot {
 
   }
 
-
   @Override
   public void autonomousInit() {
     Strongback.start();
@@ -66,7 +65,8 @@ public class Robot extends IterativeRobot {
 
     opFlow.update();
 
-    Feedback feedback = new Feedback(orientation);
+    Feedback feedback = new Feedback(IO.navX.getAngle());
+    SmartDashboard.putNumber("Gyro", feedback.currentAngle);
     drive.onUpdate(feedback);
   }
 

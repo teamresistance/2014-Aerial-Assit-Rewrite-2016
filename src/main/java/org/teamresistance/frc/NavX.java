@@ -10,10 +10,10 @@ import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 /**
  * @author Shreya Ravi
  */
-public class Gyro3D implements AngleSensor, Accelerometer {
+public class NavX implements AngleSensor, Accelerometer {
   private final AHRS gyro;
 
-  public Gyro3D(SPI.Port port) {
+  public NavX(SPI.Port port) {
     this.gyro = new AHRS(port);
   }
 
@@ -41,7 +41,7 @@ public class Gyro3D implements AngleSensor, Accelerometer {
     return Math.abs(getAngle() - angle) <= threshold;
   }
 
-  public AHRS getNavX() {
+  public AHRS getRawNavX() {
     return gyro;
   }
 
