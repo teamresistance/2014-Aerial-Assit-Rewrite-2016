@@ -17,13 +17,6 @@ class JoystickMap {
   }
 
   static class RightJoystick {
-    // Stick
-    static final int FEED_AND_SHOOT = 1;
-    static final int AGITATE_WHILE_FEEDING = 3;
-
-    // Base
-    static final int SNORFLE_IN = 11;
-    static final int SNORFLE_OUT = 10;
-    static final int CLIMBER = 8;
+    // Empty
   }
 }

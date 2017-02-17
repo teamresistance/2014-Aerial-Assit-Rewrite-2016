@@ -1,30 +1,31 @@
 package org.teamresistance.frc;
 
-import com.sun.corba.se.impl.encoding.CDROutputStream_1_0;
-import org.strongback.components.Motor;
-import org.strongback.drive.MecanumDrive;
-import org.strongback.hardware.Hardware;
-import org.teamresistance.frc.util.MotorSpy;
-
+import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Victor;
 
 /**
  * @author Shreya Ravi
  */
 public class IO {
-  public static final Motor frontLeftMotor = new MotorSpy(Hardware.Motors.victor(0), "FL");
-  public static final Motor frontRightMotor = new MotorSpy(Hardware.Motors.victor(1).invert(), "FR");
-  public static final Motor rearLeftMotor = new MotorSpy(Hardware.Motors.victor(2), "RL");
-  public static final Motor rearRightMotor = new MotorSpy(Hardware.Motors.victor(3).invert(), "RR");
+  public static final SpeedController leftFrontMotor = new Victor(0);
+  public static final SpeedController leftRearMotor = new Victor(2);
+  public static final SpeedController rightFrontMotor = new Victor(1);
+  public static final SpeedController rightRearMotor = new Victor(3);
 
-  public static final Gyro3D gyro = new Gyro3D(SPI.Port.kMXP);
+  static {
+    rightFrontMotor.setInverted(true);
+    rightRearMotor.setInverted(true);
+  }
 
-  public static final MecanumDrive robotDrive = new MecanumDrive(
-      frontLeftMotor,
-      rearLeftMotor,
-      frontRightMotor,
-      rearRightMotor,
-      gyro
+  public static final NavX navX = new NavX(SPI.Port.kMXP);
+
+  public static final RobotDrive robotDrive = new RobotDrive(
+      leftFrontMotor,
+      leftRearMotor,
+      rightFrontMotor,
+      rightRearMotor
   );
   //public static CDROutputStream_1_0 opticalFlow;
 }

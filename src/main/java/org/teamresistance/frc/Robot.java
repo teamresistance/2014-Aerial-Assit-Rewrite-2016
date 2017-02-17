@@ -4,8 +4,9 @@ import org.strongback.Strongback;
 import org.strongback.SwitchReactor;
 import org.strongback.components.ui.Gamepad;
 import org.strongback.hardware.Hardware;
-import edu.wpi.first.wpilibj.IterativeRobot;
 import org.teamresistance.frc.subsystem.drive.Drive;
+
+import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
@@ -23,14 +24,13 @@ public class Robot extends IterativeRobot {
 
   private OpticalFlow opFlow = new OpticalFlow();
 
-
   private final Drive drive = new Drive(
       IO.robotDrive,
+      IO.navX,
       xboxDriver.getLeftY(),
       xboxDriver.getLeftX(),
       xboxDriver.getRightX()
   );
-
 
   @Override
   public void robotInit() {
@@ -40,11 +40,10 @@ public class Robot extends IterativeRobot {
     final SwitchReactor reactor = Strongback.switchReactor();
 
     // Reset the gyro
-    reactor.onTriggered(xboxDriver.getA(), () -> IO.gyro.getNavX().reset());
+    reactor.onTriggered(xboxDriver.getA(), () -> IO.navX.getRawNavX().reset());
 
-    //Reset the OF sensor
-    reactor.onTriggered(xboxDriver.getB(), () -> opFlow.init() );
-
+    // Reset the OF sensor
+    reactor.onTriggered(xboxDriver.getB(), () -> opFlow.init());
   }
 
   @Override
@@ -59,10 +58,6 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
-    // Post our orientation on the SD for debugging purposes
-    double orientation = IO.gyro.getAngle();
-    SmartDashboard.putNumber("Gyro Angle", orientation);
-
     opFlow.update();
 
     Feedback feedback = new Feedback(IO.navX.getAngle());
