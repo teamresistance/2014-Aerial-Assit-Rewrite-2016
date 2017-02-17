@@ -56,3 +56,9 @@ jar {
 task wrapper(type: Wrapper) {
     gradleVersion = '3.3'
 }
+
+task buidAndDeploy {
+    dependsOn 'build'
+    dependsOn 'deploy'
+    tasks.findByName('deploy').mustRunAfter 'build'
+}
