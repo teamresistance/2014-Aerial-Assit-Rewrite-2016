@@ -72,6 +72,6 @@ public class DriveTesting extends CommandTesting {
 
   public void enableNavXReset() {
     // Reset the NavX
-    reactor.onTriggered(joystickB.getButton(2), () -> navX.getRawNavX().reset());
+    reactor.onTriggered(joystickA.getButton(6), () -> navX.getRawNavX().reset());
   }
 }

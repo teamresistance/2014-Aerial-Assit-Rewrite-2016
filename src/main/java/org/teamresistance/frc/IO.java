@@ -1,5 +1,7 @@
 package org.teamresistance.frc;
 
+import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Victor;
 import org.strongback.components.Motor;
 
 import edu.wpi.first.wpilibj.SPI;
@@ -15,10 +17,10 @@ public class IO {
   private static final class PWM {
 
     // Drive assignments
-    private static final int LF_WHEEL = 1;
-    private static final int LR_WHEEL = 3;
-    private static final int RF_WHEEL = 8;
-    private static final int RR_WHEEL = 7;
+    private static final int LF_WHEEL = 7;
+    private static final int LR_WHEEL = 8;
+    private static final int RF_WHEEL = 3;
+    private static final int RR_WHEEL = 1;
 
     // Shooter assignments
     private static final int SHOOTER_WHEEL = 4;
@@ -35,10 +37,15 @@ public class IO {
   public static final NavX navX = new NavX(SPI.Port.kMXP);
 
   // Drive motors
-  public static final Motor lfMotor = victor(PWM.LF_WHEEL);
-  public static final Motor lRMotor = victor(PWM.LR_WHEEL);
-  public static final Motor rfMotor = victor(PWM.RF_WHEEL).invert();
-  public static final Motor rrMotor = victor(PWM.RR_WHEEL).invert();
+  public static final SpeedController lfMotor = new Victor(PWM.LF_WHEEL);
+  public static final SpeedController lrMotor = new Victor(PWM.LR_WHEEL);
+  public static final SpeedController rfMotor = new Victor(PWM.RF_WHEEL);
+  public static final SpeedController rrMotor = new Victor(PWM.RR_WHEEL);
+
+  static {
+    rfMotor.setInverted(true);
+    rrMotor.setInverted(true);
+  }
 
   // Shooter motors
   public static final Motor shooterMotor = victorSP(PWM.SHOOTER_WHEEL);

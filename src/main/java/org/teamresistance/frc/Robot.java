@@ -1,6 +1,10 @@
 package org.teamresistance.frc;
 
+import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.strongback.Strongback;
+import org.strongback.SwitchReactor;
+import org.strongback.components.ui.ContinuousRange;
 import org.strongback.components.ui.FlightStick;
 import org.strongback.drive.MecanumDrive;
 import org.strongback.hardware.Hardware;
@@ -24,10 +28,18 @@ public class Robot extends IterativeRobot {
   private final FlightStick coJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(2);
 
   private final Drive drive = new Drive(
-      new MecanumDrive(IO.lfMotor, IO.lRMotor, IO.rfMotor, IO.rrMotor, IO.navX),
-      leftJoystick.getRoll(), leftJoystick.getPitch(), rightJoystick.getRoll());
+      new RobotDrive(IO.lfMotor, IO.lrMotor, IO.rfMotor, IO.rrMotor),
+      IO.navX,
+      () -> spy(leftJoystick.getRoll(), "Left X").read(),
+      () -> spy(leftJoystick.getPitch(), "Left Y").read(),
+      () -> spy(rightJoystick.getRoll(), "Right X").read());
 
   private final Snorfler snorfler = new Snorfler(IO.snorflerMotor);
+
+  private static ContinuousRange spy(ContinuousRange range, String key) {
+    SmartDashboard.putNumber(key, range.read());
+    return range;
+  }
 
   @Override
   public void robotInit() {
@@ -38,6 +50,21 @@ public class Robot extends IterativeRobot {
     driveTesting.enableAngleHold();
     driveTesting.enableAngleHoldTests();
     driveTesting.enableCancelling();
+    driveTesting.enableNavXReset();
+
+//    SwitchReactor reactor = Strongback.switchReactor();
+//
+//    reactor.whileTriggered(rightJoystick.getButton(6), () -> IO.lfMotor.setSpeed(0.2));
+//    reactor.whileUntriggered(rightJoystick.getButton(6), () -> IO.lfMotor.setSpeed(0.0));
+//
+//    reactor.whileTriggered(rightJoystick.getButton(7), () -> IO.lrMotor.setSpeed(0.2));
+//    reactor.whileUntriggered(rightJoystick.getButton(7), () -> IO.lrMotor.setSpeed(0.0));
+//
+//    reactor.whileTriggered(rightJoystick.getButton(11), () -> IO.rfMotor.setSpeed(0.2));
+//    reactor.whileUntriggered(rightJoystick.getButton(11), () -> IO.rfMotor.setSpeed(0.0));
+//
+//    reactor.whileTriggered(rightJoystick.getButton(10), () -> IO.rrMotor.setSpeed(0.2));
+//    reactor.whileUntriggered(rightJoystick.getButton(10), () -> IO.rrMotor.setSpeed(0.0));
   }
 
   @Override
@@ -52,11 +79,11 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
-    // Post our orientation on the SD for debugging purposes
-    //double orientation = IO.navX.getAngle();
+    double orientation = IO.navX.getAngle();
+    SmartDashboard.putNumber("Gyro", orientation);
 
-    //Feedback feedback = new Feedback(orientation);
-    //drive.onUpdate(feedback);
+    Feedback feedback = new Feedback(orientation);
+    drive.onUpdate(feedback);
   }
 
   @Override
