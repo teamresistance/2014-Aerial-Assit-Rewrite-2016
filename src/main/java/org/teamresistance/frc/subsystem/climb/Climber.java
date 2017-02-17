@@ -3,10 +3,9 @@ package org.teamresistance.frc.subsystem.climb;
 import org.strongback.command.Command;
 import org.strongback.command.Requirable;
 import org.strongback.components.Motor;
+import org.strongback.components.PowerPanel;
 import org.strongback.components.Stoppable;
 import org.teamresistance.frc.command.climb.ClimbRope;
-
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 
 /**
  * @author Sabrina
@@ -15,10 +14,10 @@ public class Climber implements Requirable, Stoppable {
   private static final double CLIMB_SPEED = 1.0;
 
   private final Motor motor;
-  private final PowerDistributionPanel pdp;
+  private final PowerPanel pdp;
   private final int channel;
 
-  public Climber(Motor motor, PowerDistributionPanel pdp, int channel) {
+  public Climber(Motor motor, PowerPanel pdp, int channel) {
     this.motor = motor;
     this.pdp = pdp;
     this.channel = channel;
