@@ -1,18 +1,16 @@
 package org.teamresistance.frc.subsystem.drive;
 
-import edu.wpi.first.wpilibj.RobotDrive;
 import org.strongback.command.Command;
 import org.strongback.command.CommandGroup;
 import org.strongback.command.Requirable;
 import org.strongback.components.AngleSensor;
 import org.strongback.components.ui.ContinuousRange;
-import org.strongback.drive.MecanumDrive;
 import org.teamresistance.frc.Feedback;
 import org.teamresistance.frc.subsystem.ClosedLooping;
 import org.teamresistance.frc.subsystem.Controller;
 import org.teamresistance.frc.subsystem.OpenLoopController;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.RobotDrive;
 
 /**
  * The drive subsystem. The <b>only</b> way to manipulate the drivetrain is through this class. It
@@ -42,7 +40,7 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
   private final RobotDrive robotDrive;
   private final AngleSensor gyro;
 
-  private boolean hackBrakingLatch;
+  //private boolean hackBrakingLatch;
 
   public Drive(RobotDrive robotDrive, AngleSensor gyro, ContinuousRange xSpeed, ContinuousRange ySpeed,
                ContinuousRange rotateSpeed) {
@@ -57,32 +55,33 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
     //if (hackBrakingLatch) {
     //  SmartDashboard.putBoolean("Is Braking?", true);
     //  final double power = 0.3;
-    //  IO.lfMotor.setSpeed(-power);
-    //  IO.rfMotor.setSpeed(-power);
+    //  IO.leftFrontMotor.setSpeed(-power);
+    //  IO.rightFrontMotor.setSpeed(-power);
     //  IO.rLMotor.setSpeed(power);
-    //  IO.rrMotor.setSpeed(power);
+    //  IO.rightRearMotor.setSpeed(power);
     //  return; // abort so the drive signal doesn't mess things up
     //}
-
-    SmartDashboard.putBoolean("Is Braking?", false);
+    //
+    //SmartDashboard.putBoolean("Is Braking?", false);
 
     if (signal.robotOriented) {
-//      // Convert the speeds from cartesian to polar
-//      double magnitude = Math.sqrt(signal.xSpeed * signal.xSpeed + signal.ySpeed * signal.ySpeed);
-//      double direction = Math.toDegrees(Math.atan2(signal.ySpeed, signal.xSpeed));
-//      robotDrive.relativePolar(magnitude, direction, signal.rotateSpeed);
+      // Robot-oriented: convert the speeds from cartesian to polar
+      double magnitude = Math.sqrt(signal.xSpeed * signal.xSpeed + signal.ySpeed * signal.ySpeed);
+      double direction = Math.toDegrees(Math.atan2(signal.ySpeed, signal.xSpeed));
+      robotDrive.mecanumDrive_Polar(magnitude, direction, signal.rotateSpeed);
     } else {
+      // Field-oriented
       robotDrive.mecanumDrive_Cartesian(signal.xSpeed, signal.ySpeed, signal.rotateSpeed, gyro.getAngle());
     }
   }
 
-  public void hackPressBrake() {
-    hackBrakingLatch = true; // start stopping
-  }
-
-  public void hackLiftBrake() {
-    hackBrakingLatch = false; // lift the latch
-  }
+  //public void hackPressBrake() {
+  //  hackBrakingLatch = true; // start stopping
+  //}
+  //
+  //public void hackLiftBrake() {
+  //  hackBrakingLatch = false; // lift the latch
+  //}
 
   public static final class Signal {
     final double xSpeed;

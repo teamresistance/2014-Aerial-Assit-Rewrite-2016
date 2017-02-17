@@ -1,12 +1,13 @@
 package org.teamresistance.frc;
 
-import edu.wpi.first.wpilibj.*;
 import org.strongback.components.Motor;
 
-import org.strongback.components.Switch;
-import org.strongback.hardware.Hardware;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Victor;
 
-import static org.strongback.hardware.Hardware.Motors.victor;
 import static org.strongback.hardware.Hardware.Motors.victorSP;
 
 /**
@@ -24,8 +25,8 @@ public class IO {
 
     // Shooter assignments
     private static final int SHOOTER_WHEEL = 4;
-    private static final int SHOOTER_FEEDER = 2;
-    private static final int SHOOTER_AGITATOR = 6;
+    private static final int FEEDER_SNORFLER = 2;
+    private static final int AGITATOR = 6;
 
     // Snorfler, grabulator, and climber assignments
     private static final int BALL_SNORFLER = 0;
@@ -33,29 +34,38 @@ public class IO {
     private static final int CLIMBER = 9;
   }
 
+  private static final class CAN {
+    private static final int PDP = 0;
+    private static final int PCM = 1;
+  }
+
+  public static final class PDP {
+    public static final int CLIMBER = 8;
+  }
+
   public static final Relay cameraLights = new Relay(1);
 
-  // PDB
-  public static final PowerDistributionPanel powerPanel = new PowerDistributionPanel(0);
+  // Power distribution panel (PDP)
+  public static final PowerDistributionPanel powerPanel = new PowerDistributionPanel(CAN.PDP);
 
   // NavX-MXP navigation sensor
   public static final NavX navX = new NavX(SPI.Port.kMXP);
 
   // Drive motors
-  public static final SpeedController lfMotor = new Victor(PWM.LF_WHEEL);
-  public static final SpeedController lrMotor = new Victor(PWM.LR_WHEEL);
-  public static final SpeedController rfMotor = new Victor(PWM.RF_WHEEL);
-  public static final SpeedController rrMotor = new Victor(PWM.RR_WHEEL);
+  public static final SpeedController leftFrontMotor = new Victor(PWM.LF_WHEEL);
+  public static final SpeedController leftRearMotor = new Victor(PWM.LR_WHEEL);
+  public static final SpeedController rightFrontMotor = new Victor(PWM.RF_WHEEL);
+  public static final SpeedController rightRearMotor = new Victor(PWM.RR_WHEEL);
 
   static {
-    rfMotor.setInverted(true);
-    rrMotor.setInverted(true);
+    rightFrontMotor.setInverted(true);
+    rightRearMotor.setInverted(true);
   }
 
   // Shooter motors
   public static final Motor shooterMotor = victorSP(PWM.SHOOTER_WHEEL);
-  public static final Motor feederMotor = victorSP(PWM.SHOOTER_FEEDER).invert();
-  public static final Motor shooterAgitatorMotor = victorSP(PWM.SHOOTER_AGITATOR);
+  public static final Motor feederMotor = victorSP(PWM.FEEDER_SNORFLER).invert();
+  public static final Motor agitatorMotor = victorSP(PWM.AGITATOR);
 
   // Snorfler, gear, and climber motors
   public static final Motor snorflerMotor = victorSP(PWM.BALL_SNORFLER).invert();

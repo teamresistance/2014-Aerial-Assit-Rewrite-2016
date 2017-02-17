@@ -1,13 +1,13 @@
 package org.teamresistance.frc.hid;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.strongback.components.AngleSensor;
 import org.strongback.components.ui.ContinuousRange;
-import org.teamresistance.frc.subsystem.drive.Drive;
 import org.teamresistance.frc.subsystem.drive.DriveHoldingAngleController;
 import org.teamresistance.frc.util.SynchronousPID;
 
-import static org.strongback.control.SoftwarePIDController.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import static org.strongback.control.SoftwarePIDController.SourceType;
 
 public final class DaveKnob implements ContinuousRange {
   private static final double DEADBAND_DEGREES = 30.0;
@@ -29,22 +29,23 @@ public final class DaveKnob implements ContinuousRange {
     // Calculate the shortest distance between the two angles, for checking the deadband
     double difference = -1 * (Math.abs(knobAngle - gyroAngle + 180) % 360 - 180);
 
-    SmartDashboard.putNumber("Knob-Gyro Difference", difference);
-    SmartDashboard.putBoolean("Done rotating", false);
+    SmartDashboard.putNumber("Knob: Error", difference);
+    SmartDashboard.putBoolean("Knob: Latched?", false);
 
     // Only update the setpoint when the robot isn't already in the middle of rotating
     if (currentRotationPid == null) {
       if (difference > DEADBAND_DEGREES) return 0;
       currentRotationPid = createPid(knobAngle);
     } else if (currentRotationPid.isWithinTolerance() && difference < DEADBAND_DEGREES) {
-      SmartDashboard.putBoolean("Done rotating", true);
+      SmartDashboard.putBoolean("Knob: Latched?", true);
       currentRotationPid = createPid(knobAngle);
     }
+
     return currentRotationPid.calculate(gyroAngle);
   }
 
   private SynchronousPID createPid(double setpoint) {
-    return new SynchronousPID("Dave Knob Rotation", SourceType.DISTANCE,
+    return new SynchronousPID("Knob Rotation", SourceType.DISTANCE,
         DriveHoldingAngleController.KP,
         DriveHoldingAngleController.KI,
         DriveHoldingAngleController.KD)
