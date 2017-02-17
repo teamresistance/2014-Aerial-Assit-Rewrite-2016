@@ -1,6 +1,7 @@
 package org.teamresistance.frc.util.testing;
 
 import org.strongback.components.ui.FlightStick;
+import org.teamresistance.frc.IO;
 import org.teamresistance.frc.command.SnorfleReverseCommand;
 import org.teamresistance.frc.command.SnorfleStopReversingCommand;
 import org.teamresistance.frc.command.SnorfleToggleCommand;
@@ -16,10 +17,11 @@ public class SnorflerTesting extends CommandTesting {
   
   public void enableAllSnorflerTests() {
     // Press to toggle the snorfler forward/off
-    reactor.onTriggeredSubmit(joystickB.getButton(6), () -> new SnorfleToggleCommand(snorfler));
+    reactor.onTriggered(joystickB.getButton(11), () -> IO.snorflerMotor.setSpeed(1.0));
+    reactor.onUntriggered(joystickB.getButton(11), () -> IO.snorflerMotor.setSpeed(0.0));
 
     // Press and hold to reverse the snorfler
-    reactor.onTriggeredSubmit(joystickB.getButton(7), () -> new SnorfleReverseCommand(snorfler));
-    reactor.onUntriggeredSubmit(joystickB.getButton(7), () -> new SnorfleStopReversingCommand(snorfler));
+    reactor.onTriggered(joystickB.getButton(10), () -> IO.snorflerMotor.setSpeed(-1.0));
+    reactor.onUntriggered(joystickB.getButton(10), () -> IO.snorflerMotor.setSpeed(0.0));
   }
 }

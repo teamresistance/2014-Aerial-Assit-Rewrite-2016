@@ -1,5 +1,6 @@
 package org.teamresistance.frc;
 
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.strongback.Strongback;
@@ -11,8 +12,10 @@ import org.strongback.components.ui.ContinuousRange;
 import org.strongback.components.ui.FlightStick;
 import org.strongback.drive.MecanumDrive;
 import org.strongback.hardware.Hardware;
+import org.teamresistance.frc.hid.DaveKnob;
 import org.teamresistance.frc.subsystem.drive.Drive;
 import org.teamresistance.frc.subsystem.snorfler.Snorfler;
+import org.teamresistance.frc.util.testing.ClimberTesting;
 import org.teamresistance.frc.util.testing.DriveTesting;
 import org.teamresistance.frc.util.testing.SnorflerTesting;
 
@@ -30,32 +33,35 @@ public class Robot extends IterativeRobot {
   private final FlightStick rightJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(1);
   private final FlightStick coDriverBox = Hardware.HumanInterfaceDevices.logitechAttack3D(2);
   private final AngleSensor rawKnob = () -> coDriverBox.getAxis(2).read() * -180 + 180;
-  private final DaveKnob knob = new DaveKnob(rawKnob, IO.gyro);
+  private final DaveKnob knob = new DaveKnob(rawKnob, IO.navX);
 
   private final Drive drive = new Drive(
       new RobotDrive(IO.lfMotor, IO.lrMotor, IO.rfMotor, IO.rrMotor),
       IO.navX,
-      () -> spy(leftJoystick.getRoll(), "Left X").read(),
-      () -> spy(leftJoystick.getPitch(), "Left Y").read(),
-      () -> spy(rightJoystick.getRoll(), "Right X").read());
+      leftJoystick.getRoll(),
+      leftJoystick.getPitch(),
+      rightJoystick.getRoll()
+  );
 
   private final Snorfler snorfler = new Snorfler(IO.snorflerMotor);
-
-  private static ContinuousRange spy(ContinuousRange range, String key) {
-    SmartDashboard.putNumber(key, range.read());
-    return range;
-  }
 
   @Override
   public void robotInit() {
     Strongback.configure().recordNoEvents().recordNoData();
     DriveTesting driveTesting = new DriveTesting(drive, IO.navX, leftJoystick, rightJoystick);
     SnorflerTesting snorflerTesting = new SnorflerTesting(snorfler, leftJoystick, rightJoystick);
+    ClimberTesting climberTesting = new ClimberTesting(null, leftJoystick, rightJoystick);
+
+    IO.cameraLights.set(Relay.Value.kForward);
 
     driveTesting.enableAngleHold();
     driveTesting.enableAngleHoldTests();
     driveTesting.enableCancelling();
     driveTesting.enableNavXReset();
+
+    snorflerTesting.enableAllSnorflerTests();
+
+    climberTesting.enableClimberDebugging();
 
 //    SwitchReactor reactor = Strongback.switchReactor();
 //
@@ -84,11 +90,11 @@ public class Robot extends IterativeRobot {
 
   @Override
   public void teleopPeriodic() {
-    // Post our orientation on the SD for debugging purposes
     double orientation = IO.navX.getAngle();
     SmartDashboard.putNumber("Gyro", orientation);
     SmartDashboard.putNumber("Knob Angle", rawKnob.getAngle());
     SmartDashboard.putNumber("Computed Rotation Speed", knob.read());
+    SmartDashboard.putData("PDP", IO.powerPanel);
 
     Feedback feedback = new Feedback(orientation);
     drive.onUpdate(feedback);

@@ -1,10 +1,10 @@
 package org.teamresistance.frc;
 
-import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.*;
 import org.strongback.components.Motor;
 
-import edu.wpi.first.wpilibj.SPI;
+import org.strongback.components.Switch;
+import org.strongback.hardware.Hardware;
 
 import static org.strongback.hardware.Hardware.Motors.victor;
 import static org.strongback.hardware.Hardware.Motors.victorSP;
@@ -32,6 +32,11 @@ public class IO {
     private static final int GRABULATOR_ROTATOR = 5;
     private static final int CLIMBER = 9;
   }
+
+  public static final Relay cameraLights = new Relay(1);
+
+  // PDB
+  public static final PowerDistributionPanel powerPanel = new PowerDistributionPanel(0);
 
   // NavX-MXP navigation sensor
   public static final NavX navX = new NavX(SPI.Port.kMXP);
