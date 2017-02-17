@@ -18,26 +18,26 @@ public class SnorflerTesting extends CommandTesting {
     // Trigger spins snorfler and feeder
     reactor.whileTriggered(joystickB.getButton(FEED_AND_SHOOT), () -> {
       if (joystickB.getButton(AGITATE_WHILE_FEEDING).isTriggered()) {
-        IO.agitatorMotor.setSpeed(0.3);
+        IO.agitatorMotor.set(0.3);
       } else {
-        IO.agitatorMotor.setSpeed(0.0);
+        IO.agitatorMotor.stopMotor();
       }
-      IO.shooterMotor.setSpeed(1.0);
-      IO.feederMotor.setSpeed(1.0);
+      IO.shooterMotor.set(1.0);
+      IO.feederMotor.set(1.0);
     });
     reactor.whileUntriggered(joystickB.getButton(FEED_AND_SHOOT), () -> {
-      IO.shooterMotor.setSpeed(0.0);
-      IO.feederMotor.setSpeed(0.0);
-      IO.agitatorMotor.setSpeed(0.0);
+      IO.shooterMotor.stopMotor();
+      IO.feederMotor.stopMotor();
+      IO.agitatorMotor.stopMotor();
     });
   }
 
   public void enableSnorflerTest() {
-    reactor.onTriggered(joystickB.getButton(SNORFLE_IN), () -> IO.snorflerMotor.setSpeed(1.0));
-    reactor.onUntriggered(joystickB.getButton(SNORFLE_IN), () -> IO.snorflerMotor.setSpeed(0.0));
+    reactor.onTriggered(joystickB.getButton(SNORFLE_IN), () -> IO.snorflerMotor.set(1.0));
+    reactor.onUntriggered(joystickB.getButton(SNORFLE_IN), IO.snorflerMotor::stopMotor);
 
     // Press and hold to reverse the snorfler
-    reactor.onTriggered(joystickB.getButton(SNORFLE_OUT), () -> IO.snorflerMotor.setSpeed(-1.0));
-    reactor.onUntriggered(joystickB.getButton(SNORFLE_OUT), () -> IO.snorflerMotor.setSpeed(0.0));
+    reactor.onTriggered(joystickB.getButton(SNORFLE_OUT), () -> IO.snorflerMotor.set(-1.0));
+    reactor.onUntriggered(joystickB.getButton(SNORFLE_OUT), IO.snorflerMotor::stopMotor);
   }
 }

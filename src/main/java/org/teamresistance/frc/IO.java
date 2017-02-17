@@ -1,14 +1,11 @@
 package org.teamresistance.frc;
 
-import org.strongback.components.Motor;
-
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Victor;
-
-import static org.strongback.hardware.Hardware.Motors.victorSP;
+import edu.wpi.first.wpilibj.VictorSP;
 
 /**
  * @author Rothanak So
@@ -30,8 +27,12 @@ public class IO {
 
     // Snorfler, grabulator, and climber assignments
     private static final int BALL_SNORFLER = 0;
-    private static final int GRABULATOR_ROTATOR = 5;
+    private static final int GEAR_ROTATOR = 5;
     private static final int CLIMBER = 9;
+  }
+
+  private static final class RELAY {
+    private static final int LIGHTS = 1; // TODO: verify
   }
 
   private static final class CAN {
@@ -43,7 +44,8 @@ public class IO {
     public static final int CLIMBER = 8;
   }
 
-  public static final Relay cameraLights = new Relay(1);
+  // Relay for green LEDs
+  public static final Relay cameraLights = new Relay(RELAY.LIGHTS);
 
   // Power distribution panel (PDP)
   public static final PowerDistributionPanel powerPanel = new PowerDistributionPanel(CAN.PDP);
@@ -63,12 +65,21 @@ public class IO {
   }
 
   // Shooter motors
-  public static final Motor shooterMotor = victorSP(PWM.SHOOTER_WHEEL);
-  public static final Motor feederMotor = victorSP(PWM.FEEDER_SNORFLER).invert();
-  public static final Motor agitatorMotor = victorSP(PWM.AGITATOR);
+  public static final SpeedController shooterMotor = new VictorSP(PWM.SHOOTER_WHEEL);
+  public static final SpeedController feederMotor = new VictorSP(PWM.FEEDER_SNORFLER);
+  public static final SpeedController agitatorMotor = new VictorSP(PWM.AGITATOR);
+
+  static {
+    feederMotor.setInverted(true);
+  }
 
   // Snorfler, gear, and climber motors
-  public static final Motor snorflerMotor = victorSP(PWM.BALL_SNORFLER).invert();
-  public static final Motor gearRotatorMotor = victorSP(PWM.GRABULATOR_ROTATOR);
-  public static final Motor climberMotor = victorSP(PWM.CLIMBER).invert();
+  public static final SpeedController snorflerMotor = new VictorSP(PWM.BALL_SNORFLER);
+  public static final SpeedController gearRotatorMotor = new VictorSP(PWM.GEAR_ROTATOR);
+  public static final SpeedController climberMotor = new VictorSP(PWM.CLIMBER);
+
+  static {
+    snorflerMotor.setInverted(true);
+    climberMotor.setInverted(true);
+  }
 }

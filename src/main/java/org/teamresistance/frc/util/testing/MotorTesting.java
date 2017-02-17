@@ -23,13 +23,13 @@ public class MotorTesting {
   public static void registerIdentificationCommands(SwitchReactor reactor, FlightStick joystick) {
     for (int i = 1; i < 10; i++) {
       VictorSP victor = new VictorSP(i);
-      reactor.whileTriggered(joystick.getButton(i), () -> victor.setSpeed(.2));
-      reactor.whileUntriggered(joystick.getButton(i), () -> victor.setSpeed(0));
+      reactor.whileTriggered(joystick.getButton(i), () -> victor.set(0.2));
+      reactor.whileUntriggered(joystick.getButton(i), victor::stopMotor);
     }
 
     VictorSP victor = new VictorSP(0);
-    reactor.whileTriggered(joystick.getButton(10), () -> victor.setSpeed(.2));
-    reactor.whileUntriggered(joystick.getButton(10), () -> victor.setSpeed(0));
+    reactor.whileTriggered(joystick.getButton(10), () -> victor.set(0.2));
+    reactor.whileUntriggered(joystick.getButton(10), victor::stopMotor);
   }
 
   /**
@@ -39,15 +39,15 @@ public class MotorTesting {
    */
   public static void registerVerificationCommands(SwitchReactor reactor, FlightStick joystick) {
     reactor.whileTriggered(joystick.getButton(6), () -> IO.leftFrontMotor.set(0.2));
-    reactor.whileUntriggered(joystick.getButton(6), () -> IO.leftFrontMotor.set(0.0));
+    reactor.whileUntriggered(joystick.getButton(6), IO.leftFrontMotor::stopMotor);
 
     reactor.whileTriggered(joystick.getButton(7), () -> IO.leftRearMotor.set(0.2));
-    reactor.whileUntriggered(joystick.getButton(7), () -> IO.leftRearMotor.set(0.0));
+    reactor.whileUntriggered(joystick.getButton(7), IO.leftRearMotor::stopMotor);
 
     reactor.whileTriggered(joystick.getButton(11), () -> IO.rightFrontMotor.set(0.2));
-    reactor.whileUntriggered(joystick.getButton(11), () -> IO.rightFrontMotor.set(0.0));
+    reactor.whileUntriggered(joystick.getButton(11), IO.rightFrontMotor::stopMotor);
 
     reactor.whileTriggered(joystick.getButton(10), () -> IO.rightRearMotor.set(0.2));
-    reactor.whileUntriggered(joystick.getButton(10), () -> IO.rightRearMotor.set(0.0));
+    reactor.whileUntriggered(joystick.getButton(10), IO.rightRearMotor::stopMotor);
   }
 }

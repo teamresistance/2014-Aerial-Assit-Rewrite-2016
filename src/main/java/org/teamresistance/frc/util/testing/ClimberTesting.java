@@ -13,7 +13,7 @@ public class ClimberTesting extends CommandTesting {
 
   public void enableClimberTest() {
     // Press and hold to climb
-    reactor.whileTriggered(joystickB.getButton(CLIMBER), () -> IO.climberMotor.setSpeed(1.0));
-    reactor.whileUntriggered(joystickB.getButton(CLIMBER), () -> IO.climberMotor.stop());
+    reactor.whileTriggered(joystickB.getButton(CLIMBER), () -> IO.climberMotor.set(1.0));
+    reactor.whileUntriggered(joystickB.getButton(CLIMBER), IO.climberMotor::stopMotor);
   }
 }

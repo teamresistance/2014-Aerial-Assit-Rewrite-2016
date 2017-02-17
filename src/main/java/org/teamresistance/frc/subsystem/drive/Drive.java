@@ -6,11 +6,13 @@ import org.strongback.command.Requirable;
 import org.strongback.components.AngleSensor;
 import org.strongback.components.ui.ContinuousRange;
 import org.teamresistance.frc.Feedback;
+import org.teamresistance.frc.IO;
 import org.teamresistance.frc.subsystem.ClosedLooping;
 import org.teamresistance.frc.subsystem.Controller;
 import org.teamresistance.frc.subsystem.OpenLoopController;
 
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The drive subsystem. The <b>only</b> way to manipulate the drivetrain is through this class. It
@@ -40,7 +42,7 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
   private final RobotDrive robotDrive;
   private final AngleSensor gyro;
 
-  //private boolean hackBrakingLatch;
+  private boolean hackBrakingLatch;
 
   public Drive(RobotDrive robotDrive, AngleSensor gyro, ContinuousRange xSpeed, ContinuousRange ySpeed,
                ContinuousRange rotateSpeed) {
@@ -52,17 +54,17 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
   @Override
   protected void onSignal(Drive.Signal signal) {
     // Spin the motors inwards if we're stopped
-    //if (hackBrakingLatch) {
-    //  SmartDashboard.putBoolean("Is Braking?", true);
-    //  final double power = 0.3;
-    //  IO.leftFrontMotor.setSpeed(-power);
-    //  IO.rightFrontMotor.setSpeed(-power);
-    //  IO.rLMotor.setSpeed(power);
-    //  IO.rightRearMotor.setSpeed(power);
-    //  return; // abort so the drive signal doesn't mess things up
-    //}
-    //
-    //SmartDashboard.putBoolean("Is Braking?", false);
+    if (hackBrakingLatch) {
+      SmartDashboard.putBoolean("Is Braking?", true);
+      final double power = 0.3;
+      IO.leftFrontMotor.set(-power);
+      IO.rightFrontMotor.set(-power);
+      IO.leftFrontMotor.set(power);
+      IO.rightRearMotor.set(power);
+      return; // abort so the drive signal doesn't mess things up
+    }
+
+    SmartDashboard.putBoolean("Is Braking?", false);
 
     if (signal.robotOriented) {
       // Robot-oriented: convert the speeds from cartesian to polar
@@ -75,13 +77,13 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
     }
   }
 
-  //public void hackPressBrake() {
-  //  hackBrakingLatch = true; // start stopping
-  //}
-  //
-  //public void hackLiftBrake() {
-  //  hackBrakingLatch = false; // lift the latch
-  //}
+  public void hackPressBrake() {
+    hackBrakingLatch = true; // start stopping
+  }
+
+  public void hackLiftBrake() {
+    hackBrakingLatch = false; // lift the latch
+  }
 
   public static final class Signal {
     final double xSpeed;
