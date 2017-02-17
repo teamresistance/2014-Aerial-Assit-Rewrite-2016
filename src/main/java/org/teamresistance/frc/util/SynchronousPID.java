@@ -1,5 +1,6 @@
 package org.teamresistance.frc.util;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.strongback.control.SoftwarePIDController;
 import org.strongback.control.SoftwarePIDController.SourceType;
 
@@ -18,14 +19,14 @@ public class SynchronousPID implements LiveWindowSendable {
   private final Relay<Double> outputRelay = new Relay<>();
   private boolean isConfigured = false;
 
-  public SynchronousPID(SourceType type, double kP, double kI, double kD) {
-    this(type, kP, kI, kD, 0.0);
-  }
-
-  public SynchronousPID(SourceType type, double kP, double kI, double kD, double feedForward) {
+  public SynchronousPID(String name, SourceType type, double kP, double kI, double kD) {
     this.controller = new SoftwarePIDController(type, inputRelay::get, outputRelay::accept)
-        .withGains(kP, kI, kD, feedForward)
+        .withGains(
+            SmartDashboard.getNumber(name + "/p", kP),
+            SmartDashboard.getNumber(name + "/i", kI),
+            SmartDashboard.getNumber(name + "/d", kD))
         .enable();
+    SmartDashboard.putData(name, this);
   }
 
   public SynchronousPID withConfigurations(Function<SoftwarePIDController,

@@ -1,5 +1,6 @@
 package org.teamresistance.frc.util.testing;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.strongback.Strongback;
 import org.strongback.command.Command;
 import org.strongback.command.CommandGroup;
@@ -31,16 +32,22 @@ public class DriveTesting extends CommandTesting {
   public void enableAngleHold() {
     // Hold the current angle of the robot while the trigger is held
     reactor.onTriggeredSubmit(joystickA.getTrigger(), () -> new HoldAngleCommand(drive, navX.getAngle()));
-    reactor.onUntriggeredSubmit(joystickA.getTrigger(), () -> Command.cancel(drive)); // FIXME doesn't cancel
+    reactor.onUntriggeredSubmit(joystickA.getTrigger(), () -> {
+      drive.setOpenLoop();
+      return Command.cancel(drive);
+    });
   }
 
   public void enableAngleHoldTests() {
-    reactor.onTriggeredSubmit(joystickB.getButton(3), () -> new HoldAngleCommand(drive, 135));
+    SmartDashboard.putNumber("Angle Target", 0);
+    reactor.onTriggeredSubmit(joystickB.getButton(3), () -> new HoldAngleCommand(drive, 45));
     reactor.onTriggeredSubmit(joystickB.getButton(4), () -> new HoldAngleCommand(drive, 0));
+    reactor.onTriggeredSubmit(joystickB.getButton(5), () -> new HoldAngleCommand(drive,
+        SmartDashboard.getNumber("Angle Target", 0)));
   }
 
   public void enableStrafeTests() {
-    // Drive straight, strafe 90 degrees, and strafe 45 -- each for 2 seconds
+    // Drive straight, strafe 90 degrees, and strafe 45 -- each for 2 seconds43
     reactor.onTriggeredSubmit(joystickA.getButton(6), () -> new DriveTimedCommand(drive, 0, 0, 1.5));
     reactor.onTriggeredSubmit(joystickA.getButton(11), () -> new DriveTimedCommand(drive, 0, 90, 1.5));
     reactor.onTriggeredSubmit(joystickA.getButton(10), () -> new DriveTimedCommand(drive, 0, 45, 1.5));
