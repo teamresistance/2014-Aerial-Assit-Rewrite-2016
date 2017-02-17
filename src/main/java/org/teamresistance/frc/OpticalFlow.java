@@ -36,10 +36,10 @@ public class OpticalFlow {
 
   //Convert for Decimal Values
   //Pixel to Feet conversion factor
-  private long X_Left_Per_Ft = 590;
-  private long X_Right_Per_Ft = 575;
-  private long Y_Fwd_Per_Ft = 595;
-  private long Y_Rev_Per_Ft = 595;
+  private long X_Left_Per_Ft  = 1190;
+  private long X_Right_Per_Ft = 1200;
+  private long Y_Fwd_Per_Ft   = 1190;
+  private long Y_Rev_Per_Ft   = 1200;
 
   //Distance Covered
   private long dx = 0;
@@ -157,19 +157,19 @@ public class OpticalFlow {
       dx = tot_dx / X_Right_Per_Ft;  //If the bot is going right, use right conversion factor
     }
     if (raw_dy < 0){
-      dy = tot_dx / Y_Rev_Per_Ft;    //If the bot is going backwards, use backwards conversion factor
+      dy = tot_dy / Y_Rev_Per_Ft;    //If the bot is going backwards, use backwards conversion factor
     }
     else {
       dy = tot_dy / Y_Fwd_Per_Ft;    //If the bot is going forward, use forward conversion factor
     }
 
     //Ensure that im getting values
-    SmartDashboard.putNumber("Raw X:",raw_dx);
-    SmartDashboard.putNumber("Raw Y:",raw_dy);
-    SmartDashboard.putNumber("Total X:",tot_dx);
-    SmartDashboard.putNumber("Total Y:",tot_dy);
-    SmartDashboard.putNumber("Actual X:",dx);
-    SmartDashboard.putNumber("Actual Y:",dy);
+    SmartDashboard.putNumber("Raw Y:",raw_dx);
+    SmartDashboard.putNumber("Raw X:",raw_dy);
+    SmartDashboard.putNumber("Total Y:",tot_dx);
+    SmartDashboard.putNumber("Total X:",tot_dy);
+    SmartDashboard.putNumber("Actual Y:",dx);
+    SmartDashboard.putNumber("Actual X:",dy);
 
   }
 
