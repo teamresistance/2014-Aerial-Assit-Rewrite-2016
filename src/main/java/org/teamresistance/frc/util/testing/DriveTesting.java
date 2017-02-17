@@ -15,8 +15,8 @@ public class DriveTesting extends CommandTesting {
   private final Drive drive;
   private final NavX navX;
 
-  public DriveTesting(Drive drive, NavX navX, FlightStick joystickA, FlightStick joystickB) {
-    super(joystickA, joystickB);
+  public DriveTesting(Drive drive, NavX navX, FlightStick joystickA, FlightStick joystickB, FlightStick joystickC) {
+    super(joystickA, joystickB, joystickC);
     this.drive = drive;
     this.navX = navX;
   }
@@ -40,9 +40,9 @@ public class DriveTesting extends CommandTesting {
 
   public void enableAngleHoldTests() {
     SmartDashboard.putNumber("Angle Target", 0);
-    reactor.onTriggeredSubmit(joystickB.getButton(3), () -> new HoldAngleCommand(drive, 45));
-    reactor.onTriggeredSubmit(joystickB.getButton(4), () -> new HoldAngleCommand(drive, 0));
-    reactor.onTriggeredSubmit(joystickB.getButton(5), () -> new HoldAngleCommand(drive,
+    reactor.onTriggeredSubmit(joystickC.getButton(3), () -> new HoldAngleCommand(drive, 45));
+    reactor.onTriggeredSubmit(joystickC.getButton(4), () -> new HoldAngleCommand(drive, 0));
+    reactor.onTriggeredSubmit(joystickC.getButton(5), () -> new HoldAngleCommand(drive,
         SmartDashboard.getNumber("Angle Target", 0)));
   }
 

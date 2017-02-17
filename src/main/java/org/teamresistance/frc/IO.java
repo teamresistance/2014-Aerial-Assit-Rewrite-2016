@@ -54,7 +54,7 @@ public class IO {
 
   // Shooter motors
   public static final Motor shooterMotor = victorSP(PWM.SHOOTER_WHEEL);
-  public static final Motor shooterConveyorMotor = victorSP(PWM.SHOOTER_FEEDER).invert();
+  public static final Motor feederMotor = victorSP(PWM.SHOOTER_FEEDER).invert();
   public static final Motor shooterAgitatorMotor = victorSP(PWM.SHOOTER_AGITATOR);
 
   // Snorfler, gear, and climber motors

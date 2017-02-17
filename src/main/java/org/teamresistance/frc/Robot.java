@@ -4,13 +4,8 @@ import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.strongback.Strongback;
-import org.strongback.SwitchReactor;
-import org.strongback.command.Command;
-import org.strongback.command.CommandGroup;
 import org.strongback.components.AngleSensor;
-import org.strongback.components.ui.ContinuousRange;
 import org.strongback.components.ui.FlightStick;
-import org.strongback.drive.MecanumDrive;
 import org.strongback.hardware.Hardware;
 import org.teamresistance.frc.hid.DaveKnob;
 import org.teamresistance.frc.subsystem.drive.Drive;
@@ -31,8 +26,8 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 public class Robot extends IterativeRobot {
   private final FlightStick leftJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(0);
   private final FlightStick rightJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(1);
-  private final FlightStick coDriverBox = Hardware.HumanInterfaceDevices.logitechAttack3D(2);
-  private final AngleSensor rawKnob = () -> coDriverBox.getAxis(2).read() * -180 + 180;
+  private final FlightStick coJoystick = Hardware.HumanInterfaceDevices.logitechAttack3D(2);
+  private final AngleSensor rawKnob = () -> coJoystick.getAxis(2).read() * -180 + 180;
   private final DaveKnob knob = new DaveKnob(rawKnob, IO.navX);
 
   private final Drive drive = new Drive(
@@ -48,7 +43,7 @@ public class Robot extends IterativeRobot {
   @Override
   public void robotInit() {
     Strongback.configure().recordNoEvents().recordNoData();
-    DriveTesting driveTesting = new DriveTesting(drive, IO.navX, leftJoystick, rightJoystick);
+    DriveTesting driveTesting = new DriveTesting(drive, IO.navX, leftJoystick, rightJoystick, coJoystick);
     SnorflerTesting snorflerTesting = new SnorflerTesting(snorfler, leftJoystick, rightJoystick);
     ClimberTesting climberTesting = new ClimberTesting(null, leftJoystick, rightJoystick);
 
@@ -60,6 +55,7 @@ public class Robot extends IterativeRobot {
     driveTesting.enableNavXReset();
 
     snorflerTesting.enableAllSnorflerTests();
+    snorflerTesting.enableCompositeTest();
 
     climberTesting.enableClimberDebugging();
 
