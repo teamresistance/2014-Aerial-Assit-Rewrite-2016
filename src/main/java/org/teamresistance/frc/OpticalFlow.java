@@ -42,8 +42,8 @@ public class OpticalFlow {
   private long Y_Rev_Per_Ft   = 1200;
 
   //Distance Covered
-  private long dx = 0;
-  private long dy = 0;
+  public long dx = 0;
+  public long dy = 0;
 
   //Vars for Jim's Math code
   double prstOrient = 0;
@@ -70,7 +70,7 @@ public class OpticalFlow {
   public void init() {
     int motionRegister = readRegister((byte)2);
     SmartDashboard.putNumber("Motion Register", motionRegister);
-
+    double test = 0;
     dx = 0;
     dy = 0;
 
@@ -108,7 +108,7 @@ public class OpticalFlow {
 
     double prstOrient = getOrientation;        //Get the present orientation
 
-    double raw_do = lastOrient - psntOrient;   //calc delta orientation
+    double raw_do = psntOrient - lastOrient;   //calc delta orientation
 
     //Find Actual Distance Covered
     if (raw_dx < 0){
@@ -116,7 +116,8 @@ public class OpticalFlow {
       //cntsPerDeg = (ofsFtXoffset * PI() / 180.0) * X_Left_Per_Ft = 10.472333 for a 1' offset and 600 XPerFt
       raw_dx -= raw_do * dxPerDegLeft;  //compensate for off center rotation
       if (raw_do != 0) {
-         raw_dx += raw_dx / Math.sin(Math.toRadians(raw_do));     //compensate for orientation
+         raw_dx += raw_dx / Math.sin(Math.toRadians(raw_do));//compensate for orientation
+        double test = raw_dx;
       }
       tot_dx += raw_dx;                 //Update Total
       dx = tot_dx / X_Left_Per_Ft;      //If the bot is going left, use left conversion factor
@@ -181,7 +182,7 @@ public class OpticalFlow {
     return dataReceived[0];
   }
 
- /* public double getX() {
+  public  double getX() {
     return dx;
   }
 
@@ -195,6 +196,6 @@ public class OpticalFlow {
 
   public void setY(double dy) {
     this.dy = (long) dy;
-  }*/
+  }
 
 }

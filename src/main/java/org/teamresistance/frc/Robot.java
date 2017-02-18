@@ -4,6 +4,7 @@ import org.strongback.Strongback;
 import org.strongback.SwitchReactor;
 import org.strongback.components.ui.Gamepad;
 import org.strongback.hardware.Hardware;
+import org.teamresistance.frc.command.DriveToX;
 import org.teamresistance.frc.subsystem.drive.Drive;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -42,6 +43,8 @@ public class Robot extends IterativeRobot {
     // Reset the gyro
     reactor.onTriggered(xboxDriver.getA(), () -> IO.navX.getRawNavX().reset());
 
+    reactor.onTriggered(xboxDriver.getX(),  () -> new DriveToX(drive,3,4));
+
     // Reset the OF sensor
     reactor.onTriggered(xboxDriver.getB(), () -> opFlow.init());
   }
@@ -60,7 +63,7 @@ public class Robot extends IterativeRobot {
   public void teleopPeriodic() {
     opFlow.update();
 
-    Feedback feedback = new Feedback(IO.navX.getAngle());
+    Feedback feedback = new Feedback(IO.navX.getAngle(),opFlow.getX(), opFlow.getY());
     SmartDashboard.putNumber("Gyro", feedback.currentAngle);
     drive.onUpdate(feedback);
   }
