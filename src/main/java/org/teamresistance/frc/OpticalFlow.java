@@ -3,9 +3,6 @@ package org.teamresistance.frc;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.strongback.command.Command;
-
-import java.util.function.Supplier;
 
 /**
  * Created by Joseph for testing the Optical Flow
@@ -25,19 +22,19 @@ public class OpticalFlow {
   private  final byte[] dataReceived;
   private  final byte[] register = new byte[] {0};
 
-//  //Test Vars
-//  double test2;
-//  double test;
-//  double x = 0;
-//  double graph = 0;
+  //Test Vars
+  double test2;
+  double test;
+  double x = 0;
+  double graph = 0;
 
   //Amount of change since last read
   private float raw_dx = 0;
   private float raw_dy = 0;
 
   //Summation of raw_dx/y over time
-//  private float tot_dx = 0;
-//  private float tot_dy = 0;
+  private float tot_dx = 0;
+  private float tot_dy = 0;
   private float tot_dxLinear = 0;
   private float tot_dyLinear = 0;
 
@@ -50,17 +47,17 @@ public class OpticalFlow {
   private float Y_Rev_Per_Ft   = 450;
 
   //Distance Covered
-//  private float dx = 0;
-//  private float dy = 0;
+  private float dx = 0;
+  private float dy = 0;
   private float dxLinear = 0;
   private float dyLinear = 0;
 
   //Vars for Jim's Math code
-//  double lastOrient;
-//  double dxPerDegCCW = 4.8;
-//  double dxPerDegCW = -4.8;
-//  double dyPerDegCCW = 1.7;
-//  double dyPerDegCW = -1.7;
+  double lastOrient;
+  double dxPerDegCCW = 4.8;
+  double dxPerDegCW = -4.8;
+  double dyPerDegCCW = 1.7;
+  double dyPerDegCW = -1.7;
 
   public OpticalFlow() {
     spi = new SPI(Port.kOnboardCS0);    //Finds the OF on the SPI ports
@@ -77,22 +74,22 @@ public class OpticalFlow {
   public void init() {
     int motionRegister = readRegister((byte)2);
     SmartDashboard.putNumber("Motion Register", motionRegister);
-//
-//    dx = 0;
-//    dy = 0;
+
+    dx = 0;
+    dy = 0;
     dxLinear = 0;
     dyLinear = 0;
-//
-//    tot_dx = 0;
-//    tot_dy = 0;
+
+    tot_dx = 0;
+    tot_dy = 0;
     tot_dxLinear = 0;
     tot_dyLinear = 0;
 
     raw_dx = 0;
     raw_dy = 0;
 
-//    test = 0;
-//    test2 = 0;
+    test = 0;
+    test2 = 0;
 
   }
 
@@ -132,7 +129,7 @@ public class OpticalFlow {
 
     //---------------------------------------- Non Linear -------------------------------------------------------------
 
-    /*double psntOrient = IO.navX.getAngle();       //Get the present orientation
+    double psntOrient = IO.navX.getAngle();       //Get the present orientation
     double raw_do = lastOrient - psntOrient;      //calc delta orientation
     if (raw_do > 180) {raw_do = 360-raw_do;}      //Angle wrap so its cant exceed 180 Degrees
     if (raw_do < -180) {raw_do = -(360+raw_do);}
@@ -202,14 +199,14 @@ public class OpticalFlow {
     SmartDashboard.putNumber("raw_do", raw_do);
 
     SmartDashboard.putNumber("Present Orientation", psntOrient);
-*/
+
     //Ensure that im getting values
     SmartDashboard.putNumber("Raw Y", raw_dy);
     SmartDashboard.putNumber("Raw X", raw_dx);
-//    SmartDashboard.putNumber("Total Y", tot_dy);
-//    SmartDashboard.putNumber("Total X", tot_dx);
-//    SmartDashboard.putNumber("Actual Y", dy);
-//    SmartDashboard.putNumber("Actual X", dx);
+    SmartDashboard.putNumber("Total Y", tot_dy);
+    SmartDashboard.putNumber("Total X", tot_dx);
+    SmartDashboard.putNumber("Actual Y", dy);
+    SmartDashboard.putNumber("Actual X", dx);
 
     //Ensure that im getting values Linear
     SmartDashboard.putNumber("Total X (Linear)", tot_dxLinear);
@@ -227,17 +224,20 @@ public class OpticalFlow {
     return dataReceived[0];
   }
 
-  public double getX() {
-    return dxLinear;
+ /* public double getX() {
+    return dx;
   }
+
   public void setX(double dx) {
-    this.dxLinear = (long) dxLinear;
+    this.dx = (long) dx;
   }
+
   public double getY() {
-    return dyLinear;
+    return dy;
   }
+
   public void setY(double dy) {
-    this.dyLinear = (long) dyLinear;
-  }
+    this.dy = (long) dy;
+  }*/
 
 }

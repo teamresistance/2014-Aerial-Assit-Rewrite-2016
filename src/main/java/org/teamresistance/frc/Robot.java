@@ -27,13 +27,13 @@ public class Robot extends IterativeRobot {
 
   private OpticalFlow opFlow = new OpticalFlow();
 
-  private final Drive drive = new Drive(
+  /*private final Drive drive = new Drive(
       IO.robotDrive,
       IO.navX,
       xboxDriver.getLeftY(),
       xboxDriver.getLeftX(),
       xboxDriver.getRightX()
-  );
+  );*/
 
   @Override
   public void robotInit() {
@@ -66,7 +66,7 @@ public class Robot extends IterativeRobot {
     opFlow.update();
     Feedback feedback = new Feedback(IO.navX.getAngle(),opFlow.getX(), opFlow.getY());
     SmartDashboard.putNumber("Gyro", feedback.currentAngle);
-    drive.onUpdate(feedback);
+    //drive.onUpdate(feedback);
   }
 
   @Override
