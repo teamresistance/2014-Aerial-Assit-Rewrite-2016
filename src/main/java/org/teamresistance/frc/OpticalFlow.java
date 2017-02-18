@@ -1,6 +1,5 @@
 package org.teamresistance.frc;
 
-import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,6 +25,9 @@ public class OpticalFlow {
   //Test Vars
   double test2;
   double test;
+  double i = 0;
+  double x = 0;
+  double graph = 0;
 
   //Amount of change since last read
   private long raw_dx = 0;
@@ -40,10 +42,10 @@ public class OpticalFlow {
 
   //Convert for Decimal Values
   //Pixel to Feet conversion factor
-  private long X_Left_Per_Ft  = 1190;
-  private long X_Right_Per_Ft = 1200;
-  private long Y_Fwd_Per_Ft   = 1190;
-  private long Y_Rev_Per_Ft   = 1200;
+  private long X_Left_Per_Ft  = 450;
+  private long X_Right_Per_Ft = 450;
+  private long Y_Fwd_Per_Ft   = 450;
+  private long Y_Rev_Per_Ft   = 450;
 
   //Distance Covered
   private long dx = 0;
@@ -53,10 +55,10 @@ public class OpticalFlow {
 
   //Vars for Jim's Math code
   double lastOrient;
-  double dxPerDegLeft = 7.85;
-  double dxPerDegRight = 7.85;
-  double dxPerDegFwd = 0;
-  double dxPerDegRev = 0;
+  double dxPerDegCCL = 7.4;
+  double dxPerDegCL = -4;
+  double dyPerDegCL = 1.25;
+  double dyPerDegCCL = -2.3;
 
   public OpticalFlow() {
     spi = new SPI(Port.kOnboardCS0);    //Finds the OF on the SPI ports
@@ -134,30 +136,26 @@ public class OpticalFlow {
     if (raw_do < -180) {raw_do = -(360+raw_do);}
     lastOrient = psntOrient;                      //Grab Present Orientation
 
+    x += 0.01;
+    graph = (Math.cos((x * 100)*((Math.PI)/180))) / 100;
+    SmartDashboard.putNumber("graph",graph);
+
     //Find Actual Distance Covered
     //--------Do dX--------------
     if (raw_dx < 0) {
       //although this can be calc'ed using est'ed radius, it's easier to manually get the counts/deg
       //cntsPerDeg = (ofsFtXoffset * PI() / 180.0) * X_Left_Per_Ft = 10.472333 for a 1' offset and 600 XPerFt
-      raw_dx -= raw_do * dxPerDegLeft;                            //compensate for off center rotation
+      raw_dx -= raw_do * dxPerDegCCL;                            //compensate for off center rotation
       if (raw_do != 0) {
-        raw_dx += (raw_dx / Math.cos(Math.toRadians(raw_do)));     //compensate for
+        raw_dx += (((raw_dx*100)%360) / (Math.cos(Math.toRadians(raw_do))) / 100);      //compensate for
         // orientation
       }
       tot_dx += raw_dx;                                           //Update Total
       dx = tot_dx / X_Left_Per_Ft;                                //If the bot is going left, use left conversion factor
     } else {
-      raw_dx -= raw_do * dxPerDegRight;                           //compensate for off center rotation
+      raw_dx -= raw_do * dxPerDegCL;                           //compensate for off center rotation
       if (raw_do != 0) {
-
-        double sinMath = Math.cos(Math.toRadians(raw_do));
-        sinMath = Math.max(sinMath, sinMath);
-        SmartDashboard.putNumber("Sin Math", sinMath);
-
-        test += raw_dx; //--------------------------------------------------------------------------------------------
-        raw_dx += (raw_dx / Math.cos(Math.toRadians(raw_do)));      //compensate for
-        // orientation
-        test2 += raw_dx; //-------------------------------------------------------------------------------------------
+        raw_dx += (((raw_dx*100)%360) / (Math.cos(Math.toRadians(raw_do))) / 100);      //compensate for orientation
       }
       tot_dx += raw_dx;
       dx = tot_dx / X_Right_Per_Ft;                               //If the bot is going right, use right conversion
@@ -166,17 +164,17 @@ public class OpticalFlow {
 
     //---------Do dY--------------
     if (raw_dy < 0) {
-      raw_dy -= raw_do * dxPerDegRev;                             //compensate for off center rotation
+      raw_dy -= raw_do * dyPerDegCCL;                             //compensate for off center rotation
       if (raw_do != 90) {
-        raw_dy += raw_dx / Math.cos(Math.toRadians(raw_do));      //compensate for orientation
+        raw_dy += (((raw_dx*100)%360) / (Math.cos(Math.toRadians(raw_do))) / 100);      //compensate for orientation
       }
       tot_dy += raw_dy;                                           //Update Total
       dy = tot_dy / Y_Rev_Per_Ft;                                 //If the bot is going backwards, use backwards
       // conversion factor
     } else {
-      raw_dy += raw_do * dxPerDegFwd;                             //compensate for off center rotation
+      raw_dy += raw_do * dyPerDegCL;                             //compensate for off center rotation
       if (raw_do != 90) {
-        raw_dy -= raw_dx / Math.cos(Math.toRadians(raw_do));      //compensate for orientation
+        raw_dy += (((raw_dx*100)%360) / (Math.cos(Math.toRadians(raw_do))) / 100);      //compensate for orientation
       }
       tot_dy += raw_dy;                                           //Update Total
       dy = tot_dy / Y_Fwd_Per_Ft;                                 //If the bot is going forward, use forward conversion factor
