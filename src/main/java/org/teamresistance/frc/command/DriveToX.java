@@ -13,17 +13,15 @@ public class DriveToX extends Command {
   private final OpticalFlowController controller;
   private final Drive drive;
 
-  public DriveToX(Drive drive, double time, double targetX) {
-    super(time, drive);
+  public DriveToX(Drive drive, double targetX) {
+    super(drive);
     this.drive = drive;
     this.controller = new OpticalFlowController(targetX);
   }
-
   @Override
   public void initialize() {
     drive.setController(controller);
   }
-
   @Override
   public boolean execute() {
     boolean onTarget = controller.isOnTarget();

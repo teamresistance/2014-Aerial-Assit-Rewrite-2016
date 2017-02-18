@@ -12,7 +12,7 @@ import org.teamresistance.frc.util.SynchronousPID;
 public class OpticalFlowController implements Controller<Drive.Signal> {
   private final SynchronousPID opticalPID;
   private final SynchronousPID rotationPID;
-  private final double KP = 0.0;
+  private final double KP = 0.02;
   private final double KI = 0.0;
   private final double KD = 0.0;
   private final double rotationKP = 0.0;
@@ -23,7 +23,7 @@ public class OpticalFlowController implements Controller<Drive.Signal> {
   public OpticalFlowController(double targetx){
 
     this.rotationPID = new SynchronousPID("thispid",
-        SoftwarePIDController.SourceType.DISTANCE,0,0,0)
+        SoftwarePIDController.SourceType.DISTANCE,rotationKP,0,0)
         .withConfigurations(controller -> controller
             .withInputRange(0, 360) // gyro
             .withOutputRange(-1.0, 1.0) // motor
@@ -34,25 +34,19 @@ public class OpticalFlowController implements Controller<Drive.Signal> {
     this.opticalPID = new SynchronousPID("opflowpid", SoftwarePIDController.SourceType.DISTANCE,KP,KI,KD)
         .withConfigurations(controller -> controller
         .withInputRange(0,10)
-        .withOutputRange(-1.0,1.0)
+        .withOutputRange(-.5,.5)
         .withTarget(targetx)
         .withTolerance(opticTolerance));
-
-
   }
-
   @Override
   public Drive.Signal computeSignal(Drive.Signal feedForward, Feedback feedback) {
-   double xspeed = this.opticalPID.calculate(feedback.dxdist);
+   double xspeed = this.opticalPID.calculate(feedback.dxdist) + .02;
    double rotationspeed = this.rotationPID.calculate(feedback.currentAngle);
     final boolean robotOriented = true;
     return new Drive.Signal(xspeed,0,rotationspeed,robotOriented);
   }
-
   @Override
   public boolean isOnTarget() {
     return opticalPID.isWithinTolerance();
   }
-
-
 }
