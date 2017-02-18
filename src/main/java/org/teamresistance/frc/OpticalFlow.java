@@ -25,40 +25,39 @@ public class OpticalFlow {
   //Test Vars
   double test2;
   double test;
-  double i = 0;
   double x = 0;
   double graph = 0;
 
   //Amount of change since last read
-  private long raw_dx = 0;
-  private long raw_dy = 0;
+  private float raw_dx = 0;
+  private float raw_dy = 0;
 
   //Summation of raw_dx/y over time
-  private long tot_dx = 0;
-  private long tot_dy = 0;
-  private long tot_dxLinear = 0;
-  private long tot_dyLinear = 0;
+  private float tot_dx = 0;
+  private float tot_dy = 0;
+  private float tot_dxLinear = 0;
+  private float tot_dyLinear = 0;
 
 
   //Convert for Decimal Values
   //Pixel to Feet conversion factor
-  private long X_Left_Per_Ft  = 450;
-  private long X_Right_Per_Ft = 450;
-  private long Y_Fwd_Per_Ft   = 450;
-  private long Y_Rev_Per_Ft   = 450;
+  private float X_Left_Per_Ft  = 450;
+  private float X_Right_Per_Ft = 450;
+  private float Y_Fwd_Per_Ft   = 450;
+  private float Y_Rev_Per_Ft   = 450;
 
   //Distance Covered
-  private long dx = 0;
-  private long dy = 0;
-  private long dxLinear = 0;
-  private long dyLinear = 0;
+  private float dx = 0;
+  private float dy = 0;
+  private float dxLinear = 0;
+  private float dyLinear = 0;
 
   //Vars for Jim's Math code
   double lastOrient;
-  double dxPerDegCCL = 7.4;
-  double dxPerDegCL = -4;
-  double dyPerDegCL = 1.25;
-  double dyPerDegCCL = -2.3;
+  double dxPerDegCCW = 4.8;
+  double dxPerDegCW = -4.8;
+  double dyPerDegCCW = 1.7;
+  double dyPerDegCW = -1.7;
 
   public OpticalFlow() {
     spi = new SPI(Port.kOnboardCS0);    //Finds the OF on the SPI ports
@@ -145,7 +144,7 @@ public class OpticalFlow {
     if (raw_dx < 0) {
       //although this can be calc'ed using est'ed radius, it's easier to manually get the counts/deg
       //cntsPerDeg = (ofsFtXoffset * PI() / 180.0) * X_Left_Per_Ft = 10.472333 for a 1' offset and 600 XPerFt
-      raw_dx -= raw_do * dxPerDegCCL;                            //compensate for off center rotation
+      raw_dx -= raw_do * dxPerDegCCW;                            //compensate for off center rotation
       if (raw_do != 0) {
         raw_dx += (((raw_dx*100)%360) / (Math.cos(Math.toRadians(raw_do))) / 100);      //compensate for
         // orientation
@@ -153,9 +152,11 @@ public class OpticalFlow {
       tot_dx += raw_dx;                                           //Update Total
       dx = tot_dx / X_Left_Per_Ft;                                //If the bot is going left, use left conversion factor
     } else {
-      raw_dx -= raw_do * dxPerDegCL;                           //compensate for off center rotation
+      raw_dx -= raw_do * dxPerDegCW;                           //compensate for off center rotation
       if (raw_do != 0) {
+        test += raw_dx; //----------------------------------------------------------------------------------------------------------------------------
         raw_dx += (((raw_dx*100)%360) / (Math.cos(Math.toRadians(raw_do))) / 100);      //compensate for orientation
+        test2 = raw_dx; //----------------------------------------------------------------------------------------------------------------------------
       }
       tot_dx += raw_dx;
       dx = tot_dx / X_Right_Per_Ft;                               //If the bot is going right, use right conversion
@@ -164,7 +165,7 @@ public class OpticalFlow {
 
     //---------Do dY--------------
     if (raw_dy < 0) {
-      raw_dy -= raw_do * dyPerDegCCL;                             //compensate for off center rotation
+      raw_dy -= raw_do * dyPerDegCCW;                             //compensate for off center rotation
       if (raw_do != 90) {
         raw_dy += (((raw_dx*100)%360) / (Math.cos(Math.toRadians(raw_do))) / 100);      //compensate for orientation
       }
@@ -172,7 +173,7 @@ public class OpticalFlow {
       dy = tot_dy / Y_Rev_Per_Ft;                                 //If the bot is going backwards, use backwards
       // conversion factor
     } else {
-      raw_dy += raw_do * dyPerDegCL;                             //compensate for off center rotation
+      raw_dy += raw_do * dyPerDegCW;                             //compensate for off center rotation
       if (raw_do != 90) {
         raw_dy += (((raw_dx*100)%360) / (Math.cos(Math.toRadians(raw_do))) / 100);      //compensate for orientation
       }
@@ -196,8 +197,6 @@ public class OpticalFlow {
 
     // Test Vars
     SmartDashboard.putNumber("raw_do", raw_do);
-    SmartDashboard.putNumber("Test", test);
-    SmartDashboard.putNumber("Test 2", test2);
 
     SmartDashboard.putNumber("Present Orientation", psntOrient);
 
