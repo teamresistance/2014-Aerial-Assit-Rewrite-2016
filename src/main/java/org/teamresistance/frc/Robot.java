@@ -9,8 +9,6 @@ import org.teamresistance.frc.subsystem.drive.Drive;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.teamresistance.frc.subsystem.drive.OpticalFlowController;
-import org.teamresistance.frc.util.SynchronousPID;
 
 
 /**
@@ -27,13 +25,13 @@ public class Robot extends IterativeRobot {
 
   private OpticalFlow opFlow = new OpticalFlow();
 
-  /*private final Drive drive = new Drive(
+  private final Drive drive = new Drive(
       IO.robotDrive,
       IO.navX,
       xboxDriver.getLeftY(),
       xboxDriver.getLeftX(),
       xboxDriver.getRightX()
-  );*/
+  );
 
   @Override
   public void robotInit() {
@@ -45,7 +43,8 @@ public class Robot extends IterativeRobot {
     // Reset the gyro
     reactor.onTriggered(xboxDriver.getA(), () -> IO.navX.getRawNavX().reset());
 
-    reactor.onTriggered(xboxDriver.getX(),  () -> new DriveToX(drive,3));
+    double ofsSetpoint = SmartDashboard.getNumber("OFS Setpoint", 3);
+    reactor.onTriggeredSubmit(xboxDriver.getX(),  () -> new DriveToX(drive, ofsSetpoint));
 
     // Reset the OF sensor
     reactor.onTriggered(xboxDriver.getB(), () -> opFlow.init());
@@ -66,7 +65,7 @@ public class Robot extends IterativeRobot {
     opFlow.update();
     Feedback feedback = new Feedback(IO.navX.getAngle(),opFlow.getX(), opFlow.getY());
     SmartDashboard.putNumber("Gyro", feedback.currentAngle);
-    //drive.onUpdate(feedback);
+    drive.onUpdate(feedback);
   }
 
   @Override

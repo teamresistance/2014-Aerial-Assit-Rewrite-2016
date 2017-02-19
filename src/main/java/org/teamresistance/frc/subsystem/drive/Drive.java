@@ -99,7 +99,7 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
     }
 
     static Signal createFieldOriented(double xSpeed, double ySpeed, double rotateSpeed) {
-      return new Signal(-xSpeed, ySpeed, rotateSpeed, false);
+      return new Signal(xSpeed, ySpeed, rotateSpeed, false);
     }
 
     static Signal createRobotOriented(double speed, double headingDeg, double rotateSpeed) {

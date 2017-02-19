@@ -1,12 +1,12 @@
 package org.teamresistance.frc.util;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.strongback.control.SoftwarePIDController;
 import org.strongback.control.SoftwarePIDController.SourceType;
 
 import java.util.function.Function;
 
 import edu.wpi.first.wpilibj.livewindow.LiveWindowSendable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.tables.ITable;
 
 /**
@@ -17,6 +17,7 @@ public class SynchronousPID implements LiveWindowSendable {
   private final SoftwarePIDController controller;
   private final Relay<Double> inputRelay = new Relay<>();
   private final Relay<Double> outputRelay = new Relay<>();
+  private boolean hasRun = false;
   private boolean isConfigured = false;
 
   public SynchronousPID(String name, SourceType type, double kP, double kI, double kD) {
@@ -37,10 +38,11 @@ public class SynchronousPID implements LiveWindowSendable {
   }
 
   public boolean isWithinTolerance() {
-    return controller.isWithinTolerance();
+    return hasRun && controller.isWithinTolerance();
   }
 
   public double calculate(double input) {
+    hasRun = true;
     if (!isConfigured)
       throw new IllegalStateException("PID not configured. Did you remember to call " +
           "`withConfigurations`? Refer to the documentation for usage notes.");
