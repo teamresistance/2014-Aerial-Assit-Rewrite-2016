@@ -10,8 +10,8 @@ public class DriveOpticalXBraking extends CommandGroup {
 
   public DriveOpticalXBraking(Drive drive, double targetX, double diagonalTime) {
     sequentially(
-        //new DriveOpticalX(drive, targetX),
-        new DiagonalCommand(drive, diagonalTime)
+        new DriveOpticalX(drive, targetX),
+        new BrakeCommand(drive, diagonalTime)
     );
   }
 }

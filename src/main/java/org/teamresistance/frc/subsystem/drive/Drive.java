@@ -57,18 +57,18 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
     // Spin the motors inwards if we're stopped
     if (hackBrakingLatch) {
       SmartDashboard.putBoolean("Is Braking?", true);
-      final double power = 0.5;
-      IO.leftFrontMotor.set(-power);
-      IO.rightFrontMotor.set(-power);
-      IO.leftRearMotor.set(power);
-      IO.rightRearMotor.set(power);
+      //final double power = 0.5;
+      IO.leftFrontMotor.set(-0.5);
+      IO.rightFrontMotor.set(-0.5);
+      IO.leftRearMotor.set(0.4);
+      IO.rightRearMotor.set(0.5);
       return; // abort so the drive signal doesn't mess things up
     }
     if (hackDiagonal) {
       SmartDashboard.putBoolean("Is Diagonal?", true);
       IO.leftFrontMotor.set(0.1);
-      IO.rightFrontMotor.set(-0.7);
-      IO.leftRearMotor.set(-0.7);
+      IO.rightFrontMotor.set(-0.6);
+      IO.leftRearMotor.set(-0.6);
       IO.rightRearMotor.set(0.1);
       return; // abort so the drive signal doesn't mess things up
     }

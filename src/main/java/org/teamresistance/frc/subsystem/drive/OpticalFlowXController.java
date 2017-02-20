@@ -11,10 +11,10 @@ import org.teamresistance.frc.util.SynchronousPID;
 public class OpticalFlowXController implements Controller<Drive.Signal> {
   private final DriveHoldingAngleController angleController;
   private final SynchronousPID opticalPID;
-  private static final double KP = 0.2;
+  private static final double KP = -0.2;
   private static final double KI = 0.0;
   private static final double KD = 0.0;
-  private static final double TOLERANCE = 1;
+  private static final double TOLERANCE = 0.5;
 
   public OpticalFlowXController(double targetX) {
     this.angleController = new DriveHoldingAngleController(0);

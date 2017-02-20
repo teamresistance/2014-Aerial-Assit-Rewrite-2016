@@ -12,10 +12,10 @@ public class OpticalFlowYController implements Controller<Drive.Signal> {
   private final DriveHoldingAngleController angleController;
   private final SynchronousPID opticalPID;
 
-  private static final double KP = 0.2;
+  private static final double KP = -0.2;
   private static final double KI = 0.0;
   private static final double KD = 0.0;
-  private static final double tolerance = 1; // feet
+  private static final double tolerance = 0.5; // feet
 
   public OpticalFlowYController(double targetY) {
     this.angleController = new DriveHoldingAngleController(0);

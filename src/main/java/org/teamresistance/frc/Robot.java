@@ -62,13 +62,13 @@ public class Robot extends IterativeRobot {
 
     // Drive X with braking
     final double xWithBrakeSetpoint = 1.0;
-    final double xWithBrakeTimeout = 1.0;
-    SmartDashboard.putNumber("[X Braking] Timeout", xWithBrakeTimeout);
-    SmartDashboard.putNumber("[X Braking] Setpoint", xWithBrakeSetpoint);
+    final double xWithBrakeTimeout = 3.0;
+    SmartDashboard.putNumber("[X Braking] Time", xWithBrakeTimeout);
+    SmartDashboard.putNumber("[X Braking] N/A", xWithBrakeSetpoint);
     reactor.onTriggeredSubmit(xboxDriver.getRightBumper(),
         () -> new DriveOpticalXBraking(drive,
-            SmartDashboard.getNumber("[X Braking] Setpoint", xWithBrakeSetpoint),
-            SmartDashboard.getNumber("[X Braking] Timeout", xWithBrakeTimeout)
+            SmartDashboard.getNumber("[X Braking] N/A", xWithBrakeSetpoint),
+            SmartDashboard.getNumber("[X Braking] Time", xWithBrakeTimeout)
         ));
 
     // Drive X Y sequentially
@@ -95,10 +95,6 @@ public class Robot extends IterativeRobot {
         () -> new DriveOpticalXY(drive,
             SmartDashboard.getNumber("[XY] Setpoint X", xySetpointX),
             SmartDashboard.getNumber("[XY] Setpoint Y", xySetpointY)));
-
-    //Drive Diagonal Test
-    boolean isDiagonal = false;
-    SmartDashboard.putBoolean("isDiagonal", isDiagonal);
 
 //    reactor.onTriggered(xboxDriver.getStart(),
 //        () -> new DriveDiagnal);
