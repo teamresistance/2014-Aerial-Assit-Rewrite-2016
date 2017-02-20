@@ -12,4 +12,3 @@ public class DriveOpticalXY extends DriveCommand {
     super(drive, new OpticalFlowXYController(targetXSeq, targetYSeq), false);
   }
 }
-

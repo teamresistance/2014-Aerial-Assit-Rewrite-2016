@@ -43,6 +43,7 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
   private final AngleSensor gyro;
 
   private boolean hackBrakingLatch;
+  private boolean hackDiagonal;
 
   public Drive(RobotDrive robotDrive, AngleSensor gyro, ContinuousRange xSpeed, ContinuousRange ySpeed,
                ContinuousRange rotateSpeed) {
@@ -59,11 +60,20 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
       final double power = 0.5;
       IO.leftFrontMotor.set(-power);
       IO.rightFrontMotor.set(-power);
-      IO.leftFrontMotor.set(power);
+      IO.leftRearMotor.set(power);
       IO.rightRearMotor.set(power);
       return; // abort so the drive signal doesn't mess things up
     }
+    if (hackDiagonal) {
+      SmartDashboard.putBoolean("Is Diagonal?", true);
+      IO.leftFrontMotor.set(0.1);
+      IO.rightFrontMotor.set(-0.7);
+      IO.leftRearMotor.set(-0.7);
+      IO.rightRearMotor.set(0.1);
+      return; // abort so the drive signal doesn't mess things up
+    }
 
+    SmartDashboard.putBoolean("Is Diagonal?", false);
     SmartDashboard.putBoolean("Is Braking?", false);
 
     if (signal.robotOriented) {
@@ -85,6 +95,14 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
 
   public void hackLiftBrake() {
     hackBrakingLatch = false; // lift the latch
+  }
+
+  public void hackDiagonalStart() {
+    hackDiagonal = true; // start diagonal
+  }
+
+  public void hackDiagonalStop() {
+    hackDiagonal = false; // stop diagonal
   }
 
   public static final class Signal {

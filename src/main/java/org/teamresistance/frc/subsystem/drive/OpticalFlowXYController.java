@@ -15,15 +15,16 @@ public class OpticalFlowXYController implements Controller<Drive.Signal> {
   private final SynchronousPID opticalPIDX;
   private final SynchronousPID opticalPIDY;
 
-  private double xKp = 0.2;
+  private double xKp = -0.3;
   private double xKi = 0.0;
   private double xKd = 0.0;
-  private double opFlowToleranceX = 0.5;
+  private double opFlowToleranceX = 1.0;
 
-  private double yKp = 0.2;
+  private double yKp = -0.1;
   private double yKi = 0.0;
   private double yKd = 0.0;
-  private double getOpFlowToleranceY = 0.5;
+  private double opFlowToleranceY = 1.0;
+
 
   /*
   *
@@ -32,19 +33,43 @@ public class OpticalFlowXYController implements Controller<Drive.Signal> {
   */
 
   public OpticalFlowXYController(double targetX, double targetY) {
+
     this.angleController = new DriveHoldingAngleController(0);
+
+    SmartDashboard.putNumber("xKp", xKp);
+    SmartDashboard.putNumber("xKi", xKi);
+    SmartDashboard.putNumber("xKd", xKd);
+    SmartDashboard.putNumber("opFlowToleranceX", opFlowToleranceX);
+
+    SmartDashboard.getNumber("xKp", xKp);
+    SmartDashboard.getNumber("xKi", xKi);
+    SmartDashboard.getNumber("xKd", xKd);
+    SmartDashboard.getNumber("opFlowToleranceX", opFlowToleranceX);
+
     this.opticalPIDX = new SynchronousPID("Optical Flow XY (X)", SourceType.DISTANCE, xKp, xKi, xKd)
         .withConfigurations(controller -> controller
             .withInputRange(-50, 50)
             .withOutputRange(-0.7, 0.7)
             .withTarget(targetX)//-------
             .withTolerance(opFlowToleranceX));
+
+    SmartDashboard.putNumber("yKp", yKp);
+    SmartDashboard.putNumber("yKi", yKi);
+    SmartDashboard.putNumber("yKd", yKd);
+    SmartDashboard.putNumber("opFlowTolerancey", opFlowToleranceY);
+
+    SmartDashboard.getNumber("yKp", yKp);
+    SmartDashboard.getNumber("yKi", yKi);
+    SmartDashboard.getNumber("yKd", yKd);
+    SmartDashboard.getNumber("opFlowTolerancey", opFlowToleranceY);
+
     this.opticalPIDY = new SynchronousPID("Optical Flow XY (Y)", SourceType.DISTANCE, yKp, yKi, yKd)
         .withConfigurations(controller -> controller
             .withInputRange(-50, 50)
-            .withOutputRange(-0.7, 0.7)
+            .withOutputRange(-0.1, 0.1)
             .withTarget(targetY)
-            .withTolerance(getOpFlowToleranceY));
+            .withTolerance(opFlowToleranceY));
+
   }
 
   @Override

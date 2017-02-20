@@ -124,10 +124,12 @@ public class OpticalFlow {
   }
 
  public double getX() {
-    return dxLinear; // TODO: verify you want to return dx
-  }
+   SmartDashboard.putNumber("dxLinear [DEBUG}", dxLinear);
+   return dxLinear; // TODO: verify you want to return dx
+ }
 
   public double getY() {
+    SmartDashboard.putNumber("dyLinear [DEBUG}", dyLinear);
     return dyLinear; // TODO: verify you want to return dy
   }
 }

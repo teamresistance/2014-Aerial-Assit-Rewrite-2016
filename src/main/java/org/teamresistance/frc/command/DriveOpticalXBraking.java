@@ -8,10 +8,10 @@ import org.teamresistance.frc.subsystem.drive.Drive;
  */
 public class DriveOpticalXBraking extends CommandGroup {
 
-  public DriveOpticalXBraking(Drive drive, double targetX, double brakeTime) {
+  public DriveOpticalXBraking(Drive drive, double targetX, double diagonalTime) {
     sequentially(
-        new DriveOpticalX(drive, targetX),
-        new BrakeCommand(drive, brakeTime)
+        //new DriveOpticalX(drive, targetX),
+        new DiagonalCommand(drive, diagonalTime)
     );
   }
 }

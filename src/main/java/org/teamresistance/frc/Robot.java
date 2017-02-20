@@ -28,8 +28,13 @@ public class Robot extends IterativeRobot {
   private final Gamepad xboxDriver = Hardware.HumanInterfaceDevices.xbox360(0);
 
   private OpticalFlow opticalFlow = new OpticalFlow();
-  private final Drive drive = new Drive(IO.robotDrive, IO.navX,
-      xboxDriver.getLeftY(), xboxDriver.getLeftX(), xboxDriver.getRightX());
+  private final Drive drive = new Drive(
+      IO.robotDrive,
+      IO.navX,
+      xboxDriver.getLeftY(),
+      xboxDriver.getLeftX(),
+      xboxDriver.getRightX()
+  );
 
   @Override
   public void robotInit() {
@@ -41,42 +46,33 @@ public class Robot extends IterativeRobot {
     // Reset the gyro
     reactor.onTriggered(xboxDriver.getA(), () -> IO.navX.getRawNavX().reset());
 
-    // Drive X
-    final double xSetpoint = 1.86;
-    SmartDashboard.putNumber("[X] Setpoint", xSetpoint);
-    reactor.onTriggeredSubmit(xboxDriver.getLeftBumper(),
-        () -> new DriveOpticalX(drive, SmartDashboard.getNumber("[X] Setpoint", xSetpoint)));
-
-    // Drive Y
-    final double ySetpoint = 1.86;
-    SmartDashboard.putNumber("[Y] Setpoint", ySetpoint);
-    reactor.onTriggeredSubmit(xboxDriver.getRightBumper(),
-        () -> new DriveOpticalY(drive, SmartDashboard.getNumber("[Y] Setpoint", ySetpoint)));
+    // Reset the OF sensor
+    reactor.onTriggered(xboxDriver.getB(), () -> opticalFlow.init());
 
     // Drive Y with braking
-    final double yWithBrakeSetpoint = 1.86;
+    final double yWithBrakeSetpoint = 1.0;
     final double yWithBrakeTimeout = 1.0;
     SmartDashboard.putNumber("[Y Braking] Timeout", yWithBrakeTimeout);
     SmartDashboard.putNumber("[Y Braking] Setpoint", yWithBrakeSetpoint);
-    reactor.onTriggeredSubmit(xboxDriver.getY(),
+    reactor.onTriggeredSubmit(xboxDriver.getLeftBumper(),
         () -> new DriveOpticalYBraking(drive,
             SmartDashboard.getNumber("[Y Braking] Setpoint", yWithBrakeSetpoint),
             SmartDashboard.getNumber("[Y Braking] Timeout", yWithBrakeTimeout)
         ));
 
     // Drive X with braking
-    final double xWithBrakeSetpoint = 1.86;
+    final double xWithBrakeSetpoint = 1.0;
     final double xWithBrakeTimeout = 1.0;
     SmartDashboard.putNumber("[X Braking] Timeout", xWithBrakeTimeout);
     SmartDashboard.putNumber("[X Braking] Setpoint", xWithBrakeSetpoint);
-    reactor.onTriggeredSubmit(xboxDriver.getX(),
+    reactor.onTriggeredSubmit(xboxDriver.getRightBumper(),
         () -> new DriveOpticalXBraking(drive,
             SmartDashboard.getNumber("[X Braking] Setpoint", xWithBrakeSetpoint),
             SmartDashboard.getNumber("[X Braking] Timeout", xWithBrakeTimeout)
         ));
 
     // Drive X Y sequentially
-    reactor.onTriggeredSubmit(xboxDriver.getSelect(),
+    reactor.onTriggeredSubmit(xboxDriver.getY(),
         () -> CommandGroup.runSequentially(
             new DriveOpticalYBraking(drive,
                 SmartDashboard.getNumber("[Y Braking] Setpoint", yWithBrakeSetpoint),
@@ -89,17 +85,24 @@ public class Robot extends IterativeRobot {
         ));
 
     // Drive X Y together
-    final double xySetpointX = 1.86;
-    final double xySetpointY = 1.86;
+    final double xySetpointX = 1.0;
+    final double xySetpointY = 1.0;
+    final double diagonalTime = 1.0;
     SmartDashboard.putNumber("[XY] Setpoint X", xySetpointX);
     SmartDashboard.putNumber("[XY] Setpoint Y", xySetpointY);
-    reactor.onTriggeredSubmit(xboxDriver.getStart(),
+    SmartDashboard.putNumber("[XY] Diagonal Time", diagonalTime);
+    reactor.onTriggeredSubmit(xboxDriver.getX(),
         () -> new DriveOpticalXY(drive,
             SmartDashboard.getNumber("[XY] Setpoint X", xySetpointX),
             SmartDashboard.getNumber("[XY] Setpoint Y", xySetpointY)));
 
-    // Reset the OF sensor
-    reactor.onTriggered(xboxDriver.getB(), () -> opticalFlow.init());
+    //Drive Diagonal Test
+    boolean isDiagonal = false;
+    SmartDashboard.putBoolean("isDiagonal", isDiagonal);
+
+//    reactor.onTriggered(xboxDriver.getStart(),
+//        () -> new DriveDiagnal);
+
   }
 
   @Override
