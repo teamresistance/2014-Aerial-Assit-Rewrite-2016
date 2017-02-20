@@ -2,13 +2,15 @@ package org.teamresistance.frc;
 
 import org.strongback.Strongback;
 import org.strongback.SwitchReactor;
+import org.strongback.command.Command;
 import org.strongback.components.ui.Gamepad;
 import org.strongback.hardware.Hardware;
-import org.teamresistance.frc.command.DriveToX;
+import org.teamresistance.frc.command.*;
 import org.teamresistance.frc.subsystem.drive.Drive;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.teamresistance.frc.command.DriveOfsXY;
 
 
 /**
@@ -43,8 +45,33 @@ public class Robot extends IterativeRobot {
     // Reset the gyro
     reactor.onTriggered(xboxDriver.getA(), () -> IO.navX.getRawNavX().reset());
 
-    double ofsSetpoint = SmartDashboard.getNumber("OFS Setpoint", 3);
-    reactor.onTriggeredSubmit(xboxDriver.getX(),  () -> new DriveToX(drive, ofsSetpoint));
+    final double ofsxSetpoint = 1.0;
+    SmartDashboard.putNumber("OFSX Setpoint", ofsxSetpoint);
+    reactor.onTriggeredSubmit(xboxDriver.getLeftBumper(),  () -> new DriveToX(drive,
+        SmartDashboard.getNumber("OFSX Setpoint", ofsxSetpoint)));
+    final double ofsySetpoint = 10.0;
+    SmartDashboard.putNumber("OFSY Setpoint", ofsySetpoint);
+    reactor.onTriggeredSubmit(xboxDriver.getRightBumper(), () -> new DriveToY(drive,
+        SmartDashboard.getNumber("OFSY Setpoint", ofsySetpoint)));
+    reactor.onTriggeredSubmit(xboxDriver.getStart(), () -> Command.cancel(drive));
+
+    final double ofsySeqSetpoint = 5.0;
+    final double ofsyTimeout = 1.0;
+    SmartDashboard.putNumber("OFSY Timeout",  ofsyTimeout);
+    SmartDashboard.putNumber("OFSY Setpoint(Sequence)",  ofsySeqSetpoint);
+    reactor.onTriggeredSubmit(xboxDriver.getY(), () -> new DriveToYSequence(drive,
+        SmartDashboard.getNumber("OFSY Setpoint(Sequence)", ofsySeqSetpoint),
+        SmartDashboard.getNumber("OFSY Timeout", ofsyTimeout)));
+
+    final double ofsX = 5;
+    final double ofsY = 5;
+    SmartDashboard.putNumber("[XY] x", ofsX);
+    SmartDashboard.putNumber("[XY] y", ofsY);
+    reactor.onTriggeredSubmit(xboxDriver.getX(), () -> new DriveOfsXY(drive,
+        opFlow,
+        SmartDashboard.getNumber("[XY] x", ofsX),
+        SmartDashboard.getNumber("[XY] y", ofsY)
+    ));
 
     // Reset the OF sensor
     reactor.onTriggered(xboxDriver.getB(), () -> opFlow.init());

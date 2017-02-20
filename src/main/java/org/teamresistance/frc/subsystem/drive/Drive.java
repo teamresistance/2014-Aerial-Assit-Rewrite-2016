@@ -7,6 +7,8 @@ import org.strongback.components.AngleSensor;
 import org.strongback.components.ui.ContinuousRange;
 import org.teamresistance.frc.Feedback;
 import org.teamresistance.frc.IO;
+import org.teamresistance.frc.command.BrakeCommand;
+import org.teamresistance.frc.command.DriveToY;
 import org.teamresistance.frc.subsystem.ClosedLooping;
 import org.teamresistance.frc.subsystem.Controller;
 import org.teamresistance.frc.subsystem.OpenLoopController;
@@ -70,6 +72,8 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
       // Robot-oriented: convert the speeds from cartesian to polar
       double magnitude = Math.sqrt(signal.xSpeed * signal.xSpeed + signal.ySpeed * signal.ySpeed);
       double direction = Math.toDegrees(Math.atan2(signal.ySpeed, signal.xSpeed));
+      SmartDashboard.putNumber("Robot-oriented: Magnitude", magnitude);
+      SmartDashboard.putNumber("Robot-oriented: Direction", direction);
       robotDrive.mecanumDrive_Polar(magnitude, direction, signal.rotateSpeed);
     } else {
       // Field-oriented
@@ -105,6 +109,10 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
     static Signal createRobotOriented(double speed, double headingDeg, double rotateSpeed) {
       double xSpeed = speed * Math.cos(Math.toRadians(headingDeg));
       double ySpeed = speed * Math.sin(Math.toRadians(headingDeg));
+      return new Signal(xSpeed, ySpeed, rotateSpeed, true);
+    }
+
+    static Signal createRobotOrientedRaw(double xSpeed, double ySpeed, double rotateSpeed) {
       return new Signal(xSpeed, ySpeed, rotateSpeed, true);
     }
   }

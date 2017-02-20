@@ -19,7 +19,7 @@ public class DriveHoldingAngleController implements Controller<Drive.Signal> {
   // from -180 to +180, and so a very small kP must be used to ensure the output isn't full speed
   // (>= 1.0 or <= -1.0) for the majority of travel. For example, a kP of 0.008 only outputs full
   // speed when the error exceeds 1 / 0.008, or 125 degrees.
-  private static final double TOLERANCE = 4;
+  private static final double TOLERANCE = 5;
   public static final double KP = 0.044;
   public static final double KI = 0.0007;
   public static final double KD = 0.088;

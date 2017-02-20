@@ -1,7 +1,7 @@
 package org.teamresistance.frc.command;
 
 import org.teamresistance.frc.subsystem.drive.Drive;
-import org.teamresistance.frc.subsystem.drive.OpticalFlowController;
+import org.teamresistance.frc.subsystem.drive.OpticalFlowXController;
 
 /**
  * @author Tarik C. Brown
@@ -9,7 +9,7 @@ import org.teamresistance.frc.subsystem.drive.OpticalFlowController;
 public class DriveToX extends DriveCommand {
 
   public DriveToX(Drive drive, double targetX) {
-    super(drive, new OpticalFlowController(targetX), false);
+    super(drive, new OpticalFlowXController(targetX), false);
   }
 
 
