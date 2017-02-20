@@ -25,7 +25,11 @@ public class OpticalFlowXYController implements Controller<Drive.Signal> {
   private double yKd = 0.0;
   private double getOpFlowToleranceY = 0.5;
 
-  //Try Combining two PID
+  /*
+  *
+  *Try Combining the two PIDS
+  *
+  */
 
   public OpticalFlowXYController(double targetX, double targetY) {
     this.angleController = new DriveHoldingAngleController(0);
