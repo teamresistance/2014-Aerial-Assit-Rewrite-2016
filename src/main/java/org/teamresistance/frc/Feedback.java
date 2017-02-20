@@ -24,13 +24,12 @@ import org.teamresistance.frc.subsystem.Looping;
 @Experimental
 public final class Feedback {
   public final double currentAngle;
-  public final double dxdist;
-  public final double dydist;
+  public final double dx;
+  public final double dy;
 
-
-  Feedback(double currentAngle, double dxdist, double dydist) {
+  Feedback(double currentAngle, double dx, double dy) {
     this.currentAngle = currentAngle;
-    this.dxdist = dxdist;
-    this.dydist = dydist;
+    this.dx = dx;
+    this.dy = dy;
   }
 }

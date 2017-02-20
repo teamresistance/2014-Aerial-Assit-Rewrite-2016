@@ -11,31 +11,31 @@ import org.teamresistance.frc.util.SynchronousPID;
 public class OpticalFlowXController implements Controller<Drive.Signal> {
   private final DriveHoldingAngleController angleController;
   private final SynchronousPID opticalPID;
-  private final double KP = 0.8;
-  private final double KI = 0.0;
-  private final double KD = 0.0;
-  private final double opticTolerance = 0.5;
+  private static final double KP = 0.8;
+  private static final double KI = 0.0;
+  private static final double KD = 0.0;
+  private static final double TOLERANCE = 1;
 
-  public OpticalFlowXController(double targetx) {
+  public OpticalFlowXController(double targetX) {
     this.angleController = new DriveHoldingAngleController(0);
-    this.opticalPID = new SynchronousPID("OFSX PID", SourceType.DISTANCE, KP, KI, KD)
+    this.opticalPID = new SynchronousPID("Optical Flow X", SourceType.DISTANCE, KP, KI, KD)
         .withConfigurations(controller -> controller
-        .withInputRange(0,20)
-        .withOutputRange(-1.0,1.0)
-        .withTarget(targetx)
-        .withTolerance(opticTolerance));
+            .withInputRange(-20, 20)
+            .withOutputRange(-0.7, 0.7)
+            .withTarget(targetX)
+            .withTolerance(TOLERANCE));
   }
 
   @Override
   public Drive.Signal computeSignal(Drive.Signal feedForward, Feedback feedback) {
-    double xSpeed = this.opticalPID.calculate(feedback.dxdist);
-    xSpeed = xSpeed > 0 ? xSpeed + .2: xSpeed - .2; // Add or subtract 0.2 depending on direction
+    double xSpeed = this.opticalPID.calculate(feedback.dx);
+    //xSpeed = xSpeed > 0 ? xSpeed + .2 : xSpeed - .2; // Add or subtract 0.2 depending on direction
     double rotationSpeed = angleController.computeSignal(feedForward, feedback).rotateSpeed;
-    return Drive.Signal.createRobotOriented(xSpeed,270, rotationSpeed);
+    return Drive.Signal.createRobotOriented(xSpeed, 90, rotationSpeed);
   }
 
   @Override
   public boolean isOnTarget() {
-   return opticalPID.isWithinTolerance();
+    return opticalPID.isWithinTolerance();
   }
 }

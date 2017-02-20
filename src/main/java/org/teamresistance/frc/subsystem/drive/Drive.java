@@ -7,8 +7,6 @@ import org.strongback.components.AngleSensor;
 import org.strongback.components.ui.ContinuousRange;
 import org.teamresistance.frc.Feedback;
 import org.teamresistance.frc.IO;
-import org.teamresistance.frc.command.BrakeCommand;
-import org.teamresistance.frc.command.DriveToY;
 import org.teamresistance.frc.subsystem.ClosedLooping;
 import org.teamresistance.frc.subsystem.Controller;
 import org.teamresistance.frc.subsystem.OpenLoopController;
@@ -58,7 +56,7 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
     // Spin the motors inwards if we're stopped
     if (hackBrakingLatch) {
       SmartDashboard.putBoolean("Is Braking?", true);
-      final double power = 0.3;
+      final double power = 0.5;
       IO.leftFrontMotor.set(-power);
       IO.rightFrontMotor.set(-power);
       IO.leftFrontMotor.set(power);
@@ -72,8 +70,8 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
       // Robot-oriented: convert the speeds from cartesian to polar
       double magnitude = Math.sqrt(signal.xSpeed * signal.xSpeed + signal.ySpeed * signal.ySpeed);
       double direction = Math.toDegrees(Math.atan2(signal.ySpeed, signal.xSpeed));
-      SmartDashboard.putNumber("Robot-oriented: Magnitude", magnitude);
-      SmartDashboard.putNumber("Robot-oriented: Direction", direction);
+      SmartDashboard.putNumber("[DEBUG] magnitude", magnitude);
+      SmartDashboard.putNumber("[DEBUG] direction", direction);
       robotDrive.mecanumDrive_Polar(magnitude, direction, signal.rotateSpeed);
     } else {
       // Field-oriented

@@ -6,11 +6,9 @@ import org.teamresistance.frc.subsystem.drive.OpticalFlowXController;
 /**
  * @author Tarik C. Brown
  */
-public class DriveToX extends DriveCommand {
+public class DriveOpticalX extends DriveCommand {
 
-  public DriveToX(Drive drive, double targetX) {
+  public DriveOpticalX(Drive drive, double targetX) {
     super(drive, new OpticalFlowXController(targetX), false);
   }
-
-
 }
