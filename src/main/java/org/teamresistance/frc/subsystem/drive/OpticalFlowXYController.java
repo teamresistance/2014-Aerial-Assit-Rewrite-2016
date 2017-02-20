@@ -15,20 +15,30 @@ public class OpticalFlowXYController implements Controller<Drive.Signal> {
   private final SynchronousPID opticalPIDX;
   private final SynchronousPID opticalPIDY;
 
+  private double xKp = 0.2;
+  private double xKi = 0.0;
+  private double xKd = 0.0;
+  private double opFlowToleranceX = 0.5;
+
+  private double yKp = 0.2;
+  private double yKi = 0.0;
+  private double yKd = 0.0;
+  private double getOpFlowToleranceY = 0.5;
+
   public OpticalFlowXYController(double targetX, double targetY) {
     this.angleController = new DriveHoldingAngleController(0);
-    this.opticalPIDX = new SynchronousPID("Optical Flow XY (X)", SourceType.DISTANCE, 0.5, 0.0, 0.0)
+    this.opticalPIDX = new SynchronousPID("Optical Flow XY (X)", SourceType.DISTANCE, xKp, xKi, xKd)
         .withConfigurations(controller -> controller
             .withInputRange(-50, 50)
             .withOutputRange(-0.7, 0.7)
             .withTarget(targetX)
-            .withTolerance(0.5));
-    this.opticalPIDY = new SynchronousPID("Optical Flow XY (Y)", SourceType.DISTANCE, 0.5, 0.0, 0.0)
+            .withTolerance(opFlowToleranceX));
+    this.opticalPIDY = new SynchronousPID("Optical Flow XY (Y)", SourceType.DISTANCE, yKp, yKi, yKd)
         .withConfigurations(controller -> controller
             .withInputRange(-50, 50)
             .withOutputRange(-0.7, 0.7)
             .withTarget(targetY)
-            .withTolerance(0.5));
+            .withTolerance(getOpFlowToleranceY));
   }
 
   @Override

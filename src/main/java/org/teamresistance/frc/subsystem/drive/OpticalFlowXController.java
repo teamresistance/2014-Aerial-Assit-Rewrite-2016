@@ -11,7 +11,7 @@ import org.teamresistance.frc.util.SynchronousPID;
 public class OpticalFlowXController implements Controller<Drive.Signal> {
   private final DriveHoldingAngleController angleController;
   private final SynchronousPID opticalPID;
-  private static final double KP = 0.8;
+  private static final double KP = 0.2;
   private static final double KI = 0.0;
   private static final double KD = 0.0;
   private static final double TOLERANCE = 1;
@@ -31,7 +31,7 @@ public class OpticalFlowXController implements Controller<Drive.Signal> {
     double xSpeed = this.opticalPID.calculate(feedback.dx);
     //xSpeed = xSpeed > 0 ? xSpeed + .2 : xSpeed - .2; // Add or subtract 0.2 depending on direction
     double rotationSpeed = angleController.computeSignal(feedForward, feedback).rotateSpeed;
-    return Drive.Signal.createRobotOriented(xSpeed, 90, rotationSpeed);
+    return Drive.Signal.createRobotOriented(xSpeed, 270, rotationSpeed);
   }
 
   @Override

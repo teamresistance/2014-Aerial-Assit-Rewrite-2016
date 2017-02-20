@@ -12,7 +12,7 @@ public class OpticalFlowYController implements Controller<Drive.Signal> {
   private final DriveHoldingAngleController angleController;
   private final SynchronousPID opticalPID;
 
-  private static final double KP = 0.5;
+  private static final double KP = 0.2;
   private static final double KI = 0.0;
   private static final double KD = 0.0;
   private static final double tolerance = 1; // feet
@@ -32,7 +32,7 @@ public class OpticalFlowYController implements Controller<Drive.Signal> {
     double ySpeed = this.opticalPID.calculate(feedback.dy);
     //ySpeed = ySpeed > 0 ? ySpeed + .2: ySpeed - .2; // Add or subtract 0.2 depending on direction
     double rotationSpeed = angleController.computeSignal(feedForward, feedback).rotateSpeed;
-    return Drive.Signal.createRobotOriented(ySpeed, 0, rotationSpeed);
+    return Drive.Signal.createRobotOriented(ySpeed, 180, rotationSpeed);
   }
 
   @Override
