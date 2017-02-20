@@ -113,6 +113,7 @@ public class OpticalFlow {
     SmartDashboard.putNumber("Actual X (Linear)", dxLinear);
     SmartDashboard.putNumber("Actual Y (Linear)", dyLinear);
 
+
   }
 
   private int readRegister(byte register) {
@@ -125,7 +126,7 @@ public class OpticalFlow {
 
  public double getX() {
    SmartDashboard.putNumber("dxLinear [DEBUG}", dxLinear);
-   return dxLinear; // TODO: verify you want to return dx
+   return (dxLinear); // make dxLinear Negative to go in negative X TODO: verify you want to return dx
  }
 
   public double getY() {

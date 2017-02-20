@@ -50,7 +50,7 @@ public class Robot extends IterativeRobot {
     reactor.onTriggered(xboxDriver.getB(), () -> opticalFlow.init());
 
     // Drive Y with braking
-    final double yWithBrakeSetpoint = 1.0;
+    final double yWithBrakeSetpoint = 6.0;
     final double yWithBrakeTimeout = 1.0;
     SmartDashboard.putNumber("[Y Braking] Timeout", yWithBrakeTimeout);
     SmartDashboard.putNumber("[Y Braking] Setpoint", yWithBrakeSetpoint);
