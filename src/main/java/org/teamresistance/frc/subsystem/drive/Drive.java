@@ -3,14 +3,15 @@ package org.teamresistance.frc.subsystem.drive;
 import org.strongback.command.Command;
 import org.strongback.command.CommandGroup;
 import org.strongback.command.Requirable;
+import org.strongback.components.AngleSensor;
 import org.strongback.components.ui.ContinuousRange;
-import org.strongback.drive.MecanumDrive;
-import org.teamresistance.frc.IO;
 import org.teamresistance.frc.Feedback;
+import org.teamresistance.frc.IO;
 import org.teamresistance.frc.subsystem.ClosedLooping;
 import org.teamresistance.frc.subsystem.Controller;
 import org.teamresistance.frc.subsystem.OpenLoopController;
 
+import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -38,13 +39,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * @author Rothanak So
  */
 public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
-  private final MecanumDrive robotDrive;
-  private boolean hackBrakingLatch;
+  private final RobotDrive robotDrive;
+  private final AngleSensor gyro;
 
-  public Drive(MecanumDrive robotDrive, ContinuousRange xSpeed, ContinuousRange ySpeed,
+  private boolean hackBrakingLatch;
+  private boolean hackDiagonal;
+
+  public Drive(RobotDrive robotDrive, AngleSensor gyro, ContinuousRange xSpeed, ContinuousRange ySpeed,
                ContinuousRange rotateSpeed) {
     super(() -> Signal.createFieldOriented(xSpeed.read(), ySpeed.read(), rotateSpeed.read()));
     this.robotDrive = robotDrive;
+    this.gyro = gyro;
   }
 
   @Override
@@ -52,23 +57,35 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
     // Spin the motors inwards if we're stopped
     if (hackBrakingLatch) {
       SmartDashboard.putBoolean("Is Braking?", true);
-      final double power = 0.3;
-      IO.frontLeftMotor.setSpeed(-power);
-      IO.frontRightMotor.setSpeed(-power);
-      IO.rearLeftMotor.setSpeed(power);
-      IO.rearRightMotor.setSpeed(power);
+      //final double power = 0.5;
+      IO.leftFrontMotor.set(-0.5);
+      IO.rightFrontMotor.set(-0.5);
+      IO.leftRearMotor.set(0.4);
+      IO.rightRearMotor.set(0.5);
+      return; // abort so the drive signal doesn't mess things up
+    }
+    if (hackDiagonal) {
+      SmartDashboard.putBoolean("Is Diagonal?", true);
+      IO.leftFrontMotor.set(0.1);
+      IO.rightFrontMotor.set(-0.6);
+      IO.leftRearMotor.set(-0.6);
+      IO.rightRearMotor.set(0.1);
       return; // abort so the drive signal doesn't mess things up
     }
 
+    SmartDashboard.putBoolean("Is Diagonal?", false);
     SmartDashboard.putBoolean("Is Braking?", false);
 
     if (signal.robotOriented) {
-      // Convert the speeds from cartesian to polar
+      // Robot-oriented: convert the speeds from cartesian to polar
       double magnitude = Math.sqrt(signal.xSpeed * signal.xSpeed + signal.ySpeed * signal.ySpeed);
       double direction = Math.toDegrees(Math.atan2(signal.ySpeed, signal.xSpeed));
-      robotDrive.polar(magnitude, direction, signal.rotateSpeed);
+      SmartDashboard.putNumber("[DEBUG] magnitude", magnitude);
+      SmartDashboard.putNumber("[DEBUG] direction", direction);
+      robotDrive.mecanumDrive_Polar(magnitude, direction, signal.rotateSpeed);
     } else {
-      robotDrive.cartesian(signal.xSpeed, signal.ySpeed, signal.rotateSpeed);
+      // Field-oriented
+      robotDrive.mecanumDrive_Cartesian(signal.xSpeed, signal.ySpeed, signal.rotateSpeed, gyro.getAngle());
     }
   }
 
@@ -80,13 +97,21 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
     hackBrakingLatch = false; // lift the latch
   }
 
+  public void hackDiagonalStart() {
+    hackDiagonal = true; // start diagonal
+  }
+
+  public void hackDiagonalStop() {
+    hackDiagonal = false; // stop diagonal
+  }
+
   public static final class Signal {
     final double xSpeed;
     final double ySpeed;
     final double rotateSpeed;
     final boolean robotOriented;
 
-    private Signal(double xSpeed, double ySpeed, double rotateSpeed, boolean robotOriented) {
+    public Signal(double xSpeed, double ySpeed, double rotateSpeed, boolean robotOriented) {
       this.xSpeed = xSpeed;
       this.ySpeed = ySpeed;
       this.rotateSpeed = rotateSpeed;
@@ -100,6 +125,10 @@ public class Drive extends ClosedLooping<Drive.Signal> implements Requirable {
     static Signal createRobotOriented(double speed, double headingDeg, double rotateSpeed) {
       double xSpeed = speed * Math.cos(Math.toRadians(headingDeg));
       double ySpeed = speed * Math.sin(Math.toRadians(headingDeg));
+      return new Signal(xSpeed, ySpeed, rotateSpeed, true);
+    }
+
+    static Signal createRobotOrientedRaw(double xSpeed, double ySpeed, double rotateSpeed) {
       return new Signal(xSpeed, ySpeed, rotateSpeed, true);
     }
   }

@@ -19,22 +19,21 @@ public class DriveHoldingAngleController implements Controller<Drive.Signal> {
   // from -180 to +180, and so a very small kP must be used to ensure the output isn't full speed
   // (>= 1.0 or <= -1.0) for the majority of travel. For example, a kP of 0.008 only outputs full
   // speed when the error exceeds 1 / 0.008, or 125 degrees.
-  private static final double TOLERANCE = 2;
-  private static final double KP = 0.02; // TODO: underdamped, spun so fast it killed the robot
-  private static final double KD = 0.01;
+  private static final double TOLERANCE = 5;
+  public static final double KP = 0.044;
+  public static final double KI = 0.0007;
+  public static final double KD = 0.088;
 
   private final SynchronousPID rotationPid;
 
   public DriveHoldingAngleController(double targetDegrees) {
-    this.rotationPid = new SynchronousPID(SourceType.DISTANCE, KP, 0, KD)
+    this.rotationPid = new SynchronousPID("Angle Hold", SourceType.DISTANCE, KP, 0, KD)
         .withConfigurations(controller -> controller
-            .withInputRange(0, 360) // gyro
+            .withInputRange(0, 360) // navX
             .withOutputRange(-1.0, 1.0) // motor
             .withTarget(targetDegrees)
             .withTolerance(TOLERANCE)
             .continuousInputs(true));
-
-    SmartDashboard.putData("Angle Hold PID", rotationPid);
   }
 
   @Override

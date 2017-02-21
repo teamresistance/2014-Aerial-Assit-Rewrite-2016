@@ -6,6 +6,7 @@ import org.strongback.control.SoftwarePIDController.SourceType;
 import java.util.function.Function;
 
 import edu.wpi.first.wpilibj.livewindow.LiveWindowSendable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.tables.ITable;
 
 /**
@@ -16,16 +17,17 @@ public class SynchronousPID implements LiveWindowSendable {
   private final SoftwarePIDController controller;
   private final Relay<Double> inputRelay = new Relay<>();
   private final Relay<Double> outputRelay = new Relay<>();
+  private boolean hasRun = false;
   private boolean isConfigured = false;
 
-  public SynchronousPID(SourceType type, double kP, double kI, double kD) {
-    this(type, kP, kI, kD, 0.0);
-  }
-
-  public SynchronousPID(SourceType type, double kP, double kI, double kD, double feedForward) {
+  public SynchronousPID(String name, SourceType type, double kP, double kI, double kD) {
     this.controller = new SoftwarePIDController(type, inputRelay::get, outputRelay::accept)
-        .withGains(kP, kI, kD, feedForward)
+        .withGains(
+            SmartDashboard.getNumber(name + "/p", kP),
+            SmartDashboard.getNumber(name + "/i", kI),
+            SmartDashboard.getNumber(name + "/d", kD))
         .enable();
+    SmartDashboard.putData(name, this);
   }
 
   public SynchronousPID withConfigurations(Function<SoftwarePIDController,
@@ -36,10 +38,11 @@ public class SynchronousPID implements LiveWindowSendable {
   }
 
   public boolean isWithinTolerance() {
-    return controller.isWithinTolerance();
+    return hasRun && controller.isWithinTolerance();
   }
 
   public double calculate(double input) {
+    hasRun = true;
     if (!isConfigured)
       throw new IllegalStateException("PID not configured. Did you remember to call " +
           "`withConfigurations`? Refer to the documentation for usage notes.");
